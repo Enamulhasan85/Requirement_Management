@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Requirement_Management.Models.RequirementProvider>
+
+@{
+    ViewBag.Title = "Providers";
+}
+
+<div class="">
+    <div class="d-flex">
+        <h4 class="text-center mx-auto p-2" style="border-bottom:2px solid #00bcd4;">Requirement Providers</h4>
+    </div>
+    <p>
+        @Html.ActionLink("Add Provider", "Create", new { area = "" }, new { @class = "btn btn-success" })
+    </p>
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="bg-dark text-white">
+                <tr class="border">
+                    <th>#</th>
+                    <th>
+                        Provider
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Contact)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var x = 1;
+                }
+                @foreach (var item in Model)
+                {
+                    <tr class="border">
+                        <td>@x</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Contact)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td class="text-center">
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-info" })
+                            <form action="/RequirementProviders/Delete/@item.Id" method="post" class="d-inline-block" onsubmit="return confirm('Do you really want to delete the provider data?');">
+                                @Html.AntiForgeryToken()
+                                <div class="">
+                                    <input type="submit" value="Delete" class="btn btn-danger">
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                    x++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

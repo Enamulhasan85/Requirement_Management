@@ -1,0 +1,280 @@
+﻿@model Requirement_Management.Models.Requirement
+
+@{
+    ViewBag.Title = "Add Requirement";
+}
+<div class="mx-auto p-0 col-11 col-sm-8 col-md-12 card my-3" @*style="position: absolute; left: 0; right: 0;top: 20%; bottom: 24.4%;"*@>
+    <div class="card-header bg-dark text-white">
+        <h4 class="text-center mx-auto my-0">New Requirement</h4>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal mx-auto p-1 bg-light">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="d-flex">
+                <div class="form-group mx-auto col-lg-4 my-2">
+                    <label class="control-label w-100" for="Title"><b>Title:</b></label>
+                    <div class="w-100">
+                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @id = "Title" } })
+                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group mx-auto col-lg-4 my-2">
+                    <label class="control-label w-100" for="Date"><b>Date:</b></label>
+                    <div class="w-100">
+                        <input class="form-control text-box single-line" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required." id="Date" name="Date" type="date" value="">
+                        @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group mx-auto col-lg-4 my-2">
+                    <label class="control-label w-100" for="CompanyId"><b>Company:</b></label>
+                    <div class="w-100">
+                        @Html.DropDownList("CompanyId", null, "", htmlAttributes: new { @class = "form-control", @id = "Company" })
+                        @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <div class="form-group mx-auto col-lg-4 my-2">
+                    <label class="control-label" for="ReqProviderId"><b>Requirement Provider:</b></label>
+                    <div class="d-flex">
+                        @Html.DropDownList("ReqProviderId", null, "", htmlAttributes: new { @class = "form-control", @id = "Provider" })
+                        @Html.ValidationMessageFor(model => model.ReqProviderId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="form-group d-flex my-4">
+                <div class="d-inline-block mx-auto">
+                    <input type="submit" value="Create" class="btn btn-success" />
+                    @Html.ActionLink("Back to List", "Index", new { @area = "" }, new { @class = "btn btn-info" })
+                </div>
+            </div>*@
+        </div>
+    }
+
+</div>
+<div class="d-flex">
+    <h3 class="text-center mx-auto my-3 p-2" style="border-bottom:2px solid #00bcd4;">Requirement Details</h3>
+</div>
+
+<div class="d-flex col-sm-8 mx-auto">
+    <div class="form-group mx-auto col-lg-6 my-2">
+        <label class="control-label w-100" for="Requirement"><b>Requirement:</b></label>
+        <div class="w-100">
+            <textarea class="form-control text-area single-line m-0" id="Requirement" name="Requirement" required="required" type="textarea" cols="40" style="width: 1234px;" rows="3" value=""></textarea>
+            <span class="field-validation-valid text-danger" data-valmsg-for="Requirement" data-valmsg-replace="true"></span>
+        </div>
+    </div>
+
+    <div class="form-group mx-auto col-lg-6 my-2">
+        <label class="control-label w-100" for="ReqTypeId"><b>Requirement Type:</b></label>
+        <div class="w-100">
+            @Html.DropDownList("ReqTypeId", null, "", htmlAttributes: new { @class = "form-control", @id = "Type" })
+            <span class="field-validation-valid text-danger" data-valmsg-for="Type" data-valmsg-replace="true"></span>
+        </div>
+    </div>
+
+</div>
+
+<div class="d-flex col-sm-8 mx-auto">
+    <div class="form-group col my-2">
+        <label class="control-label w-100" for="Description"><b>Description:</b></label>
+        <div class="w-100">
+            <textarea class="form-control text-area single-line m-0" id="Description" name="Description" required="required" type="textarea" cols="40" style="width: 1234px;" rows="5" value=""></textarea>
+            <span class="field-validation-valid text-danger" data-valmsg-for="Description" data-valmsg-replace="true"></span>
+
+        </div>
+    </div>
+    <div class="d-flex flex-column col my-2">
+        <div class="form-group">
+            <label class="control-label w-100" for="Status"><b>Status:</b></label>
+            <div class="w-100">
+                @*@Html.DropDownList("Status", (IEnumerable<SelectListItem>)ViewBag.Status, new { @class = "form-control", @id = "Status" })*@
+                @*@Html.EnumDropDownListFor(model => model.Status, htmlAttributes: new { @class = "form-control", @id = "Status" })*@
+                <select class="form-control" id="Status" name="Status">
+                    <option value="0">Submitted</option>
+                    <option value="1">Verified</option>
+                    <option value="2">Working</option>
+                    <option value="3">Done</option>
+                    <option value="4">Deployed</option>
+                </select>
+                <span class="field-validation-valid text-danger" data-valmsg-for="Status" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+
+        <div class="form-group my-1">
+            <label class="control-label w-100" for="StarMarked"><b>Star Marked:</b></label>
+            <div class="w-100">
+                <div class="checkbox">
+                    <input class="check-box" data-val="true" data-val-required="The StarMarked field is required." id="StarMarked" name="StarMarked" type="checkbox" value="true">
+                    <input id="StarMarked" name="StarMarked" type="hidden" value="false">
+                    <span class="field-validation-valid text-danger" data-valmsg-for="StarMarked" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <div class="d-flex m-3">
+        <button class="btn btn-primary mx-auto" id="add" onclick="AddInfo();">Add</button>
+    </div>
+
+    <div class="table-responsive container my-2">
+        <table class="table table-sm">
+            <thead class="bg-dark text-white">
+                <tr class="border">
+                    <th>
+                        Requirement
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th style="display: none;">TypeId</th>
+                    <th>
+                        Req. Type
+                    </th>
+                    <th style="display: none;">StatusId</th>
+                    <th>
+                        Status
+                    </th>
+                    <th style="display: none;">StarMarkedId</th>
+                    <th>
+                        Star Marked
+                    </th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody id="reqtable"></tbody>
+        </table>
+    </div>
+
+    <div class="form-group d-flex my-4">
+        <div class="d-inline-block mx-auto">
+            <button class="btn btn-success mx-auto" id="save" onclick="Save();">Save</button>
+            @Html.ActionLink("Back to List", "Index", new { @area = "" }, new { @class = "btn btn-info" })
+        </div>
+    </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        var editstat = false;
+        var curobj = null;
+
+        function AddInfo() {
+            if (editstat) {
+                $(curobj).parent().parent().find(".requirement").text($("#Requirement").val());
+                $(curobj).parent().parent().find(".description").text($("#Description").val());
+                $(curobj).parent().parent().find(".typeid").text($("#Type").val());
+                $(curobj).parent().parent().find(".type").text($("#Type option:selected").text());
+                $(curobj).parent().parent().find(".statusid").text($("#Status").val());
+                $(curobj).parent().parent().find(".status").text($("#Status option:selected").text());
+                $(curobj).parent().parent().find(".starmarkedid").text($("#StarMarked").is(":checked") ? 1 : 0);
+                $(curobj).parent().parent().find(".starmarked").text($("#StarMarked").is(":checked"));
+
+                $(curobj).parent().find(".btn-danger").attr("disabled", false);
+                editstat = false;
+                curobj = null;
+            }
+            else {
+                var x = $("#StarMarked").is(":checked") ? 1 : 0;
+                $("#reqtable").append(
+                    '<tr class="border">' +
+                        '<td class="requirement">' + $("#Requirement").val() + '</td>' +
+                        '<td class="description d-block p-0" style="width: 300px;" >' + $("#Description").val() + '</td>' +
+                        '<td class="typeid" style="display:none;" >' + $("#Type").val() + '</td>' +
+                        '<td class="type">' + $("#Type option:selected").text() + '</td>' +
+                        '<td class="statusid" style="display:none;" >' + $("#Status").val() + '</td>' +
+                        '<td class="status">' + $("#Status option:selected").text() + '</td>' +
+                        '<td class="starmarkedid" style="display:none;">' + x + '</td>' +
+                        '<td class="starmarked">' + $("#StarMarked").is(":checked") + '</td>' +
+                        '<td class="text-center">' +
+                            '<button class="btn btn-info btn-sm mx-1" id="edit" onclick="editRow(this);">Edit</button>' +
+                            '<button class="btn btn-danger btn-sm mx-1" id="delete" onclick="deleteRow(this);">Delete</button>' +
+                        '</td>' +
+                    '</tr>'
+                );
+            }
+
+            $("#Requirement").val(null);
+            $("#Description").val(null);
+            $("#Type").val(0);
+            $("#Status").val(0);
+            $("#StarMarked").prop('checked', false);
+        }
+
+        function deleteRow(rowobj) {
+            $(rowobj).parent().parent().remove();
+        }
+
+        function editRow(rowobj) {
+
+            if (curobj != null) {
+                $(curobj).parent().find(".btn-danger").attr("disabled", false);
+            }
+
+            $("#Requirement").val($(rowobj).parent().parent().find(".requirement").text());
+            $("#Description").val($(rowobj).parent().parent().find(".description").text());
+            $("#Type").val($(rowobj).parent().parent().find(".typeid").text());
+            $("#Status").val($(rowobj).parent().parent().find(".statusid").text());
+            if ($(rowobj).parent().parent().find(".starmarkedid").text() == '1') $("#StarMarked").prop('checked', true);
+            else $("#StarMarked").prop('checked', false);
+
+
+            editstat = true;
+
+            curobj = rowobj;
+
+            $(rowobj).parent().find(".btn-danger").attr("disabled", true);
+        }
+
+        function Save() {
+
+            var rows = [];
+
+            var table = document.getElementById("reqtable");
+            for (var i = 0; i < table.rows.length; i++) {
+                var rowData = {
+                    'Requirement': table.rows[i].cells[0].innerText,
+                    'Description': table.rows[i].cells[1].innerText,
+                    'ReqTypeId': table.rows[i].cells[2].innerText,
+                    'Status': table.rows[i].cells[4].innerText,
+                    'StarMarked': table.rows[i].cells[6].innerText,
+                };
+                rows.push(rowData);
+            }
+
+            var inputData = {
+                'Title': $("#Title").val(),
+                'Date': $("#Date").val(),
+                'CompanyId': $("#Company").val(),
+                'ReqProviderId': $("#Provider").val(),
+
+                'reqDetails': rows
+            };
+
+            console.log(inputData);
+
+            $.post("/Requirements/Create", inputData,
+                function (data, status) {
+
+                    if (data.Id) {
+
+                        alert("Operation Successfull.");
+
+                    }
+
+            });
+        }
+
+    </script>
+
+}

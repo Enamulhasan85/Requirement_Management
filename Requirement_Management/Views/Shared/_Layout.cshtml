@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title | Requirement Management</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        li a:hover{
+            background-color: #00bcd4;
+            color: white!important;
+        }
+    </style>
+</head> 
+<body class="pt-0" style="padding-top:0;">
+    <div class="navbar navbar-expand-lg navbar-light bg-light mb-4 p-0" style="">
+        @Html.ActionLink("Requirement Management", "Index", "Home", new { area = "" }, new { @class = "navbar-brand p-3 pl-4", @style = "font-size:1rem; font-family:cursive;" })
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-around" id="navbarNav">
+            <ul class="navbar-nav " style="font-size:.9rem;">
+                <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link p-3" })</li>
+                <li class="nav-item">@Html.ActionLink("Company", "Index", "ClientCompanies", new { area = "" }, new { @class = "nav-link p-3" })</li>
+                <li class="nav-item">@Html.ActionLink("Req. Provider", "Index", "RequirementProviders", new { area = "" }, new { @class = "nav-link p-3" })</li>
+                <li class="nav-item">@Html.ActionLink("Soft. Category", "Index", "SoftwareCategories", new { area = "" }, new { @class = "nav-link p-3" })</li>
+                <li class="nav-item">@Html.ActionLink("Software", "Index", "Softwares", new { area = "" }, new { @class = "nav-link p-3" })</li>
+                <li class="nav-item">@Html.ActionLink("Req. Type", "Index", "RequirementTypes", new { area = "" }, new { @class = "nav-link p-3" })</li>
+                <li class="nav-item">@Html.ActionLink("Requirement", "Index", "Requirements", new { area = "" }, new { @class = "nav-link p-3" })</li>
+                <li class="nav-item">@Html.ActionLink("Req. Detail", "Index", "RequirementDetails", new { area = "" }, new { @class = "nav-link p-3" })</li>
+            </ul>
+            @Html.Partial("_LoginPartial")
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer class="text-center">
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Requirement_Management", "Requirement_Management\Requirement_Management.csproj", "{4BBC1929-8F5A-408C-81E2-E71AB71CF351}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4BBC1929-8F5A-408C-81E2-E71AB71CF351}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BBC1929-8F5A-408C-81E2-E71AB71CF351}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BBC1929-8F5A-408C-81E2-E71AB71CF351}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BBC1929-8F5A-408C-81E2-E71AB71CF351}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

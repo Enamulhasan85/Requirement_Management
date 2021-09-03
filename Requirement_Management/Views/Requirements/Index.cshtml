@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Requirement_Management.Models.Requirement>
+
+@{
+    ViewBag.Title = "Requirements";
+}
+
+<div class="">
+    <div class="d-flex">
+        <h4 class="text-center mx-auto p-2" style="border-bottom:2px solid #00bcd4;">Requirements</h4>
+    </div>
+    <p>
+        @Html.ActionLink("Add Requirement", "Create", new { area = "" }, new { @class = "btn btn-success" })
+    </p>
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="bg-dark text-white">
+                <tr class="border">
+                    <th>#</th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    @*<th>
+                        Html.DisplayNameFor(model => model.Description)
+                    </th>*@
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Entry Date
+                    </th>
+                    @*<th>
+                        Req. Type
+                    </th>*@
+                    <th>
+                        Provider
+                    </th>
+                    <th>
+                        Company
+                    </th>
+                    @*<th>
+                        Status
+                    </th>
+                    <th>
+                        Star Marked
+                    </th>*@
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var x = 1;
+                }
+                @foreach (var item in Model)
+                {
+                    <tr class="border">
+                        <td>@x</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EntryDate)
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.ReqType.Name)
+                        </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReqProvider.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Company.Name)
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>*@
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.StarMarked)
+                        </td>*@
+                        <td class="text-center d-flex">
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-info mx-1" })
+                            <form action="/Requirements/Delete/@item.Id" method="post" class="d-inline-block" onsubmit="return confirm('Do you really want to delete the requirement?');">
+                                @Html.AntiForgeryToken()
+                                <div class="">
+                                    <input type="submit" value="Delete" class="btn btn-danger mx-1">
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

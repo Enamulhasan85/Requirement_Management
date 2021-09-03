@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Requirement_Management.Models.Software>
+
+@{
+    ViewBag.Title = "Softwares";
+}
+
+<div class="">
+    <div class="d-flex">
+        <h4 class="text-center mx-auto p-2" style="border-bottom:2px solid #00bcd4;">Softwares</h4>
+    </div>
+    <p>
+        @Html.ActionLink("Add Software", "Create", new { area = "" }, new { @class = "btn btn-success" })
+    </p>
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="bg-dark text-white">
+                <tr class="border">
+                    <th>#</th>
+                    <th>
+                        Software
+                    </th>
+                    <th>
+                        Category
+                    </th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var x = 1;
+                }
+                @foreach (var item in Model)
+                {
+                    <tr class="border">
+                        <td>@x</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Software_Category.Name)
+                        </td>
+                        <td class="text-center">
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-info" })
+                            @*@Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })*@
+                            <form action="/Softwares/Delete/@item.Id" method="post" class="d-inline-block" onsubmit="return confirm('Do you really want to delete the software data?');">
+                                @Html.AntiForgeryToken()
+                                <div class="">
+                                    <input type="submit" value="Delete" class="btn btn-danger">
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                    x++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
