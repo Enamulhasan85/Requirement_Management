@@ -53,7 +53,7 @@
                 @foreach (var item in Model)
                 {
                     <tr class="border">
-                        <td>@x</td>
+                        <td>@(x++)</td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Title)
                         </td>
@@ -83,6 +83,7 @@
                         </td>*@
                         <td class="text-center d-flex">
                             @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-info mx-1" })
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-warning mx-1" })
                             <form action="/Requirements/Delete/@item.Id" method="post" class="d-inline-block" onsubmit="return confirm('Do you really want to delete the requirement?');">
                                 @Html.AntiForgeryToken()
                                 <div class="">
