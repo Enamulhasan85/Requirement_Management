@@ -16,26 +16,26 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="d-flex">
                 <div class="form-group mx-auto col-lg-4 my-2">
-                    <label class="control-label w-100" for="Title"><b>Title:</b></label>
+                    <label class="control-label w-100" for="Title"><b>Title:</b> <i class="text-danger">*required</i></label>
                     <div class="w-100">
                         @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @id = "Title" } })
-                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                        <span class="text-danger ml-1 m-0 titleVal" style="font-family: none;display: none;">*Title can't be empty</span>
                     </div>
                 </div>
 
                 <div class="form-group mx-auto col-lg-4 my-2">
-                    <label class="control-label w-100" for="Date"><b>Date:</b></label>
+                    <label class="control-label w-100" for="Date"><b>Date:</b> <i class="text-danger">*required</i></label>
                     <div class="w-100">
                         <input class="form-control text-box single-line" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required." id="Date" name="Date" type="date" value="">
-                        @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                        <span class="text-danger ml-1 m-0 dateVal" style="font-family: none;display: none;">*Date can't be empty</span>
                     </div>
                 </div>
 
                 <div class="form-group mx-auto col-lg-4 my-2">
                     <label class="control-label w-100" for="CompanyId"><b>Company:</b></label>
                     <div class="w-100">
-                        @Html.DropDownList("CompanyId", null, "", htmlAttributes: new { @class = "form-control", @id = "Company" })
-                        @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+                        @Html.DropDownList("CompanyId", null, htmlAttributes: new { @class = "form-control", @id = "Company" })
+                        @Html.ValidationMessageFor(model => model.CompanyId, null, new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
@@ -44,8 +44,8 @@
                 <div class="form-group col-lg-4 my-2">
                     <label class="control-label" for="ReqProviderId"><b>Requirement Provider:</b></label>
                     <div class="d-flex">
-                        @Html.DropDownList("ReqProviderId", null, "", htmlAttributes: new { @class = "form-control", @id = "Provider" })
-                        @Html.ValidationMessageFor(model => model.ReqProviderId, "", new { @class = "text-danger" })
+                        @Html.DropDownList("ReqProviderId", null, htmlAttributes: new { @class = "form-control", @id = "Provider" })
+                        @Html.ValidationMessageFor(model => model.ReqProviderId, null, new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group col-lg-4 my-2">
@@ -64,75 +64,72 @@
     <h4 class="text-center mx-auto p-2" style="border-bottom:2px solid #00bcd4;">Requirement Details</h4>
 </div>*@
 
-<div class="d-flex mx-auto alert alert-info p-0">
-    <div class="form-group mx-auto col my-2">
-        <label class="control-label w-100" for="Requirement"><b>Requirement:</b></label>
-        <div class="w-100">
-            <textarea class="form-control text-area single-line m-0" id="Requirement" name="Requirement" required="required" type="textarea" cols="40" style="width: 1234px;" rows="4" value=""></textarea>
-            <span class="field-validation-valid text-danger" data-valmsg-for="Requirement" data-valmsg-replace="true"></span>
-        </div>
-    </div>
-
-    <div class="form-group mx-auto col my-2">
-        <label class="control-label w-100" for="Description"><b>Description:</b></label>
-        <div class="w-100">
-            <textarea class="form-control text-area single-line m-0" id="Description" name="Description" required="required" type="textarea" cols="40" style="width: 1234px;" rows="4" value=""></textarea>
-            <span class="field-validation-valid text-danger" data-valmsg-for="Description" data-valmsg-replace="true"></span>
-
-        </div>
-    </div>
-
-    <div class="d-flex flex-column col my-2">
-        <div class="form-group">
-            <label class="control-label w-100" for="ReqTypeId"><b>Requirement Type:</b></label>
+<div class="d-flex flex-column alert alert-info p-0">
+    <div class="d-flex">
+        <div class="form-group mx-auto col my-2">
+            <label class="control-label w-100" for="Requirement"><b>Requirement:</b> <i class="text-danger">*required</i></label>
             <div class="w-100">
-                @Html.DropDownList("ReqTypeId", null, htmlAttributes: new { @class = "form-control", @id = "Type" })
-                <span class="field-validation-valid text-danger" data-valmsg-for="Type" data-valmsg-replace="true"></span>
+                <textarea class="form-control text-area single-line m-0" id="Requirement" name="Requirement" required="required" type="textarea" cols="40" style="width: 1234px;" rows="4" value=""></textarea>
+                <span class="text-danger ml-1 m-0 reqVal" style="font-family: none;display: none;">*Requirement can't be empty</span>
             </div>
         </div>
-        <div class="form-group">
-             <label class="control-label w-100" for="SoftwareId"><b>Softwares:</b></label>
-            <div class="w-100">
-                @Html.DropDownList("SoftwareId", (MultiSelectList)ViewBag.SoftwareId, new { @multiple = "multiple", @class = "form-control", @id = "Softwares" })
-                <span class="field-validation-valid text-danger" data-valmsg-for="Softwares" data-valmsg-replace="true"></span>
-            </div>
-        </div>
-    </div>
 
-    <div class="form-group col my-2">
-        <div class="form-group">
-            <label class="control-label w-100" for="Status"><b>Status:</b></label>
+        <div class="form-group mx-auto col my-2">
+            <label class="control-label w-100" for="Description"><b>Description:</b></label>
             <div class="w-100">
-                @*@Html.DropDownList("Status", (IEnumerable<SelectListItem>)ViewBag.Status, new { @class = "form-control", @id = "Status" })*@
-                @*@Html.EnumDropDownListFor(model => model.Status, htmlAttributes: new { @class = "form-control", @id = "Status" })*@
-                <select class="form-control" id="Status" name="Status">
-                    <option value="0">Submitted</option>
-                    <option value="1">Verified</option>
-                    <option value="2">Working</option>
-                    <option value="3">Done</option>
-                    <option value="4">Deployed</option>
-                </select>
-                <span class="field-validation-valid text-danger" data-valmsg-for="Status" data-valmsg-replace="true"></span>
+                <textarea class="form-control text-area single-line m-0" id="Description" name="Description" required="required" type="textarea" cols="40" style="width: 1234px;" rows="4" value=""></textarea>
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label w-100" for="StarMarked"><b>Star Marked:</b></label>
-            <div class="w-100">
-                <div class="checkbox">
-                    <input class="check-box" data-val="true" data-val-required="The StarMarked field is required." id="StarMarked" name="StarMarked" type="checkbox" value="true">
-                    <input id="StarMarked" name="StarMarked" type="hidden" value="false">
-                    <span class="field-validation-valid text-danger" data-valmsg-for="StarMarked" data-valmsg-replace="true"></span>
+
+        <div class="d-flex flex-column col my-2">
+            <div class="form-group">
+                <label class="control-label w-100" for="ReqTypeId"><b>Requirement Type:</b></label>
+                <div class="w-100">
+                    @Html.DropDownList("ReqTypeId", null, htmlAttributes: new { @class = "form-control", @id = "Type" })
+                    <span class="field-validation-valid text-danger" data-valmsg-for="Type" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label w-100" for="SoftwareId"><b>Softwares:</b> <i class="text-danger">*required</i></label>
+                <div class="w-100">
+                    @Html.DropDownList("SoftwareId", (MultiSelectList)ViewBag.SoftwareId, new { @multiple = "multiple", @class = "form-control", @id = "Softwares" })
+                    <span class="text-danger ml-1 m-0 softVal" style="font-family: none;display: none;">*Software can't be empty</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group col my-2">
+            <div class="form-group">
+                <label class="control-label w-100" for="Status"><b>Status:</b></label>
+                <div class="w-100">
+                    @*@Html.DropDownList("Status", (IEnumerable<SelectListItem>)ViewBag.Status, new { @class = "form-control", @id = "Status" })*@
+                    @*@Html.EnumDropDownListFor(model => model.Status, htmlAttributes: new { @class = "form-control", @id = "Status" })*@
+                    <select class="form-control" id="Status" name="Status">
+                        <option value="0">Submitted</option>
+                        <option value="1">Verified</option>
+                        <option value="2">Working</option>
+                        <option value="3">Done</option>
+                        <option value="4">Deployed</option>
+                    </select>
+                    <span class="field-validation-valid text-danger" data-valmsg-for="Status" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label w-100" for="StarMarked"><b>Star Marked:</b></label>
+                <div class="w-100">
+                    <div class="checkbox">
+                        <input class="check-box" data-val="true" data-val-required="The StarMarked field is required." id="StarMarked" name="StarMarked" type="checkbox" value="true">
+                        <input id="StarMarked" name="StarMarked" type="hidden" value="false">
+                        <span class="field-validation-valid text-danger" data-valmsg-for="StarMarked" data-valmsg-replace="true"></span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-</div>
-
-    <div class="d-flex mt-2 mb-3">
+    <div class="d-flex mb-2">
         <button class="btn btn-primary mx-auto" id="add" onclick="AddInfo();">Add</button>
     </div>
-
+</div>
     <div class="table-responsive container my-2">
         <table class="table table-sm">
             <thead class="bg-dark text-white">
@@ -177,8 +174,6 @@
     @Scripts.Render("~/bundles/jqueryval")
 
     <script>
-        var editstat = false;
-        var curobj = null;
         $(document).ready(function () {
             $("#Type").select2();
             $("#Status").select2();
@@ -187,8 +182,32 @@
             $("#Softwares").select2();
         });
 
+        var editstat = false;
+        var curobj = null;
+
+        function validateDetail() {
+            var validation = true;
+            var req = $("#Requirement").val();
+            if (req == "") {
+                $("#Requirement").parent().find(".reqVal").css("display", "inline-block");
+                validation = false;
+            }
+            else { $("#Requirement").parent().find(".reqVal").css("display", "none"); }
+
+            var softwareData = $("#Softwares").select2('data');
+            if (softwareData.length == 0) {
+                $("#Softwares").parent().find(".softVal").css("display", "inline-block");
+                validation = false;
+            }
+            else { $("#Softwares").parent().find(".softVal").css("display", "none"); }
+            return validation;
+        }
+
         function AddInfo() {
 
+            var validation = validateDetail();
+
+            if (!validation) return;
 
             var softwareData = $("#Softwares").select2('data');
 
@@ -284,7 +303,28 @@
             $(rowobj).parent().find(".btn-danger").attr("disabled", true);
         }
 
+        function validateReq() {
+            var validation = true;
+            var req = $("#Title").val();
+            if (req == "") {
+                $("#Title").parent().find(".titleVal").css("display", "inline-block");
+                validation = false;
+            }
+            else { $("#Title").parent().find(".titleVal").css("display", "none"); }
+
+            if ($("#Date").val() == "") {
+                $("#Date").parent().find(".dateVal").css("display", "inline-block");
+                validation = false;
+            }
+            else { $("#Date").parent().find(".dateVal").css("display", "none"); }
+            return validation;
+        }
+
         function Save() {
+
+            var validation = validateReq();
+
+            if (!validation) return;
 
             var Detailrows = [];
 

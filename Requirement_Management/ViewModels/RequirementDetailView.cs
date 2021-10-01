@@ -20,7 +20,6 @@ namespace Requirement_Management.ViewModels
         public bool StarMarked { get; set; }
 
         public string ReqSoftwareId { get; set; }
-
         public string ReqSoftwareName { get; set; }
     }
 }

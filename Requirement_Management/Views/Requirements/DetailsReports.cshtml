@@ -1,0 +1,205 @@
+﻿@model Requirement_Management.ViewModels.ReportView
+
+@{
+    ViewBag.Title = "Details Report";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal mx-auto p-1 d-print-none">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="mx-auto p-0 col-11 col-sm-8 col-md-12 card mb-3 alert alert-secondary" @*style="position: absolute; left: 0; right: 0;top: 20%; bottom: 24.4%;"*@>
+            <div class="card-header bg-dark text-white p-2">
+                <h4 class="text-center mx-auto my-0">Requirement Detail Report</h4>
+            </div>
+            <div class="d-flex">
+                <div class="form-group col-lg-3 my-2">
+                    <label class="control-label w-100" for="From"><b>From:</b> <i class="text-danger">*required</i></label>
+                    <div class="w-100">
+                        <input class="form-control text-box single-line valid" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required." id="From" name="From" type="date">
+                        <span class="field-validation-valid text-danger ml-1 m-0" style="font-family: none; display: inline-block;" data-valmsg-for="From" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <div class="form-group col-lg-3 my-2">
+                    <label class="control-label w-100" for="To"><b>To:</b> <i class="text-danger">*required</i></label>
+                    <div class="w-100">
+                        <input class="form-control text-box single-line valid" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required." id="To" name="To" type="date">
+                        <span class="field-validation-valid text-danger ml-1 m-0" style="font-family: none; display: inline-block;" data-valmsg-for="To" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <div class="form-group col-lg-3 my-2">
+                    <label class="control-label w-100" for="CompanyId"><b>Company:</b></label>
+                    <div class="w-100">
+                        @Html.DropDownList("CompanyId", null, "", htmlAttributes: new { @class = "form-control", @id = "Company" })
+                        @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-3 my-2">
+                    <label class="control-label" for="ReqProviderId"><b>Requirement Provider:</b></label>
+                    <div class="d-flex">
+                        @Html.DropDownList("ReqProviderId", null, "", htmlAttributes: new { @class = "form-control", @id = "Provider" })
+                        @Html.ValidationMessageFor(model => model.ReqProviderId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex">
+                <div class="form-group col-lg-3 my-2">
+                    <label class="control-label w-100" for="ReqTypeId"><b>Requirement Type:</b></label>
+                    <div class="w-100">
+                        @Html.DropDownList("ReqTypeId", null, "", htmlAttributes: new { @class = "form-control", @id = "Type" })
+                        <span class="field-validation-valid text-danger" data-valmsg-for="Type" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <div class="form-group col-lg-3 my-2">
+                    <label class="control-label w-100" for="SoftwareId"><b>Softwares:</b> @*<i class="text-danger">*required</i>*@</label>
+                    <div class="w-100">
+                        @Html.DropDownList("SoftwareId", (MultiSelectList)ViewBag.SoftwareId, new { @multiple = "multiple", @class = "form-control", @id = "Softwares" })
+                        <span class="text-danger ml-1 m-0 softVal" style="font-family: none;display: none;">*Software can't be empty</span>
+                    </div>
+                </div>
+                <div class="form-group col-lg-3 my-2">
+                    <label class="control-label w-100" for="Status"><b>Status:</b></label>
+                    <div class="w-100">
+                        @*@Html.DropDownList("Status", (IEnumerable<SelectListItem>)ViewBag.Status, new { @class = "form-control", @id = "Status" })*@
+                        @*@Html.EnumDropDownListFor(model => model.Status, htmlAttributes: new { @class = "form-control", @id = "Status" })*@
+                        <select class="form-control" id="Status" name="Status">
+                            <option value="-1"></option>
+                            <option value="0">Submitted</option>
+                            <option value="1">Verified</option>
+                            <option value="2">Working</option>
+                            <option value="3">Done</option>
+                            <option value="4">Deployed</option>
+                        </select>
+                        <span class="field-validation-valid text-danger" data-valmsg-for="Status" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <div class="form-group col-lg-3 my-2">
+                    <label class="control-label w-100" for="StarMarked"><b>Star Marked:</b></label>
+                    <div class="w-100">
+                        <div class="checkbox">
+                            <input class="check-box" data-val="true" data-val-required="The StarMarked field is required." id="StarMarked" name="StarMarked" type="checkbox" value="true">
+                            <input id="StarMarked" name="StarMarked" type="hidden" value="false">
+                            <span class="field-validation-valid text-danger" data-valmsg-for="StarMarked" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group d-flex my-2">
+                <div class="d-inline-block mx-auto">
+                    <button class="btn btn-primary mx-auto" type="submit" id="Search">Search</button>
+                    <button onclick="window.print()" class="btn btn-danger d-print-none">PDF <i class="fas fa-file-pdf"></i></button>
+                    <button  id="btnExport" onclick="fnExcelReport();" class="btn btn-success d-print-none">Excel <i class="fas fa-file-excel"></i></button>
+                    @Html.ActionLink("Back to List", "Index", new { @area = "" }, new { @class = "btn btn-info" })
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+}
+
+<iframe id="txtArea1" style="display:none"></iframe>
+
+<div class="table-responsive my-5 d-print-table">
+    <table class="table" id="headerTable">
+        <thead class="bg-light" >
+            <tr class="border">
+                <th class="border">SL#</th>
+                <th class="border" @*style="width: 12%;"*@>
+                    Date
+                </th>
+                <th class="border" style="width: 20%;">
+                    Company & Provider
+                </th>
+                <th class="border">
+                    Softwares
+                </th>
+                <th class="border" style="width: 13%;">
+                    Requirement
+                </th>
+                <th class="border" style="width: 13%;">
+                    Description
+                </th>
+                <th class="border" style="width: 17%;">
+                    Requirement Type
+                </th>
+                <th class="border">
+                    Status
+                </th>
+                @*<th class="border">
+                        Star Marked
+                    </th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @{ var x = 1; }
+            @foreach (var item in Model.ReqDetail)
+            {
+                int status = (int)item.Status;
+
+                <tr class="border">
+                    <td class="border">@x<b class="text-danger">@{x++; @((item.StarMarked) ? "*" : ""); }</b></td>
+                    <td class="type border">@item.Date.ToString("dd/M/yyyy")</td>
+                    <td class="type border">@item.CompanyName <br />@item.ReqProviderName</td>
+                    <td class="softwares border">@item.STRSoftwareName</td>
+                    <td class="requirement border">@Html.DisplayFor(modelItem => item.Requirement)</td>
+                    <td class="description border">@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td class="type border">@item.ReqTypeName</td>
+                    <td class="status border">@Html.DisplayFor(modelItem => item.Status)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            $("#Type").select2();
+            $("#Status").select2();
+            $("#Provider").select2();
+            $("#Company").select2();
+            $("#Softwares").select2();
+        });
+
+        function fnExcelReport() {
+            var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+            var textRange; var j = 0;
+            tab = document.getElementById('headerTable'); // id of table
+
+            for (j = 0 ; j < tab.rows.length ; j++) {
+                tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+                //tab_text=tab_text+"</tr>";
+            }
+
+            tab_text = tab_text + "</table>";
+            tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+            tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+            tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+            var ua = window.navigator.userAgent;
+            var msie = ua.indexOf("MSIE ");
+
+            if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+            {
+                txtArea1.document.open("txt/html", "replace");
+                txtArea1.document.write(tab_text);
+                txtArea1.document.close();
+                txtArea1.focus();
+                sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
+            }
+            else                 //other browser not tested on IE 11
+                sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+            return (sa);
+        }
+    </script>
+}

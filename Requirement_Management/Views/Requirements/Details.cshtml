@@ -1,90 +1,65 @@
-﻿@model Requirement_Management.Models.Requirement
+﻿@model Requirement_Management.ViewModels.RequirementView
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+@*<h2>Details</h2>*@
 
 <div>
-    <h4>Requirement</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Company.Name)
-        </dt>
+    <h2 class="text-center mt-5" style="font-family: 'Berlin Sans FB';">@Model.Title</h2>
+    <hr class="col-6" />
+    <div class="col-sm-6 mx-auto" style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
+        <h6 class="text-center col">Company: @Model.CompanyName</h6>
+        <h6 class="text-center col">Provider: @Model.ReqProviderName</h6>
+    </div>
+    <div class="px-2 d-flex justify-content-between">
+        <h6 style="font-family: monospace;">Id: @Model.Id</h6>
+        <h6 style="font-family: monospace;">Date: @Model.Date.ToShortDateString()</h6>
+    </div>
+    <div class="table-responsive mb-2 d-print-table">
+        <table class="table">
+            <thead class="bg-light">
+                <tr class="border">
+                    <th class="border">#</th>
+                    <th class="border" style="width: 17%;">
+                        Requirement
+                    </th>
+                    <th class="border" style="width: 17%;">
+                        Description
+                    </th>
+                    <th class="border">
+                        Requirement Type
+                    </th>
+                    <th class="border">
+                        Softwares
+                    </th>
+                    <th class="border">
+                        Status
+                    </th>
+                    @*<th class="border">
+                        Star Marked
+                    </th>*@
+                </tr>
+            </thead>
+            <tbody id="reqtable">
+                @{ var x = 1; }
+                @foreach (var item in Model.ReqDetail)
+                {
+                    int status = (int)item.Status;
 
-        <dd>
-            @Html.DisplayFor(model => model.Company.Name)
-        </dd>
+                    <tr class="border">
+                        <td class="border">@x<b class="text-danger">@{x++; @((item.StarMarked) ? "*" : ""); }</b></td>
+                        <td class="requirement border">@Html.DisplayFor(modelItem => item.Requirement)</td>
+                        <td class="description border">@Html.DisplayFor(modelItem => item.Description)</td>
+                        <td class="type border">@item.ReqTypeName</td>
+                        <td class="softwares border">@item.ReqSoftwareName</td>
+                        <td class="status border">@Html.DisplayFor(modelItem => item.Status)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <button onclick="window.print()" class="btn btn-success d-print-none mx-auto d-block">Print <i class="fas fa-file-pdf"></i></button>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ReqProvider.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ReqProvider.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ReqType.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ReqType.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Date)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.EntryDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.EntryDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.StarMarked)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.StarMarked)
-        </dd>
-
-    </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

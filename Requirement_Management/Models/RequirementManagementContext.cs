@@ -6,7 +6,6 @@ namespace Requirement_Management.Models
 {
     public class RequirementManagementContext : DbContext
     {
-
         public RequirementManagementContext() : base("RequirementManagementContext")
         {
         }

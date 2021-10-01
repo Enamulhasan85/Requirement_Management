@@ -6,17 +6,18 @@ using System.Web;
 
 namespace Requirement_Management.ViewModels
 {
-    public class RequirementView
+    public class DetailReportView
     {
-        public RequirementView()
-        {
-            ReqDetail = new List<RequirementDetailView>();
-        }
-
         public int Id { get; set; }
-        public string Title { get; set; }
+        public string Requirement { get; set; }
+        public string Description { get; set; }
+        public int? ReqTypeId { get; set; }
+        public virtual RequirementType ReqType { get; set; }
+        public string ReqTypeName { get; set; }
+        public Status Status { get; set; }
+        public bool StarMarked { get; set; }
+
         public DateTime Date { get; set; }
-        public DateTime EntryDate { get; set; }
         public int? CompanyId { get; set; }
         public virtual ClientCompany Company { get; set; }
         public string CompanyName { get; set; }
@@ -24,6 +25,7 @@ namespace Requirement_Management.ViewModels
         public virtual RequirementProvider ReqProvider { get; set; }
         public string ReqProviderName { get; set; }
 
-        public List<RequirementDetailView> ReqDetail { get; set; }
+        public string STRSoftwareId { get; set; }
+        public string STRSoftwareName { get; set; }
     }
 }

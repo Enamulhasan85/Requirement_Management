@@ -243,6 +243,8 @@
     <Compile Include="Models\SoftwareCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\DetailReportView.cs" />
+    <Compile Include="ViewModels\ReportView.cs" />
     <Compile Include="ViewModels\RequirementDetailView.cs" />
     <Compile Include="ViewModels\RequirementView.cs" />
   </ItemGroup>
@@ -446,6 +448,7 @@
     <Content Include="Views\Requirements\Details.cshtml" />
     <Content Include="Views\Requirements\Edit.cshtml" />
     <Content Include="Views\Requirements\Index.cshtml" />
+    <Content Include="Views\Requirements\DetailsReports.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
