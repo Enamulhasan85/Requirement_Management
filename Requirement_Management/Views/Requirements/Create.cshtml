@@ -264,7 +264,7 @@
 
             $("#Requirement").val(null);
             $("#Description").val(null);
-            $("#Type").val('1').trigger("change");
+            $("#Type").val($('#Type option:first-child').val()).trigger("change");
             $("#Softwares").val(null).trigger("change");
             $("#Status").val('0').trigger("change");
             $("#StarMarked").prop('checked', false);
@@ -349,7 +349,7 @@
                 'CompanyId': $("#Company").val(),
                 'ReqProviderId': $("#Provider").val(),
 
-                'ReqDeatail': Detailrows
+                'ReqDetail': Detailrows
             };
 
             console.log(inputData);

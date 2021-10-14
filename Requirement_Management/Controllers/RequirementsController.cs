@@ -119,9 +119,9 @@ namespace Requirement_Management.Controllers
                     softwareName = softwareName.Remove(softwareName.Length - 1, 1);
                     row.STRSoftwareId += sa;
                     row.STRSoftwareName += softwareName;
-                    row.CompanyName = db.ClientCompany.Find(row.CompanyId).Name;
-                    row.ReqProviderName = db.RequirementProvider.Find(row.ReqProviderId).Name;
-                    row.ReqTypeName = db.RequirementType.Find(row.ReqTypeId).Name;
+                    if (row.CompanyId != null) row.CompanyName = db.ClientCompany.Find(row.CompanyId).Name;
+                    if (row.ReqProviderId != null) row.ReqProviderName = db.RequirementProvider.Find(row.ReqProviderId).Name;
+                    if (row.ReqTypeId != null) row.ReqTypeName = db.RequirementType.Find(row.ReqTypeId).Name;
                 }
                 else Report.ReqDetail.Remove(row);
 
@@ -156,9 +156,9 @@ namespace Requirement_Management.Controllers
             reqView.Title = requirement.Title;
             reqView.Date = requirement.Date;
             reqView.CompanyId = requirement.CompanyId;
-            reqView.CompanyName = requirement.Company.Name;
+            if (requirement.CompanyId != null) reqView.CompanyName = requirement.Company.Name;
             reqView.ReqProviderId = requirement.ReqProviderId;
-            reqView.ReqProviderName = requirement.ReqProvider.Name;
+            if (requirement.ReqProviderId != null) reqView.ReqProviderName = requirement.ReqProvider.Name;
 
             List<RequirementDetail> reqDetail = db.RequirementDetail.Where(r => r.ReqId == requirement.Id).ToList();
 
@@ -169,7 +169,7 @@ namespace Requirement_Management.Controllers
                 reqdetail.Requirement = info.Requirement;
                 reqdetail.Description = info.Description;
                 reqdetail.ReqTypeId = info.ReqTypeId;
-                reqdetail.ReqTypeName = info.ReqType.Name;
+                if (info.ReqTypeId != null) reqdetail.ReqTypeName = info.ReqType.Name;
                 reqdetail.ReqId = requirement.Id;
                 reqdetail.Status = info.Status;
                 reqdetail.StarMarked = info.StarMarked;
@@ -263,7 +263,6 @@ namespace Requirement_Management.Controllers
 
             }
 
-
             return Json(new { Id = requirement.Id }, JsonRequestBehavior.AllowGet);
         }
 
@@ -310,7 +309,7 @@ namespace Requirement_Management.Controllers
                 reqdetail.Requirement = info.Requirement;
                 reqdetail.Description = info.Description;
                 reqdetail.ReqTypeId = info.ReqTypeId;
-                reqdetail.ReqTypeName = info.ReqType.Name;
+                if (info.ReqTypeId != null) reqdetail.ReqTypeName = info.ReqType.Name;
                 reqdetail.ReqId = requirement.Id;
                 reqdetail.Status = info.Status;
                 reqdetail.StarMarked = info.StarMarked;
