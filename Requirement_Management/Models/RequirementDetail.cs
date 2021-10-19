@@ -19,6 +19,9 @@ namespace Requirement_Management.Models
         public int Id { get; set; }
         public string Requirement { get; set; }
         public string Description { get; set; }
+        public decimal Workdays { get; set; }
+        public int? SoftCategoryId { get; set; }
+        public virtual SoftwareCategory SoftCategory { get; set; }
         public int? ReqTypeId { get; set; }
         public virtual RequirementType ReqType { get; set; }
         public int? ReqId { get; set; }

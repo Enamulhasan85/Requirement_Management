@@ -16,6 +16,7 @@ namespace Requirement_Management.ViewModels
         public string ReqTypeName { get; set; }
         public Status Status { get; set; }
         public bool StarMarked { get; set; }
+        public decimal Workdays { get; set; }
 
         public DateTime Date { get; set; }
         public int? CompanyId { get; set; }
@@ -24,6 +25,9 @@ namespace Requirement_Management.ViewModels
         public int? ReqProviderId { get; set; }
         public virtual RequirementProvider ReqProvider { get; set; }
         public string ReqProviderName { get; set; }
+        public int? SoftCategoryId { get; set; }
+        public virtual RequirementProvider SoftCategory { get; set; }
+        public string SoftCategoryName { get; set; }
 
         public string STRSoftwareId { get; set; }
         public string STRSoftwareName { get; set; }

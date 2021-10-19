@@ -228,6 +228,14 @@
     <Compile Include="Migrations\202109061642174_Req.Soft.Table.Designer.cs">
       <DependentUpon>202109061642174_Req.Soft.Table.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202110151755198_add software category.cs" />
+    <Compile Include="Migrations\202110151755198_add software category.Designer.cs">
+      <DependentUpon>202110151755198_add software category.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202110171319590_Workdays in ReqDetail.cs" />
+    <Compile Include="Migrations\202110171319590_Workdays in ReqDetail.Designer.cs">
+      <DependentUpon>202110171319590_Workdays in ReqDetail.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ClientCompany.cs" />
@@ -244,6 +252,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\DetailReportView.cs" />
+    <Compile Include="ViewModels\IndexView.cs" />
     <Compile Include="ViewModels\ReportView.cs" />
     <Compile Include="ViewModels\RequirementDetailView.cs" />
     <Compile Include="ViewModels\RequirementView.cs" />
@@ -476,6 +485,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202109061642174_Req.Soft.Table.resx">
       <DependentUpon>202109061642174_Req.Soft.Table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110151755198_add software category.resx">
+      <DependentUpon>202110151755198_add software category.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110171319590_Workdays in ReqDetail.resx">
+      <DependentUpon>202110171319590_Workdays in ReqDetail.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

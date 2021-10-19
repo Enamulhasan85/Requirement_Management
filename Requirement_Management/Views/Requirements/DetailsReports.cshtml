@@ -20,14 +20,14 @@
                 <div class="form-group col-lg-3 my-2">
                     <label class="control-label w-100" for="From"><b>From:</b> <i class="text-danger">*required</i></label>
                     <div class="w-100">
-                        <input class="form-control text-box single-line valid" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required." id="From" name="From" type="date">
+                        <input class="form-control text-box single-line valid" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required." id="From" name="From" type="date" value="@Model.From.ToString("yyyy-MM-dd")">
                         <span class="field-validation-valid text-danger ml-1 m-0" style="font-family: none; display: inline-block;" data-valmsg-for="From" data-valmsg-replace="true"></span>
                     </div>
                 </div>
                 <div class="form-group col-lg-3 my-2">
                     <label class="control-label w-100" for="To"><b>To:</b> <i class="text-danger">*required</i></label>
                     <div class="w-100">
-                        <input class="form-control text-box single-line valid" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required." id="To" name="To" type="date">
+                        <input class="form-control text-box single-line valid" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required." id="To" name="To" type="date" value="@Model.To.ToString("yyyy-MM-dd")">
                         <span class="field-validation-valid text-danger ml-1 m-0" style="font-family: none; display: inline-block;" data-valmsg-for="To" data-valmsg-replace="true"></span>
                     </div>
                 </div>
@@ -50,10 +50,10 @@
 
             <div class="d-flex">
                 <div class="form-group col-lg-3 my-2">
-                    <label class="control-label w-100" for="ReqTypeId"><b>Requirement Type:</b></label>
+                    <label class="control-label w-100" for="CategoryId"><b>Software Category:</b> <i class="text-danger">*required</i></label>
                     <div class="w-100">
-                        @Html.DropDownList("ReqTypeId", null, "", htmlAttributes: new { @class = "form-control", @id = "Type" })
-                        <span class="field-validation-valid text-danger" data-valmsg-for="Type" data-valmsg-replace="true"></span>
+                        @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control", @id = "Category" })
+                        <span class="text-danger ml-1 m-0 catVal" style="font-family: none;display: none;">*Software Category can't be empty</span>
                     </div>
                 </div>
                 <div class="form-group col-lg-3 my-2">
@@ -64,31 +64,39 @@
                     </div>
                 </div>
                 <div class="form-group col-lg-3 my-2">
+                    <label class="control-label w-100" for="ReqTypeId"><b>Requirement Type:</b></label>
+                    <div class="w-100">
+                        @Html.DropDownList("ReqTypeId", null, "", htmlAttributes: new { @class = "form-control", @id = "Type" })
+                        <span class="field-validation-valid text-danger" data-valmsg-for="Type" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <div class="form-group col-lg-3 my-2">
                     <label class="control-label w-100" for="Status"><b>Status:</b></label>
                     <div class="w-100">
                         @*@Html.DropDownList("Status", (IEnumerable<SelectListItem>)ViewBag.Status, new { @class = "form-control", @id = "Status" })*@
-                        @*@Html.EnumDropDownListFor(model => model.Status, htmlAttributes: new { @class = "form-control", @id = "Status" })*@
-                        <select class="form-control" id="Status" name="Status">
+                        @Html.EnumDropDownListFor(r => r.Status, new { @class = "form-control" })
+                        @*<select class="form-control" id="Status" name="Status">
                             <option value="-1"></option>
                             <option value="0">Submitted</option>
                             <option value="1">Verified</option>
                             <option value="2">Working</option>
                             <option value="3">Done</option>
                             <option value="4">Deployed</option>
-                        </select>
-                        <span class="field-validation-valid text-danger" data-valmsg-for="Status" data-valmsg-replace="true"></span>
+                        </select>*@
+                        <span class="field-validation-valid text-danger" data-valmsg-for="" data-valmsg-replace="false"></span>
                     </div>
                 </div>
-                <div class="form-group col-lg-3 my-2">
-                    <label class="control-label w-100" for="StarMarked"><b>Star Marked:</b></label>
-                    <div class="w-100">
-                        <div class="checkbox">
-                            <input class="check-box" data-val="true" data-val-required="The StarMarked field is required." id="StarMarked" name="StarMarked" type="checkbox" value="true">
-                            <input id="StarMarked" name="StarMarked" type="hidden" value="false">
-                            <span class="field-validation-valid text-danger" data-valmsg-for="StarMarked" data-valmsg-replace="true"></span>
-                        </div>
+            </div>
+            <div class="form-check form-check-inline mx-auto mt-2 mb-3">
+                <div class="form-check-input">
+                    <div class="checkbox">
+                        @Html.CheckBoxFor(model => model.StarMarked)
+                        @*<input class="check-box" data-val="true" data-val-required="The StarMarked field is required." id="StarMarked" name="StarMarked" type="checkbox" value="true">*@
+                        @*<input id="StarMarked" name="StarMarked" type="hidden" value="false">*@
+                        @*<span class="field-validation-valid text-danger" data-valmsg-for="StarMarked" data-valmsg-replace="true"></span>*@
                     </div>
                 </div>
+                <label class="form-check-label" for="StarMarked"><b>Star Marked</b></label>
             </div>
             <div class="form-group d-flex my-2">
                 <div class="d-inline-block mx-auto">
@@ -107,7 +115,7 @@
 <iframe id="txtArea1" style="display:none"></iframe>
 
 <div class="table-responsive my-5 d-print-table">
-    <table class="table" id="headerTable">
+    <table class="table" id="headerTable"  style="font-size: smaller;">
         <thead class="bg-light" >
             <tr class="border">
                 <th class="border">SL#</th>
@@ -116,6 +124,9 @@
                 </th>
                 <th class="border" style="width: 20%;">
                     Company & Provider
+                </th>
+                <th class="border">
+                    Software Category
                 </th>
                 <th class="border">
                     Softwares
@@ -132,6 +143,9 @@
                 <th class="border">
                     Status
                 </th>
+                <th class="border">
+                    Workdays
+                </th>
                 @*<th class="border">
                         Star Marked
                     </th>*@
@@ -147,11 +161,13 @@
                     <td class="border">@x<b class="text-danger">@{x++; @((item.StarMarked) ? "*" : ""); }</b></td>
                     <td class="type border">@item.Date.ToString("dd/M/yyyy")</td>
                     <td class="type border">@item.CompanyName <br />@item.ReqProviderName</td>
+                    <td class="category border">@item.SoftCategoryName</td>
                     <td class="softwares border">@item.STRSoftwareName</td>
                     <td class="requirement border">@Html.DisplayFor(modelItem => item.Requirement)</td>
                     <td class="description border">@Html.DisplayFor(modelItem => item.Description)</td>
                     <td class="type border">@item.ReqTypeName</td>
                     <td class="status border">@Html.DisplayFor(modelItem => item.Status)</td>
+                    <td class="status border">@Html.DisplayFor(modelItem => item.Workdays)</td>
                 </tr>
             }
         </tbody>
@@ -165,11 +181,36 @@
     <script>
         $(document).ready(function () {
             $("#Type").select2();
-            $("#Status").select2();
+            $("#Category").select2();
             $("#Provider").select2();
             $("#Company").select2();
             $("#Softwares").select2();
+            $("#Status").select2();
         });
+
+        $("#Category").on('change', function () {
+
+            $("#Softwares").empty();
+
+            var inputData = {
+                'Id': this.value
+            };
+
+            $.get("/Requirements/GetSoftwares", inputData,
+                function (data, status) {
+                    //console.log(data);
+                    var appendOptionsString = "";
+
+                    for (var i = 0; i < data.length; i++) {
+                        appendOptionsString = appendOptionsString +
+                            "<option value=\"" + data[i].Id + "\" >" + data[i].Name + "</option>";
+                    }
+                    $("#Softwares").append(appendOptionsString);
+                });
+
+        });
+
+        $("#Category").trigger("change");
 
         function fnExcelReport() {
             var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";

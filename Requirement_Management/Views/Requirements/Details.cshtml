@@ -7,35 +7,47 @@
 @*<h2>Details</h2>*@
 
 <div>
-    <h2 class="text-center mt-5" style="font-family: 'Berlin Sans FB';">@Model.Title</h2>
+    <h2 class="text-center mt-5" style="font-family: 'Font Awesome 5 Pro';">@Model.Title</h2>
     <hr class="col-6" />
-    <div class="col-sm-6 mx-auto" style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
-        <h6 class="text-center col">Company: @Model.CompanyName</h6>
-        <h6 class="text-center col">Provider: @Model.ReqProviderName</h6>
+    <div class="col-sm-6 mx-auto" style="font-family: monospace; font-size: larger;">
+        @if (@Model.CompanyName != null)
+        {
+            <h6 class="text-center col">Company: @Model.CompanyName</h6>
+        }
+        @if (@Model.ReqProviderName != null)
+        {
+            <h6 class="text-center col">Provider: @Model.ReqProviderName</h6>
+        }
     </div>
     <div class="px-2 d-flex justify-content-between">
         <h6 style="font-family: monospace;">Id: @Model.Id</h6>
-        <h6 style="font-family: monospace;">Date: @Model.Date.ToShortDateString()</h6>
+        <h6 style="font-family: monospace;">Date: @Model.Date.ToString("dd/MM/yyyy")</h6>
     </div>
     <div class="table-responsive mb-2 d-print-table">
         <table class="table">
             <thead class="bg-light">
                 <tr class="border">
                     <th class="border">#</th>
-                    <th class="border" style="width: 17%;">
+                    <th class="border" style="width: 12%;">
                         Requirement
                     </th>
-                    <th class="border" style="width: 17%;">
+                    <th class="border" style="width: 15%;">
                         Description
                     </th>
-                    <th class="border">
+                    <th class="border" style="width: 17%;">
                         Requirement Type
+                    </th> 
+                    <th class="border" style="width: 18%;">
+                        Software Category
                     </th>
                     <th class="border">
                         Softwares
                     </th>
                     <th class="border">
                         Status
+                    </th>
+                    <th class="border">
+                        Workdays
                     </th>
                     @*<th class="border">
                         Star Marked
@@ -53,8 +65,10 @@
                         <td class="requirement border">@Html.DisplayFor(modelItem => item.Requirement)</td>
                         <td class="description border">@Html.DisplayFor(modelItem => item.Description)</td>
                         <td class="type border">@item.ReqTypeName</td>
+                        <td class="category border">@item.SoftCategoryName</td>
                         <td class="softwares border">@item.ReqSoftwareName</td>
                         <td class="status border">@Html.DisplayFor(modelItem => item.Status)</td>
+                        <td class="workdays border">@Html.DisplayFor(modelItem => item.Workdays)</td>
                     </tr>
                 }
             </tbody>

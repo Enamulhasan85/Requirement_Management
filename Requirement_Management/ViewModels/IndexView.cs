@@ -6,23 +6,22 @@ using System.Web;
 
 namespace Requirement_Management.ViewModels
 {
-    public class ReportView
+    public enum Query
     {
-        public ReportView()
+        EntryDate,
+        ReqDate
+    };
+
+    public class IndexView
+    {
+        public IndexView()
         {
             From = DateTime.Today;
             To = DateTime.Today;
-            ReqDetail = new List<DetailReportView>();
+            Req = new List<Requirement>();
         }
 
-        public int Id { get; set; }
-        public int? ReqTypeId { get; set; }
-        public virtual RequirementType ReqType { get; set; }
-        public Status? Status { get; set; }
-        public bool StarMarked { get; set; }
-        public int? CategoryId { get; set; }
-        public virtual RequirementProvider Category { get; set; }
-
+        public int? Id { get; set; }
         public DateTime From { get; set; }
         public DateTime Date { get; set; }
         public DateTime To { get; set; }
@@ -30,9 +29,8 @@ namespace Requirement_Management.ViewModels
         public virtual ClientCompany Company { get; set; }
         public int? ReqProviderId { get; set; }
         public virtual RequirementProvider ReqProvider { get; set; }
+        public Query Query { get; set; }
 
-        public List<int> SoftwareId { get; set; }
-
-        public List<DetailReportView> ReqDetail { get; set; }
+        public List<Requirement> Req { get; set; }
     }
 }

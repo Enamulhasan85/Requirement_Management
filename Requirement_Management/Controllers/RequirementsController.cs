@@ -18,21 +18,78 @@ namespace Requirement_Management.Controllers
         // GET: Requirements
         public ActionResult Index()
         {
-            var requirement = db.Requirement.Include(r => r.Company).Include(r => r.ReqProvider)/*.Include(r => r.ReqType)*/;
-            return View(requirement.ToList());
+            ViewBag.CompanyId = new SelectList(db.ClientCompany, "Id", "Name");
+            ViewBag.ReqProviderId = new SelectList(db.RequirementProvider, "Id", "Name");
+
+            IndexView requirement = new IndexView();
+            DateTime To = requirement.To.AddDays(1);
+            requirement.Req = db.Requirement.Where(r => r.EntryDate >= requirement.From && r.EntryDate < To ).ToList();
+            return View(requirement);
         }
 
+        // POST: Requirements
+        [HttpPost]
+        public ActionResult Index(IndexView requirement)
+        {
+            string sql = "select Requirement.Id, Requirement.Title, Requirement.Date, Requirement.EntryDate, Requirement.CompanyId, Requirement.ReqProviderId from Requirement where 1=1";
+
+            if (requirement.Id != null)
+            {
+                sql += "and Id = '" + requirement.Id + "'";
+            }
+            else if (requirement.Query == Query.EntryDate)
+            {
+                if (requirement.From != null)
+                {
+                    sql += "and EntryDate >= '" + requirement.From + "'";
+                }
+                if (requirement.To != null)
+                {
+                    sql += "and EntryDate < '" + requirement.To.AddDays(1) + "'";
+                }
+            }
+            else
+            {
+                if (requirement.From != null)
+                {
+                    sql += "and Date >= '" + requirement.From + "'";
+                }
+                if (requirement.To != null)
+                {
+                    sql += "and Date < '" + requirement.To.AddDays(1) + "'";
+                }
+            }
+            if (requirement.CompanyId != null)
+            {
+                sql += "and CompanyId = '" + requirement.CompanyId + "'";
+            }
+            if (requirement.ReqProviderId != null)
+            {
+                sql += "and ReqProviderId = '" + requirement.ReqProviderId + "'";
+            }
+
+            requirement.Req = db.Database.SqlQuery<Requirement>(sql).ToList();
+
+            foreach (var row in requirement.Req)
+            {
+                row.Company = db.ClientCompany.Where(r => r.Id == row.CompanyId).FirstOrDefault();
+                row.ReqProvider = db.RequirementProvider.Where(r => r.Id == row.ReqProviderId).FirstOrDefault();
+            }
+
+            ViewBag.CompanyId = new SelectList(db.ClientCompany, "Id", "Name");
+            ViewBag.ReqProviderId = new SelectList(db.RequirementProvider, "Id", "Name");
+            //requirement.Req = db.Requirement.Where(r => r.EntryDate.Day == DateTime.Now.Day && r.EntryDate.Month == DateTime.Now.Month && r.EntryDate.Year == DateTime.Now.Year).ToList();
+            return View(requirement);
+        }
         // GET: Requirements/Reports/5
         public ActionResult DetailsReports()
         {
             ViewBag.CompanyId = new SelectList(db.ClientCompany, "Id", "Name");
             ViewBag.ReqProviderId = new SelectList(db.RequirementProvider, "Id", "Name");
             ViewBag.ReqTypeId = new SelectList(db.RequirementType, "Id", "Name");
-            var softwares = db.Software.Select(c => new {
-                Id = c.Id,
-                Name = c.Name
-            }).ToList();
-            ViewBag.SoftwareId = new MultiSelectList(softwares, "Id", "Name");
+            ViewBag.CategoryId = new SelectList(db.SoftwareCategory, "Id", "Name");
+            ViewBag.SoftwareId = new MultiSelectList("", "Id", "Name");
+
             ReportView DetailReport = new ReportView();
             return View(DetailReport);
         }
@@ -40,21 +97,21 @@ namespace Requirement_Management.Controllers
         [HttpPost]
         public ActionResult DetailsReports(ReportView detailReport)
         {
-            string sql = "select RequirementDetail.Id, RequirementDetail.ReqTypeId, RequirementDetail.Description, RequirementDetail.Requirement, RequirementDetail.Status, RequirementDetail.StarMarked, Requirement.Date, Requirement.CompanyId, Requirement.ReqProviderId from RequirementDetail INNER JOIN Requirement ON Requirement.Id = RequirementDetail.ReqId where 1=1";
+            string sql = "select RequirementDetail.Id, RequirementDetail.ReqTypeId, RequirementDetail.Description, RequirementDetail.Requirement, RequirementDetail.Status, RequirementDetail.StarMarked, Requirement.Date, Requirement.CompanyId, Requirement.ReqProviderId, RequirementDetail.SoftCategoryId, RequirementDetail.Workdays from RequirementDetail INNER JOIN Requirement ON Requirement.Id = RequirementDetail.ReqId where 1=1";
             if (detailReport.From != null)
             {
                 sql += "and Date >= '" + detailReport.From + "'";
             }
             if (detailReport.To != null)
             {
-                sql += "and Date <= '" + detailReport.To + "'";
+                sql += "and Date < '" + detailReport.To.AddDays(1) + "'";
             }
             if (detailReport.StarMarked != null)
             {
                 int starmark = (detailReport.StarMarked) ? 1 : 0;
                 sql += "and StarMarked = " + starmark;
             }
-            if ((int)detailReport.Status != -1)
+            if (detailReport.Status >= 0)
             {
                 int status = (int)detailReport.Status;
                 sql += "and Status = " + status;
@@ -71,9 +128,12 @@ namespace Requirement_Management.Controllers
             {
                 sql += "and ReqProviderId = " + detailReport.ReqProviderId;
             }
+            if (detailReport.CategoryId != null)
+            {
+                sql += "and SoftCategoryId = " + detailReport.CategoryId;
+            }
 
             ReportView Report = new ReportView();
-
             Report.ReqDetail = db.Database.SqlQuery<DetailReportView>(sql).ToList();
 
             if (Report.ReqDetail == null)
@@ -81,11 +141,9 @@ namespace Requirement_Management.Controllers
                 return HttpNotFound();
             }
 
-
             foreach (var row in Report.ReqDetail.ToList())
             {
                 List<RequirementSoftware> reqSoftware = db.RequirementSoftware.Where(r => r.RequirementDetailId == row.Id).ToList();
-
                 bool found = false;
 
                 if(detailReport.SoftwareId != null)
@@ -122,20 +180,25 @@ namespace Requirement_Management.Controllers
                     if (row.CompanyId != null) row.CompanyName = db.ClientCompany.Find(row.CompanyId).Name;
                     if (row.ReqProviderId != null) row.ReqProviderName = db.RequirementProvider.Find(row.ReqProviderId).Name;
                     if (row.ReqTypeId != null) row.ReqTypeName = db.RequirementType.Find(row.ReqTypeId).Name;
+                    if (row.SoftCategoryId != null) row.SoftCategoryName = db.SoftwareCategory.Find(row.SoftCategoryId).Name;
                 }
                 else Report.ReqDetail.Remove(row);
 
             }
-            
+            Report.From = detailReport.From;
+            Report.To = detailReport.To;
+            Report.ReqProviderId = detailReport.ReqProviderId;
+            Report.CompanyId = detailReport.CompanyId;
+            Report.ReqTypeId = detailReport.ReqTypeId;
+            Report.StarMarked = (detailReport.StarMarked) ? true : false;
+            Report.Status = detailReport.Status;
+            Report.SoftwareId = detailReport.SoftwareId;
+
             ViewBag.CompanyId = new SelectList(db.ClientCompany, "Id", "Name");
             ViewBag.ReqProviderId = new SelectList(db.RequirementProvider, "Id", "Name");
             ViewBag.ReqTypeId = new SelectList(db.RequirementType, "Id", "Name");
-            var softwares = db.Software.Select(c => new {
-                Id = c.Id,
-                Name = c.Name
-            }).ToList();
-            //var result = string.Join(";", detailReport.SoftwareId.Select(x => x.ToString()).ToArray());
-            ViewBag.SoftwareId = new MultiSelectList(softwares, "Id", "Name");
+            ViewBag.CategoryId = new SelectList(db.SoftwareCategory, "Id", "Name");
+            ViewBag.SoftwareId = new MultiSelectList("", "Id", "Name");
             return View(Report);
         }
 
@@ -168,11 +231,14 @@ namespace Requirement_Management.Controllers
                 reqdetail.Id = info.Id;
                 reqdetail.Requirement = info.Requirement;
                 reqdetail.Description = info.Description;
+                reqdetail.Workdays = info.Workdays;
                 reqdetail.ReqTypeId = info.ReqTypeId;
                 if (info.ReqTypeId != null) reqdetail.ReqTypeName = info.ReqType.Name;
                 reqdetail.ReqId = requirement.Id;
                 reqdetail.Status = info.Status;
                 reqdetail.StarMarked = info.StarMarked;
+                reqdetail.SoftCategoryId = info.SoftCategoryId;
+                if (info.SoftCategoryId != null) reqdetail.SoftCategoryName = info.SoftCategory.Name;
 
                 List<RequirementSoftware> reqSoftware = db.RequirementSoftware.Where(r => r.RequirementDetailId == info.Id).ToList();
 
@@ -193,7 +259,6 @@ namespace Requirement_Management.Controllers
                 reqView.ReqDetail.Add(reqdetail);
             }
 
-
             ViewBag.CompanyId = new SelectList(db.ClientCompany, "Id", "Name", requirement.CompanyId);
             ViewBag.ReqProviderId = new SelectList(db.RequirementProvider, "Id", "Name", requirement.ReqProviderId);
             ViewBag.ReqTypeId = new SelectList(db.RequirementType, "Id", "Name");
@@ -212,11 +277,8 @@ namespace Requirement_Management.Controllers
             ViewBag.CompanyId = new SelectList(db.ClientCompany, "Id", "Name");
             ViewBag.ReqProviderId = new SelectList(db.RequirementProvider, "Id", "Name");
             ViewBag.ReqTypeId = new SelectList(db.RequirementType, "Id", "Name");
-            var softwares = db.Software.Select(c => new {
-                Id = c.Id,
-                Name = c.Name
-            }).ToList();
-            ViewBag.SoftwareId = new MultiSelectList(softwares, "Id", "Name");
+            ViewBag.CategoryId = new SelectList(db.SoftwareCategory, "Id", "Name");
+            ViewBag.SoftwareId = new MultiSelectList("", "Id", "Name");
             //ViewBag.SoftwareId = new SelectList(db.Software, "Id", "Name");
             return View();
         }
@@ -246,6 +308,8 @@ namespace Requirement_Management.Controllers
                 row.ReqId = requirement.Id;
                 row.Status = info.Status;
                 row.StarMarked = info.StarMarked;
+                row.SoftCategoryId = info.SoftCategoryId;
+                row.Workdays = 0;
                 db.RequirementDetail.Add(row);
                 db.SaveChanges();
 
@@ -265,23 +329,6 @@ namespace Requirement_Management.Controllers
 
             return Json(new { Id = requirement.Id }, JsonRequestBehavior.AllowGet);
         }
-
-        //public ActionResult Create(Requirement requirement)
-        //{
-            
-        //    if (ModelState.IsValid)
-        //    {
-        //        requirement.EntryDate = DateTime.Now;
-        //        db.Requirement.Add(requirement);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    ViewBag.CompanyId = new SelectList(db.ClientCompany, "Id", "Name", requirement.CompanyId);
-        //    ViewBag.ReqProviderId = new SelectList(db.RequirementProvider, "Id", "Name", requirement.ReqProviderId);
-        //    //ViewBag.ReqTypeId = new SelectList(db.RequirementType, "Id", "Name", requirement.ReqTypeId);
-        //    return View(requirement);
-        //}
 
         // GET: Requirements/Edit/5
         public ActionResult Edit(int? id)
@@ -313,7 +360,10 @@ namespace Requirement_Management.Controllers
                 reqdetail.ReqId = requirement.Id;
                 reqdetail.Status = info.Status;
                 reqdetail.StarMarked = info.StarMarked;
-                
+                reqdetail.SoftCategoryId = info.SoftCategoryId;
+                if (info.SoftCategoryId != null)  reqdetail.SoftCategoryName = info.SoftCategory.Name;
+                reqdetail.Workdays = info.Workdays;
+
                 List<RequirementSoftware> reqSoftware = db.RequirementSoftware.Where(r => r.RequirementDetailId == info.Id).ToList();
 
                 string sa = "";
@@ -337,11 +387,8 @@ namespace Requirement_Management.Controllers
             ViewBag.CompanyId = new SelectList(db.ClientCompany, "Id", "Name", requirement.CompanyId);
             ViewBag.ReqProviderId = new SelectList(db.RequirementProvider, "Id", "Name", requirement.ReqProviderId);
             ViewBag.ReqTypeId = new SelectList(db.RequirementType, "Id", "Name");
-            var softwares = db.Software.Select(c => new {
-                Id = c.Id,
-                Name = c.Name
-            }).ToList();
-            ViewBag.SoftwareId = new MultiSelectList(softwares, "Id", "Name");
+            ViewBag.CategoryId = new SelectList(db.SoftwareCategory, "Id", "Name");
+            ViewBag.SoftwareId = new MultiSelectList("", "Id", "Name");
             return View(reqView);
         }
 
@@ -375,6 +422,8 @@ namespace Requirement_Management.Controllers
             reqdetail.ReqId = reqdetailView.ReqId;
             reqdetail.Status = reqdetailView.Status;
             reqdetail.StarMarked = reqdetailView.StarMarked;
+            reqdetail.SoftCategoryId = reqdetailView.SoftCategoryId;
+            reqdetail.Workdays = reqdetailView.Workdays;
 
             db.RequirementDetail.Add(reqdetail);
             db.SaveChanges();
@@ -405,6 +454,8 @@ namespace Requirement_Management.Controllers
             reqdetail.ReqId = reqdetailView.ReqId;
             reqdetail.Status = reqdetailView.Status;
             reqdetail.StarMarked = reqdetailView.StarMarked;
+            reqdetail.SoftCategoryId = reqdetailView.SoftCategoryId;
+            reqdetail.Workdays = reqdetailView.Workdays;
 
             db.Entry(reqdetail).State = EntityState.Modified;
             db.SaveChanges();
@@ -430,36 +481,17 @@ namespace Requirement_Management.Controllers
 
             return Json(new { Id = reqdetail.Id }, JsonRequestBehavior.AllowGet);
         }
-        //public JsonResult EditReqDetail(RequirementDetailView reqDetailView)
-        //{
-        //    RequirementDetail reqDetail = new RequirementDetail();
-        //    reqDetail.Id = reqView.Id;
-        //    reqDetail.Title = reqView.Title;
-        //    reqDetail.Date = reqView.Date;
-        //    reqDetail.EntryDate = DateTime.Now;
-        //    reqDetail.CompanyId = reqView.CompanyId;
-        //    reqDetail.ReqProviderId = reqView.ReqProviderId;
 
-        //    db.Entry(requirement).State = EntityState.Modified;
-        //    db.SaveChanges();
+        public JsonResult GetSoftwares(int? Id)
+        {
+            List<Software> Softwares = db.Software.Where(i => i.Software_CategoryId == Id).ToList();
+            var softwares = Softwares.Select(c => new {
+                Id = c.Id,
+                Name = c.Name
+            }).ToList();
 
-        //    return Json(new { Id = requirement.Id }, JsonRequestBehavior.AllowGet);
-        //}
-
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit(Requirement requirement)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(requirement).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    ViewBag.CompanyId = new SelectList(db.ClientCompany, "Id", "Name", requirement.CompanyId);
-        //    ViewBag.ReqProviderId = new SelectList(db.RequirementProvider, "Id", "Name", requirement.ReqProviderId);
-        //    //ViewBag.ReqTypeId = new SelectList(db.RequirementType, "Id", "Name", requirement.ReqTypeId);
-        //    return View(requirement);
-        //}
+            return Json(softwares, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpPost]
         public JsonResult DeleteReqDetail(int? id)

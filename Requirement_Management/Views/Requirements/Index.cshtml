@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Requirement_Management.Models.Requirement>
+﻿@model Requirement_Management.ViewModels.IndexView
 
 @{
     ViewBag.Title = "Requirements";
@@ -8,17 +8,83 @@
     <div class="d-flex">
         <h4 class="text-center mx-auto p-2" style="border-bottom:2px solid #343a40;">Requirements</h4>
     </div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal d-flex flex-column alert alert-info p-0">
+        <div class="row m-2">
+            <div class="d-flex flex-column col-4">
+                <div class="form-group">
+                    <label class="control-label w-100" for="Id"><b>Req Id:</b></label>
+                    <div class="w-100">
+                        <input class="form-control" type="number" id="Id" name="Id" value="@Model.Id">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label w-100" for="CompanyId"><b>Company:</b></label>
+                    <div class="w-100">
+                        @Html.DropDownList("CompanyId", null, "", htmlAttributes: new { @class = "form-control", @id = "Company" })
+                        @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column col-4">
+                <div class="form-group">
+                    <label class="control-label w-100" for="From"><b>From:</b> <i class="text-danger">*required</i></label>
+                    <div class="w-100">
+                        <input class="form-control text-box single-line valid" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required." id="From" name="From" type="date" value="@Model.From.ToString("yyyy-MM-dd")">
+                        @*<span class="field-validation-valid text-danger ml-1 m-0" style="font-family: none; display: inline-block;" data-valmsg-for="From" data-valmsg-replace="true"></span>*@
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="ReqProviderId"><b>Requirement Provider:</b></label>
+                    <div class="d-flex">
+                        @Html.DropDownList("ReqProviderId", null, "", htmlAttributes: new { @class = "form-control", @id = "Provider" })
+                        @Html.ValidationMessageFor(model => model.ReqProviderId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column col-4">
+                <div class="form-group">
+                    <label class="control-label w-100" for="To"><b>To:</b> <i class="text-danger">*required</i></label>
+                    <div class="w-100">
+                        <input class="form-control text-box single-line valid" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required." id="To" name="To" type="date" value="@Model.To.ToString("yyyy-MM-dd")" >
+                        @*<span class="field-validation-valid text-danger ml-1 m-0" style="font-family: none; display: inline-block;" data-valmsg-for="To" data-valmsg-replace="true"></span>*@
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label w-100" for="Query"><b>Query By:</b></label>
+                    <div class="w-100">
+                        @Html.EnumDropDownListFor(r => r.Query, new { @class = "form-control" })
+                        @*<select class="form-control" id="Query" name="Query">
+                            <option value="0">Entry Date</option>
+                            <option value="1">Req Date</option>
+                        </select>*@                        
+                        <span class="field-validation-valid text-danger" data-valmsg-for="Query" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <div class="form-group mb-0">
+                    <button class="btn btn-primary mx-auto" type="submit" @*onclick="AddInfo();"*@>Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
     <p>
         @Html.ActionLink("Add Requirement", "Create", new { area = "" }, new { @class = "btn btn-success" })
-        <a class="btn btn-primary" href="/Requirements/DetailsReports">Report <i class="fas fa-file-alt"></i></a>
+        @*<a class="btn btn-primary" href="/Requirements/DetailsReports">Report <i class="fas fa-file-alt"></i></a>*@
     </p>
+
     <div class="table-responsive">
         <table class="table">
             <thead class="bg-dark text-white">
                 <tr class="border">
                     <th>#</th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Title)
+                        Title
                     </th>
                     @*<th>
                         Html.DisplayNameFor(model => model.Description)
@@ -51,7 +117,7 @@
                 @{
                     var x = 1;
                 }
-                @foreach (var item in Model)
+                @foreach (var item in Model.Req)
                 {
                     <tr class="border">
                         <td>@(x++)</td>
@@ -62,10 +128,10 @@
                             @Html.DisplayFor(modelItem => item.Description)
                         </td>*@
                         <td>
-                            @Html.DisplayFor(modelItem => item.Date)
+                            @item.Date.ToString("dd/MM/yyyy")
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.EntryDate)
+                            @item.EntryDate.ToString("dd/MM/yyyy")
                         </td>
                         @*<td>
                             @Html.DisplayFor(modelItem => item.ReqType.Name)
@@ -98,3 +164,15 @@
         </table>
     </div>
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            $("#Provider").select2();
+            $("#Company").select2();
+            $("#Query").select2();
+        });
+    </script>
+}
