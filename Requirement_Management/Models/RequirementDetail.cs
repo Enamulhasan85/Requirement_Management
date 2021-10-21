@@ -11,6 +11,7 @@ namespace Requirement_Management.Models
         Verified,
         Working,
         Done,
+        Tested,
         Deployed
     };
 

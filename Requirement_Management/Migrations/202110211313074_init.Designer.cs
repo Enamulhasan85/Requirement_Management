@@ -7,13 +7,13 @@ namespace Requirement_Management.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class ReqDetailTable2 : IMigrationMetadata
+    public sealed partial class init : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ReqDetailTable2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(init));
         
         string IMigrationMetadata.Id
         {
-            get { return "202109021601275_ReqDetailTable2"; }
+            get { return "202110211313074_init"; }
         }
         
         string IMigrationMetadata.Source

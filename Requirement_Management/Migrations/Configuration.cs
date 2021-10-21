@@ -10,6 +10,7 @@ namespace Requirement_Management.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            ContextKey = "Requirement_Management.Models.RequirementManagementContext";
         }
 
         protected override void Seed(Requirement_Management.Models.RequirementManagementContext context)

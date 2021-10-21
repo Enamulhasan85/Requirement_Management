@@ -128,7 +128,8 @@
                         <option value="1">Verified</option>
                         <option value="2">Working</option>
                         <option value="3">Done</option>
-                        <option value="4">Deployed</option>
+                        <option value="4">Tested</option>
+                        <option value="5">Deployed</option>
                     </select>
                     <span class="field-validation-valid text-danger" data-valmsg-for="Status" data-valmsg-replace="true"></span>
                 </div>
@@ -318,14 +319,17 @@
                 validation = false;
             }
             else { $("#Category").parent().find(".catVal").css("display", "none"); }
+
+            var softwareData = $("#Softwares").select2('data');;
+            if (softwareData.length == 0) {
+                $("#Softwares").parent().find(".softVal").css("display", "inline-block");
+                validation = false;
+            }
+            else { $("#Softwares").parent().find(".softVal").css("display", "none"); }
             return validation;
         }
 
         function AddInfo() {
-
-            var validation = validateDetail();
-
-            if (!validation) return;
 
             var softwareData = $("#Softwares").select2('data');
 
@@ -337,6 +341,10 @@
                 $("#Softwares").trigger('change');
                 softwareData = $("#Softwares").select2('data');
             }
+
+            var validation = validateDetail();
+            if (!validation) return;
+
             for (var i = 0; i < softwareData.length; i++) {
                 softwareIds += softwareData[i].id + (i + 1 < softwareData.length ? ", " : "");
                 softwares += softwareData[i].text + (i + 1 < softwareData.length ? ", " : "");
@@ -461,8 +469,8 @@
                     'Requirement': table.rows[i].cells[4].innerText,
                     'Description': table.rows[i].cells[5].innerText,
                     'ReqTypeId': table.rows[i].cells[6].innerText,
-                    'Status': table.rows[i].cells[10].innerText,
-                    'StarMarked': parseInt(table.rows[i].cells[12].innerText) ? true : false
+                    'Status': table.rows[i].cells[8].innerText,
+                    'StarMarked': (parseInt(table.rows[i].cells[10].innerText)==1) ? true : false
                 };
                 Detailrows.push(rowData);
             }

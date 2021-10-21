@@ -212,29 +212,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202108311604042_Init.cs" />
-    <Compile Include="Migrations\202108311604042_Init.Designer.cs">
-      <DependentUpon>202108311604042_Init.cs</DependentUpon>
+    <Compile Include="Migrations\202110211312301_InitialCreate.cs" />
+    <Compile Include="Migrations\202110211312301_InitialCreate.Designer.cs">
+      <DependentUpon>202110211312301_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202109021528264_ReqDetailTable.cs" />
-    <Compile Include="Migrations\202109021528264_ReqDetailTable.Designer.cs">
-      <DependentUpon>202109021528264_ReqDetailTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202109021601275_ReqDetailTable2.cs" />
-    <Compile Include="Migrations\202109021601275_ReqDetailTable2.Designer.cs">
-      <DependentUpon>202109021601275_ReqDetailTable2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202109061642174_Req.Soft.Table.cs" />
-    <Compile Include="Migrations\202109061642174_Req.Soft.Table.Designer.cs">
-      <DependentUpon>202109061642174_Req.Soft.Table.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202110151755198_add software category.cs" />
-    <Compile Include="Migrations\202110151755198_add software category.Designer.cs">
-      <DependentUpon>202110151755198_add software category.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202110171319590_Workdays in ReqDetail.cs" />
-    <Compile Include="Migrations\202110171319590_Workdays in ReqDetail.Designer.cs">
-      <DependentUpon>202110171319590_Workdays in ReqDetail.cs</DependentUpon>
+    <Compile Include="Migrations\202110211313074_init.cs" />
+    <Compile Include="Migrations\202110211313074_init.Designer.cs">
+      <DependentUpon>202110211313074_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -474,23 +458,11 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202108311604042_Init.resx">
-      <DependentUpon>202108311604042_Init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202110211312301_InitialCreate.resx">
+      <DependentUpon>202110211312301_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202109021528264_ReqDetailTable.resx">
-      <DependentUpon>202109021528264_ReqDetailTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202109021601275_ReqDetailTable2.resx">
-      <DependentUpon>202109021601275_ReqDetailTable2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202109061642174_Req.Soft.Table.resx">
-      <DependentUpon>202109061642174_Req.Soft.Table.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202110151755198_add software category.resx">
-      <DependentUpon>202110151755198_add software category.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202110171319590_Workdays in ReqDetail.resx">
-      <DependentUpon>202110171319590_Workdays in ReqDetail.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202110211313074_init.resx">
+      <DependentUpon>202110211313074_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
