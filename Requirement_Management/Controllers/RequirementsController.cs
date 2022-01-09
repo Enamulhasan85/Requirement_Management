@@ -224,6 +224,13 @@ namespace Requirement_Management.Controllers
             reqView.ReqProviderId = requirement.ReqProviderId;
             if (requirement.ReqProviderId != null) reqView.ReqProviderName = requirement.ReqProvider.Name;
 
+            List<RequirementFile> reqFile = db.RequirementFile.Where(r => r.ReqId == requirement.Id).ToList();
+            
+            foreach (var file in reqFile)
+            {
+                reqView.FilePath.Add(file.Filename);
+            }
+
             List<RequirementDetail> reqDetail = db.RequirementDetail.Where(r => r.ReqId == requirement.Id).ToList();
 
             foreach (var info in reqDetail)

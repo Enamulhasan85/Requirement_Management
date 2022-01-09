@@ -226,8 +226,8 @@
         foreach (var item in Model.FilePath)
         {
             <div class="d-flex flex-column mx-3 m-1 img-thumbnail bg-light">
-                <img src="\Uploads\@item" class="file" alt="@item" width="230" height="230">
-                <button class="btn btn-danger mx-auto my-2" id="delete" onclick="deleteFile(this);">Delete</button>
+                <img src="\Uploads\@item" class="file" alt="@item" width="150" height="150">
+                <button class="btn btn-danger btn-sm mx-auto mt-2 mb-1" id="delete" onclick="deleteFile(this);">Delete</button>
             </div>
         }
     }

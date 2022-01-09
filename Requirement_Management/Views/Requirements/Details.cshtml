@@ -74,6 +74,17 @@
             </tbody>
         </table>
     </div>
+    <div class="d-flex justify-content-center flex-wrap my-2 mb-4">
+        @{
+            foreach (var item in Model.FilePath)
+            {
+                <div class="d-flex flex-column mx-3 m-1 img-thumbnail bg-light">
+                    <img src="\Uploads\@item" class="file" alt="@item" width="150" height="150">
+                </div>
+            }
+        }
+    </div>
     <button onclick="window.print()" class="btn btn-success d-print-none mx-auto d-block">Print <i class="fas fa-file-pdf"></i></button>
 
 </div>
+
