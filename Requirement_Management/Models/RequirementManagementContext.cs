@@ -18,6 +18,7 @@ namespace Requirement_Management.Models
         public DbSet<Requirement> Requirement { get; set; }
         public DbSet<RequirementDetail> RequirementDetail { get; set; }
         public DbSet<RequirementSoftware> RequirementSoftware { get; set; }
+        public DbSet<RequirementFile> RequirementFile { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Requirement_Management.Models;
 using Requirement_Management.ViewModels;
+using System.IO;
 
 namespace Requirement_Management.Controllers
 {
@@ -286,6 +287,57 @@ namespace Requirement_Management.Controllers
         // POST: Requirements/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        [HttpPost]
+        public ActionResult UploadFiles()
+        {
+            // Checking no of files injected in Request object  
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    //  Get all files from Request object  
+                    HttpFileCollectionBase files = Request.Files;
+                    int n = files.Count;
+                    string[] filepath = new string[n];
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        //string path = AppDomain.CurrentDomain.BaseDirectory + "Uploads/";  
+                        //string filename = Path.GetFileName(Request.Files[i].FileName);  
+
+                        HttpPostedFileBase file = files[i];
+                        string fname;
+
+                        // Checking for Internet Explorer  
+                        if (Request.Browser.Browser.ToUpper() == "IE" || Request.Browser.Browser.ToUpper() == "INTERNETEXPLORER")
+                        {
+                            string[] testfiles = file.FileName.Split(new char[] { '\\' });
+                            fname = DateTime.Now.ToString("yyyyMMdd_hhmmss") + testfiles[testfiles.Length - 1];
+                        }
+                        else
+                        {
+                            fname = DateTime.Now.ToString("yyyyMMdd_hhmmss") + file.FileName;
+                        }
+
+                        // Get the complete folder path and store the file inside it.  
+                        filepath[i] = fname;
+                        fname = Path.Combine(Server.MapPath("~/Uploads/"), fname);
+                        file.SaveAs(fname);
+                    }
+                    // Returns message that successfully uploaded  
+                    return Json(new { error = false, message = "File Uploaded Successfully.", filepaths = filepath }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { error = true, message = "File Upload Failed.", filepaths = new string[] { } }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new { error = true, message = "No files selected.", filepaths = new string[] { } }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         [HttpPost]
         public JsonResult Create(RequirementView reqView)
         {
@@ -298,7 +350,16 @@ namespace Requirement_Management.Controllers
 
             db.Requirement.Add(requirement);
             db.SaveChanges();
-            
+
+            foreach (var info in reqView.FilePath)
+            {
+                RequirementFile row = new RequirementFile();
+                row.Filename = info;
+                row.ReqId = requirement.Id;
+                db.RequirementFile.Add(row);
+                db.SaveChanges();
+            }
+
             foreach (var info in reqView.ReqDetail)
             {
                 RequirementDetail row = new RequirementDetail();
@@ -383,6 +444,11 @@ namespace Requirement_Management.Controllers
                 reqView.ReqDetail.Add(reqdetail);
             }
 
+            List<RequirementFile> reqFile = db.RequirementFile.Where(r => r.ReqId == requirement.Id).ToList();
+            foreach(var file in reqFile)
+            {
+                reqView.FilePath.Add(file.Filename);
+            }
 
             ViewBag.CompanyId = new SelectList(db.ClientCompany, "Id", "Name", requirement.CompanyId);
             ViewBag.ReqProviderId = new SelectList(db.RequirementProvider, "Id", "Name", requirement.ReqProviderId);
@@ -405,6 +471,15 @@ namespace Requirement_Management.Controllers
             requirement.EntryDate = DateTime.Now;
             requirement.CompanyId = reqView.CompanyId;
             requirement.ReqProviderId = reqView.ReqProviderId;
+
+            foreach (var info in reqView.FilePath)
+            {
+                RequirementFile row = new RequirementFile();
+                row.Filename = info;
+                row.ReqId = requirement.Id;
+                db.RequirementFile.Add(row);
+                db.SaveChanges();
+            }
 
             db.Entry(requirement).State = EntityState.Modified;
             db.SaveChanges();
@@ -509,6 +584,22 @@ namespace Requirement_Management.Controllers
             return Json(new { Id = ReqDetail.Id }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public JsonResult DeleteFile(string Filename)
+        {
+            RequirementFile reqFile = db.RequirementFile.Where(i => i.Filename == Filename).FirstOrDefault();
+            string path = Path.Combine(Server.MapPath("~/Uploads/"), reqFile.Filename);
+            FileInfo fl = new FileInfo(path);
+            if (fl.Exists)//check file exsit or not  
+            {
+                fl.Delete();
+            }
+            db.RequirementFile.Remove(reqFile);
+            db.SaveChanges();
+
+            return Json(new { Id = reqFile.Id }, JsonRequestBehavior.AllowGet);
+        }
+
         // POST: Requirements/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -524,6 +615,19 @@ namespace Requirement_Management.Controllers
                     db.SaveChanges();
                 }
                 db.RequirementDetail.Remove(info);
+                db.SaveChanges();
+            }
+
+            List<RequirementFile> reqFile = db.RequirementFile.Where(i => i.ReqId == id).ToList();
+            foreach (var file in reqFile)
+            {
+                string path = Path.Combine(Server.MapPath("~/Uploads/"), file.Filename);
+                FileInfo fl = new FileInfo(path);
+                if (fl.Exists)//check file exsit or not  
+                {
+                    fl.Delete();
+                }
+                db.RequirementFile.Remove(file);
                 db.SaveChanges();
             }
 

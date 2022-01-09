@@ -26,7 +26,7 @@
                 <div class="form-group mx-auto col-lg-4 my-2">
                     <label class="control-label w-100" for="Date"><b>Date:</b> <i class="text-danger">*required</i></label>
                     <div class="w-100">
-                        <input class="form-control text-box single-line" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required." id="Date" name="Date" type="date" value="">
+                        <input class="form-control text-box single-line" data-val="true" data-val-date="The field Date must be a date." data-val-required="The Date field is required." id="Date" name="Date" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
                         <span class="text-danger ml-1 m-0 dateVal" style="font-family: none;display: none;">*Date can't be empty</span>
                     </div>
                 </div>
@@ -49,9 +49,9 @@
                     </div>
                 </div>
                 <div class="form-group col-lg-4 my-2">
-                    <label class="control-label" for="files"><b>Add Files:</b></label>
+                    <label class="control-label" for="mulfiles"><b>Add Files:</b></label>
                     <div class="d-flex">
-                        <input type="file" id="files" name="files" multiple>
+                        <input type="file" id="mulfiles" name="mulfiles" multiple>
                         <span class="field-validation-valid text-danger" data-valmsg-for="files" data-valmsg-replace="true"></span>
                     </div>
                 </div>
@@ -141,77 +141,6 @@
     </div>
 </div>
 
-@*<div class="d-flex flex-column alert alert-info p-0">
-    <div class="d-flex">
-        <div class="form-group mx-auto col-3 my-2">
-            <label class="control-label w-100" for="CategoryId"><b>Software Category:</b> <i class="text-danger">*required</i></label>
-            <div class="w-100">
-                @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control", @id = "Category" })
-                <span class="text-danger ml-1 m-0 catVal" style="font-family: none;display: none;">*Software Category can't be empty</span>
-            </div>
-        </div>
-        <div class="form-group mx-auto col-3 my-2">
-            <label class="control-label w-100" for="SoftwareId"><b>Softwares:</b></label>
-            <div class="w-100">
-                @Html.DropDownList("SoftwareId", (MultiSelectList)ViewBag.SoftwareId, new { @multiple = "multiple", @class = "form-control", @id = "Softwares" })
-                <span class="text-danger ml-1 m-0 softVal" style="font-family: none;display: none;">*Software can't be empty</span>
-            </div>
-        </div>
-        <div class="form-group mx-auto col-3 my-2">
-            <label class="control-label w-100" for="Requirement"><b>Requirement:</b> <i class="text-danger">*required</i></label>
-            <div class="w-100">
-                <textarea class="form-control text-area single-line m-0" id="Requirement" name="Requirement" required="required" type="textarea" style="max-width: 300px;" rows="4" value=""></textarea>
-                <span class="text-danger ml-1 m-0 reqVal" style="font-family: none;display: none;">*Requirement can't be empty</span>
-            </div>
-        </div>
-        <div class="form-group mx-auto col-3 my-2">
-            <label class="control-label w-100" for="Description"><b>Description:</b></label>
-            <div class="w-100">
-                <textarea class="form-control text-area single-line m-0" id="Description" name="Description" required="required" type="textarea" style="max-width: 600px;" rows="4" value=""></textarea>
-            </div>
-        </div>
-    </div>
-    <div class="d-flex">
-        <div class="form-group mx-auto col-3 my-2">
-            <label class="control-label w-100" for="ReqTypeId"><b>Requirement Type:</b></label>
-            <div class="w-100">
-                @Html.DropDownList("ReqTypeId", null, htmlAttributes: new { @class = "form-control", @id = "Type" })
-                <span class="field-validation-valid text-danger" data-valmsg-for="Type" data-valmsg-replace="true"></span>
-            </div>
-        </div>
-
-        <div class="form-group col-3 my-2">
-            <div class="form-group">
-                <label class="control-label w-100" for="Status"><b>Status:</b></label>
-                <div class="w-100">
-                    Html.DropDownList("Status", (IEnumerable<SelectListItem>)ViewBag.Status, new { @class = "form-control", @id = "Status" })
-                    Html.EnumDropDownListFor(model => model.Status, htmlAttributes: new { @class = "form-control", @id = "Status" })
-                    <select class="form-control" id="Status" name="Status">
-                        <option value="0">Submitted</option>
-                        <option value="1">Verified</option>
-                        <option value="2">Working</option>
-                        <option value="3">Done</option>
-                        <option value="4">Deployed</option>
-                    </select>
-                    <span class="field-validation-valid text-danger" data-valmsg-for="Status" data-valmsg-replace="true"></span>
-                </div>
-            </div>
-        </div>
-        <div class="form-group mx-auto col-3 my-2">
-            <label class="control-label w-100" for="StarMarked"><b>Star Marked:</b></label>
-            <div class="w-100">
-                <div class="checkbox">
-                    <input class="check-box" data-val="true" data-val-required="The StarMarked field is required." id="StarMarked" name="StarMarked" type="checkbox" value="true">
-                    <input id="StarMarked" name="StarMarked" type="hidden" value="false">
-                    <span class="field-validation-valid text-danger" data-valmsg-for="StarMarked" data-valmsg-replace="true"></span>
-                </div>
-            </div>
-        </div>
-        <div class="form-group my-auto col-3 my-2">
-            <button class="btn btn-primary mx-auto" id="add" onclick="AddInfo();">Add</button>
-        </div>
-    </div>
-</div>*@
 
     <div class="table-responsive my-2">
         <table class="table table-sm">
@@ -283,7 +212,7 @@
                 softwareids = $(curobj).parent().parent().find(".softwaresid").text();
             }
 
-            console.log(softwareids.split(", "));
+            //console.log(softwareids.split(", "));
 
             $.get("/Requirements/GetSoftwares", inputData,
                 function (data, status) {
@@ -408,7 +337,6 @@
         }
 
         function editRow(rowobj) {
-
             if (curobj != null) {
                 $(curobj).parent().find(".btn-danger").attr("disabled", false);
             }
@@ -455,44 +383,84 @@
         function Save() {
 
             var validation = validateReq();
-
             if (!validation) return;
+
+            var files = $("#mulfiles").get(0).files;
+            var fileData = new FormData();
+
+            for (var i = 0; i < files.length; i++) {
+                fileData.append("mulfiles", files[i]);
+            }
 
             var Detailrows = [];
 
             var table = document.getElementById("reqtable");
+
             for (var i = 0; i < table.rows.length; i++) {
-                var rowData = {
+                rowData = {
                     'SoftCategoryId': table.rows[i].cells[0].innerText,
-                    'ReqSoftwareId' : table.rows[i].cells[2].innerText,
+                    'ReqSoftwareId': table.rows[i].cells[2].innerText,
 
                     'Requirement': table.rows[i].cells[4].innerText,
                     'Description': table.rows[i].cells[5].innerText,
                     'ReqTypeId': table.rows[i].cells[6].innerText,
                     'Status': table.rows[i].cells[8].innerText,
-                    'StarMarked': (parseInt(table.rows[i].cells[10].innerText)==1) ? true : false
+                    'StarMarked': (parseInt(table.rows[i].cells[10].innerText) == 1) ? true : false
                 };
                 Detailrows.push(rowData);
             }
 
+            for (var pair of fileData.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
 
-            var inputData = {
-                'Title': $("#Title").val(),
-                'Date': $("#Date").val(),
-                'CompanyId': $("#Company").val(),
-                'ReqProviderId': $("#Provider").val(),
+            $.ajax({
+                type: "POST",
+                url: "/Requirements/UploadFiles",
+                dataType: "json",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result, status, xhr) {
+                    alert(result.message);
+                    console.log(result.filepaths);
+                    if (!result.error) {
+                        var inputData = {
+                            'Title': $("#Title").val(),
+                            'Date': $("#Date").val(),
+                            'CompanyId': $("#Company").val(),
+                            'ReqProviderId': $("#Provider").val(),
 
-                'ReqDetail': Detailrows
-            };
-
-            console.log(inputData);
-
-            $.post("/Requirements/Create", inputData,
-                function (data, status) {
-                    if (data.Id) {
-                        alert("Operation Successfull.");
+                            'FilePath': result.filepaths,
+                            'ReqDetail': Detailrows
+                        };
                     }
-                });
+                    else {
+                        var inputData = {
+                            'Title': $("#Title").val(),
+                            'Date': $("#Date").val(),
+                            'CompanyId': $("#Company").val(),
+                            'ReqProviderId': $("#Provider").val(),
+
+                            'ReqDetail': Detailrows
+                        };
+                    }
+
+                    $.post("/Requirements/Create", inputData,
+                    function (data, status) {
+                        if (data.Id) {
+                            alert("Operation Successfull.");
+                            //location.replace("/Requirements");
+                        }
+                    });
+                    console.log(inputData);
+                },
+                error: function (result, status, xhr) {
+                    alert(result.message);
+                }
+            });
+            
+
         }
 
     </script>

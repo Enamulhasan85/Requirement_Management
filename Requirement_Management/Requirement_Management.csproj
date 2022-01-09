@@ -220,6 +220,10 @@
     <Compile Include="Migrations\202110211313074_init.Designer.cs">
       <DependentUpon>202110211313074_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202112140654476_AddRequirementFileTable.cs" />
+    <Compile Include="Migrations\202112140654476_AddRequirementFileTable.Designer.cs">
+      <DependentUpon>202112140654476_AddRequirementFileTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ClientCompany.cs" />
@@ -227,6 +231,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Requirement.cs" />
     <Compile Include="Models\RequirementDetail.cs" />
+    <Compile Include="Models\RequirementFile.cs" />
     <Compile Include="Models\RequirementManagementContext.cs" />
     <Compile Include="Models\RequirementProvider.cs" />
     <Compile Include="Models\RequirementSoftware.cs" />
@@ -463,6 +468,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202110211313074_init.resx">
       <DependentUpon>202110211313074_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202112140654476_AddRequirementFileTable.resx">
+      <DependentUpon>202112140654476_AddRequirementFileTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
