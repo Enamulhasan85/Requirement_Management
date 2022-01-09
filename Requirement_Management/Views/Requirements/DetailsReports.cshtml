@@ -87,24 +87,26 @@
                     </div>
                 </div>
             </div>
-            <div class="form-check form-check-inline mx-auto mt-2 mb-3">
-                <div class="form-check-input">
-                    <div class="checkbox">
-                        @Html.CheckBoxFor(model => model.StarMarked)
-                        @*<input class="check-box" data-val="true" data-val-required="The StarMarked field is required." id="StarMarked" name="StarMarked" type="checkbox" value="true">*@
-                        @*<input id="StarMarked" name="StarMarked" type="hidden" value="false">*@
-                        @*<span class="field-validation-valid text-danger" data-valmsg-for="StarMarked" data-valmsg-replace="true"></span>*@
+            <div class="form-check form-check-inline my-3 mr-0 justify-content-between">
+                <div class="d-flex col-9">
+                    <div class="form-check-input">
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(model => model.StarMarked)
+                            @*<input class="check-box" data-val="true" data-val-required="The StarMarked field is required." id="StarMarked" name="StarMarked" type="checkbox" value="true">*@
+                            @*<input id="StarMarked" name="StarMarked" type="hidden" value="false">*@
+                            @*<span class="field-validation-valid text-danger" data-valmsg-for="StarMarked" data-valmsg-replace="true"></span>*@
+                        </div>
                     </div>
+                    <label class="form-check-label" for="StarMarked"><b>Star Marked</b></label>
                 </div>
-                <label class="form-check-label" for="StarMarked"><b>Star Marked</b></label>
-            </div>
-            <div class="form-group d-flex my-2">
-                <div class="d-inline-block mx-auto">
+                <div class="d-inline-block col-3">
                     <button class="btn btn-primary mx-auto" type="submit" id="Search">Search</button>
                     <button onclick="window.print()" class="btn btn-danger d-print-none">PDF <i class="fas fa-file-pdf"></i></button>
-                    <button  id="btnExport" onclick="fnExcelReport();" class="btn btn-success d-print-none">Excel <i class="fas fa-file-excel"></i></button>
-                    @Html.ActionLink("Back to List", "Index", new { @area = "" }, new { @class = "btn btn-info" })
+                    <button id="btnExport" onclick="fnExcelReport();" class="btn btn-success d-print-none">Excel <i class="fas fa-file-excel"></i></button>
                 </div>
+            </div>
+            <div class="form-group d-flex my-2">
+
             </div>
         </div>
 
@@ -148,15 +150,18 @@
                 </th>
                 @*<th class="border">
                         Star Marked
-                    </th>*@
+                  </th>*@
             </tr>
         </thead>
         <tbody>
-            @{ var x = 1; }
+            @{ 
+                var x = 1;
+                decimal y = 0;
+            }
             @foreach (var item in Model.ReqDetail)
             {
                 int status = (int)item.Status;
-
+                y += item.Workdays;
                 <tr class="border">
                     <td class="border">@x<b class="text-danger">@{x++; @((item.StarMarked) ? "*" : ""); }</b></td>
                     <td class="type border">@item.Date.ToString("dd/M/yyyy")</td>
@@ -167,9 +172,13 @@
                     <td class="description border">@Html.DisplayFor(modelItem => item.Description)</td>
                     <td class="type border">@item.ReqTypeName</td>
                     <td class="status border">@Html.DisplayFor(modelItem => item.Status)</td>
-                    <td class="status border">@Html.DisplayFor(modelItem => item.Workdays)</td>
+                    <td class="status border" style="text-align:right;">@Html.DisplayFor(modelItem => item.Workdays)</td>
                 </tr>
             }
+            <tr class="border">
+                <td colspan="9" class="border">Total Workdays:</td>
+                <td class="border" style="text-align:right;">@(y)</td>
+            </tr>
         </tbody>
     </table>
 </div>

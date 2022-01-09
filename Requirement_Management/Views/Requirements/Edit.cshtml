@@ -51,9 +51,9 @@
                     </div>
                 </div>
                 <div class="form-group col-lg-4 my-2">
-                    <label class="control-label" for="files"><b>Add Files:</b></label>
+                    <label class="control-label" for="mulfiles"><b>Add Files:</b></label>
                     <div class="d-flex">
-                        <input type="file" id="files" name="files" multiple>
+                        <input type="file" id="mulfiles" name="mulfiles" multiple>
                         <span class="field-validation-valid text-danger" data-valmsg-for="files" data-valmsg-replace="true"></span>
                     </div>
                 </div>
@@ -221,6 +221,17 @@
     </table>
 </div>
 
+<div class="d-flex justify-content-center flex-wrap my-5">
+    @{
+        foreach (var item in Model.FilePath)
+        {
+            <div class="d-flex flex-column mx-3 m-1 img-thumbnail bg-light">
+                <img src="\Uploads\@item" class="file" alt="@item" width="230" height="230">
+                <button class="btn btn-danger mx-auto my-2" id="delete" onclick="deleteFile(this);">Delete</button>
+            </div>
+        }
+    }
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -446,10 +457,26 @@
                    function (data, status) {
                        if (data.Id) {
                            alert("Operation Successfull.");
+                           $(rowobj).parent().parent().remove();
                        }
                    });
 
-            $(rowobj).parent().parent().remove();
+        }
+
+        var fileobj;
+        function deleteFile(fileobj) {
+            var fname = $(fileobj).parent().find(".file").attr("alt");
+            console.log(fname);
+            var inputData = {
+                'Filename': fname
+            };
+            $.post("/Requirements/DeleteFile", inputData,
+                   function (data, status) {
+                       if (data.Id) {
+                           alert("Operation Successfull.");
+                           $(fileobj).parent().remove();
+                       }
+                   });
         }
 
         function editRow(rowobj) {
@@ -488,12 +515,6 @@
                 validation = false;
             }
             else { $("#Date").parent().find(".dateVal").css("display", "none"); }
-
-            var table = document.getElementById("reqtable");
-            if (table.rows.length == 0) {
-                alert("Add Requirements Detail.")
-                validation = false;
-            }
             return validation;
         }
 
@@ -503,23 +524,57 @@
 
             if (!validation) return;
 
-            var inputData = {
-                'Id': $("#Id").val(),
-                'Title': $("#Title").val(),
-                'Date': $("#Date").val(),
-                'CompanyId': $("#Company").val(),
-                'ReqProviderId': $("#Provider").val(),
-            };
+            var files = $("#mulfiles").get(0).files;
+            var fileData = new FormData();
 
-            console.log(inputData);
-            $.post("/Requirements/EditReq", inputData,
-                function (data, status) {
+            for (var i = 0; i < files.length; i++) {
+                fileData.append("mulfiles", files[i]);
+            }
 
-                    if (data.Id) {
-                        alert("Operation Successfull.");
+            $.ajax({
+                type: "POST",
+                url: "/Requirements/UploadFiles",
+                dataType: "json",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result, status, xhr) {
+                    alert(result.message);
+                    console.log(result.filepaths);
+                    if (!result.error) {
+                        var inputData = {
+                            'Id': $("#Id").val(),
+                            'Title': $("#Title").val(),
+                            'Date': $("#Date").val(),
+                            'CompanyId': $("#Company").val(),
+                            'ReqProviderId': $("#Provider").val(),
+
+                            'FilePath': result.filepaths,
+                        };
+                    }
+                    else {
+                        var inputData = {
+                            'Id': $("#Id").val(),
+                            'Title': $("#Title").val(),
+                            'Date': $("#Date").val(),
+                            'CompanyId': $("#Company").val(),
+                            'ReqProviderId': $("#Provider").val(),
+                        };
                     }
 
-                });
+                    $.post("/Requirements/EditReq", inputData,
+                    function (data, status) {
+                        if (data.Id) {
+                            alert("Operation Successfull.");
+                            //location.replace("/Requirements");
+                            console.log(inputData);
+                        }
+                    });
+                },
+                error: function (result, status, xhr) {
+                    alert(result.message);
+                }
+            });
 
         }
 

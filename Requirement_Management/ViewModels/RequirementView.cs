@@ -11,6 +11,7 @@ namespace Requirement_Management.ViewModels
         public RequirementView()
         {
             ReqDetail = new List<RequirementDetailView>();
+            FilePath = new List<string>();
         }
 
         public int Id { get; set; }
@@ -25,5 +26,6 @@ namespace Requirement_Management.ViewModels
         public string ReqProviderName { get; set; }
 
         public List<RequirementDetailView> ReqDetail { get; set; }
+        public List<string> FilePath { get; set; }
     }
 }
