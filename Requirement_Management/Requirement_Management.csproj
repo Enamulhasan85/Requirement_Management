@@ -202,6 +202,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClientCompaniesController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RequirementProvidersController.cs" />
@@ -209,25 +210,27 @@
     <Compile Include="Controllers\RequirementTypesController.cs" />
     <Compile Include="Controllers\SoftwareCategoriesController.cs" />
     <Compile Include="Controllers\SoftwaresController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="CustomAuthentication\CustomAuthorizeAttribute.cs" />
+    <Compile Include="CustomAuthentication\CustomMembership.cs" />
+    <Compile Include="CustomAuthentication\CustomMemberShipUser.cs" />
+    <Compile Include="CustomAuthentication\CustomPrincipal.cs" />
+    <Compile Include="CustomAuthentication\CustomRole.cs" />
+    <Compile Include="DataAccess\Role.cs" />
+    <Compile Include="DataAccess\User.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202110211312301_InitialCreate.cs" />
-    <Compile Include="Migrations\202110211312301_InitialCreate.Designer.cs">
-      <DependentUpon>202110211312301_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202110211313074_init.cs" />
-    <Compile Include="Migrations\202110211313074_init.Designer.cs">
-      <DependentUpon>202110211313074_init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202112140654476_AddRequirementFileTable.cs" />
-    <Compile Include="Migrations\202112140654476_AddRequirementFileTable.Designer.cs">
-      <DependentUpon>202112140654476_AddRequirementFileTable.cs</DependentUpon>
+    <Compile Include="Migrations\202201141808308_init.cs" />
+    <Compile Include="Migrations\202201141808308_init.Designer.cs">
+      <DependentUpon>202201141808308_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ClientCompany.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\LoginView.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Requirement.cs" />
     <Compile Include="Models\RequirementDetail.cs" />
@@ -377,7 +380,11 @@
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Users\Registration.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -391,18 +398,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Manage\ChangePassword.cshtml" />
     <Content Include="Views\Manage\Index.cshtml" />
@@ -447,10 +442,17 @@
     <Content Include="Views\Requirements\Edit.cshtml" />
     <Content Include="Views\Requirements\Index.cshtml" />
     <Content Include="Views\Requirements\DetailsReports.cshtml" />
+    <Content Include="Views\Account\ActivationAccount.cshtml" />
+    <Content Include="Views\Error\AccessDenied.cshtml" />
+    <Content Include="Views\Users\Delete.cshtml" />
+    <Content Include="Views\Users\Details.cshtml" />
+    <Content Include="Views\Users\Edit.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Scripts\i18n\" />
+    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -463,14 +465,8 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202110211312301_InitialCreate.resx">
-      <DependentUpon>202110211312301_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202110211313074_init.resx">
-      <DependentUpon>202110211313074_init.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202112140654476_AddRequirementFileTable.resx">
-      <DependentUpon>202112140654476_AddRequirementFileTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202201141808308_init.resx">
+      <DependentUpon>202201141808308_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -8,10 +8,10 @@
     @Scripts.Render("~/bundles/modernizr")
     <script src="https://kit.fontawesome.com/67380cbcac.js" crossorigin="anonymous"></script>
     <style>
-        li a{
+        .nav-link{
             color: white!important;
         }
-        li a:hover{
+        .nav-link:hover{
             background-color: white;
             color: black!important;
         }
@@ -19,22 +19,31 @@
 </head> 
 <body class="pt-0" style="padding-top:0;">
     <div class="navbar navbar-expand-lg bg-dark mb-4 p-0" @*style="background-color: #00bcd4;"*@>
-        @Html.ActionLink("Requirement Management", "Index", "Home", new { area = "" }, new { @class = "navbar-brand p-3 pl-4 text-white", @style = "font-size: .9rem;font-weight: 600;font-family: monospace;" })
+        @Html.ActionLink("Requirement Management", "Index", "Home", new { area = "" }, new { @class = "navbar-brand p-0 pl-4 text-white", @style = "font-size: 20px; font-family:'Bebas Neue';" })
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse justify-content-around" id="navbarNav">
-            <ul class="navbar-nav " style="font-size:.9rem;">
-                <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link p-3" })</li>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+            @if (User.IsInRole("systemadmin, admin, normal user"))
+            {
+                <ul class="navbar-nav " style="font-size:.9rem;">
+                @if (User.IsInRole("systemadmin, admin"))
+                {
+                    <li class="nav-item">@Html.ActionLink("User", "Index", "Users", new { area = "" }, new { @class = "nav-link p-3" })</li>
+                }
                 <li class="nav-item">@Html.ActionLink("Company", "Index", "ClientCompanies", new { area = "" }, new { @class = "nav-link p-3" })</li>
                 <li class="nav-item">@Html.ActionLink("Req. Provider", "Index", "RequirementProviders", new { area = "" }, new { @class = "nav-link p-3" })</li>
                 <li class="nav-item">@Html.ActionLink("Soft. Category", "Index", "SoftwareCategories", new { area = "" }, new { @class = "nav-link p-3" })</li>
                 <li class="nav-item">@Html.ActionLink("Software", "Index", "Softwares", new { area = "" }, new { @class = "nav-link p-3" })</li>
                 <li class="nav-item">@Html.ActionLink("Req. Type", "Index", "RequirementTypes", new { area = "" }, new { @class = "nav-link p-3" })</li>
                 <li class="nav-item">@Html.ActionLink("Requirement", "Index", "Requirements", new { area = "" }, new { @class = "nav-link p-3" })</li>
-                <li class="nav-item">@Html.ActionLink("Reporting", "DetailsReports", "Requirements", new { area = "" }, new { @class = "nav-link p-3" })</li>
-            </ul>
+                @if (User.IsInRole("systemadmin, admin"))
+                {
+                    <li class="nav-item">@Html.ActionLink("Reporting", "DetailsReports", "Requirements", new { area = "" }, new { @class = "nav-link p-3" })</li>
+                }
+                </ul>
+            }
             @Html.Partial("_LoginPartial")
         </div>
     </div>
@@ -42,7 +51,7 @@
         @RenderBody()
         <hr />
         <footer class="text-center">
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p style="font-family: none;">Copyright &copy; @DateTime.Now.Year by Enamul Hasan</p>
         </footer>
     </div>
 

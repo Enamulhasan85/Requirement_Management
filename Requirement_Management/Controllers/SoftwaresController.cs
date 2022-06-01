@@ -7,9 +7,11 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Requirement_Management.Models;
+using Requirement_Management.CustomAuthentication;
 
 namespace Requirement_Management.Controllers
 {
+    [CustomAuthorize(Roles = "systemadmin, admin, normal user")]
     public class SoftwaresController : Controller
     {
         private RequirementManagementContext db = new RequirementManagementContext();

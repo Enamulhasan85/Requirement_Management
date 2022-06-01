@@ -1,4 +1,5 @@
-﻿using Requirement_Management.Models;
+﻿using Requirement_Management.DataAccess;
+using Requirement_Management.Models;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
@@ -23,7 +24,19 @@ namespace Requirement_Management.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Entity<User>()
+            .HasMany(u => u.Roles)
+            .WithMany(r => r.Users)
+            .Map(m =>
+            {
+                m.ToTable("UserRoles");
+                m.MapLeftKey("UserId");
+                m.MapRightKey("RoleId");
+            });
         }
-        
+
+        public DbSet<User> User { get; set; }
+        public DbSet<Role> Role { get; set; }
+
     }
 }

@@ -9,9 +9,12 @@ using System.Web.Mvc;
 using Requirement_Management.Models;
 using Requirement_Management.ViewModels;
 using System.IO;
+using Microsoft.AspNet.Identity;
+using Requirement_Management.CustomAuthentication;
 
 namespace Requirement_Management.Controllers
 {
+    [CustomAuthorize(Roles = "systemadmin, admin, normal user")]
     public class RequirementsController : Controller
     {
         private RequirementManagementContext db = new RequirementManagementContext();
@@ -83,6 +86,7 @@ namespace Requirement_Management.Controllers
             return View(requirement);
         }
         // GET: Requirements/Reports/5
+        [CustomAuthorize(Roles = "systemadmin, admin")]
         public ActionResult DetailsReports()
         {
             ViewBag.CompanyId = new SelectList(db.ClientCompany, "Id", "Name");
@@ -95,6 +99,7 @@ namespace Requirement_Management.Controllers
             return View(DetailReport);
         }
 
+        [CustomAuthorize(Roles = "systemadmin, admin")]
         [HttpPost]
         public ActionResult DetailsReports(ReportView detailReport)
         {
@@ -319,11 +324,11 @@ namespace Requirement_Management.Controllers
                         if (Request.Browser.Browser.ToUpper() == "IE" || Request.Browser.Browser.ToUpper() == "INTERNETEXPLORER")
                         {
                             string[] testfiles = file.FileName.Split(new char[] { '\\' });
-                            fname = DateTime.Now.ToString("yyyyMMdd_hhmmss") + testfiles[testfiles.Length - 1];
+                            fname = User.Identity.GetUserId() + "_" + DateTime.Now.ToString("yyyyMMdd_hhmmss") + testfiles[testfiles.Length - 1];
                         }
                         else
                         {
-                            fname = DateTime.Now.ToString("yyyyMMdd_hhmmss") + file.FileName;
+                            fname = User.Identity.GetUserId() + "_" + DateTime.Now.ToString("yyyyMMdd_hhmmss") + file.FileName;
                         }
 
                         // Get the complete folder path and store the file inside it.  

@@ -422,9 +422,9 @@
                 processData: false, // Not to process data
                 data: fileData,
                 success: function (result, status, xhr) {
-                    alert(result.message);
                     console.log(result.filepaths);
                     if (!result.error) {
+                        alert(result.message);
                         var inputData = {
                             'Title': $("#Title").val(),
                             'Date': $("#Date").val(),
@@ -450,7 +450,7 @@
                     function (data, status) {
                         if (data.Id) {
                             alert("Operation Successfull.");
-                            //location.replace("/Requirements");
+                            location.replace("/Requirements");
                         }
                     });
                     console.log(inputData);

@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Requirement_Management.DataAccess.User>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="d-flex">
+    <h4 class="text-center mx-auto p-2" style="border-bottom:2px solid #343a40;">User List</h4>
+</div>
+
+<p>
+    @Html.ActionLink("Register New", "Registration", "Users", routeValues: null, htmlAttributes: new { @class = "btn btn-primary" })
+</p>
+<table class="table table-bordered">
+    <tr class="border bg-light">
+        <th>
+            @Html.DisplayNameFor(model => model.Username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            User Role
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Password)
+        </th>*@
+        @*<th>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </th>*@
+        @*<th>
+            @Html.DisplayNameFor(model => model.ActivationCode)
+        </th>*@
+        <th class="text-center">Action</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Roles.FirstOrDefault().RoleName)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Password)
+        </td>*@
+        @*<td>
+            @Html.DisplayFor(modelItem => item.IsActive)
+        </td>*@
+        @*<td>
+            @Html.DisplayFor(modelItem => item.ActivationCode)
+        </td>*@
+        <td class="text-center">
+            @Html.ActionLink("Edit", "Edit", new { id = item.UserId }, new { @class = "btn btn-info"})
+            @*@Html.ActionLink("Details", "Details", new { id=item.UserId }) |*@
+            <form action="/Users/Delete/@item.UserId" method="post" class="d-inline-block" onsubmit="return confirm('Do you really want to delete the User Account?');">
+                @Html.AntiForgeryToken()
+                <div class="">
+                    <input type="submit" value="Delete" class="btn btn-danger mx-1">
+                </div>
+            </form>
+        </td>
+    </tr>
+}
+
+</table>

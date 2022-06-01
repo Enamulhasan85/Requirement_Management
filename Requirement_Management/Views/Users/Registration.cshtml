@@ -1,0 +1,110 @@
+﻿@model Requirement_Management.Models.RegistrationView
+
+@{
+    ViewBag.Title = "Registration";
+}
+
+<h2 class="text-center mt-5">Registration</h2>
+
+@if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+{
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-success">
+            <strong>Success!</strong> @ViewBag.Message
+        </div>
+    }
+}
+else
+{
+
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal col-sm-6 mx-auto">
+            <hr />
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger mx-auto col-sm-11 py-2">
+                    <strong>Error!</strong> @ViewBag.Message
+                </div>
+            }
+            <div class="d-flex justify-content-around">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="d-flex flex-column">
+                    <div class="form-group">
+                        <label class="control-label w-100" for="Username"><b>Username:</b></label>
+                        <div class="w-100">
+                            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label w-100" for="Email"><b>Email:</b></label>
+                        <div class="w-100">
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            @Html.ValidationMessage("ErrorEmail", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label w-100" for="Password"><b>Password:</b></label>
+                        <div class="w-100">
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label w-100" for="ConfirmPassword"><b>Confirm Password:</b></label>
+                        <div class="w-100">
+                            @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control w-100" } })
+                            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column">
+                    <div class="form-group">
+                        <label class="control-label w-100" for="FirstName"><b>First Name:</b></label>
+                        <div class="w-100">
+                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control w-100" } })
+                            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label w-100" for="LastName"><b>Last Name:</b></label>
+                        <div class="w-100">
+                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control w-100" } })
+                            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label w-100" for="RoleId"><b>Role:</b></label>
+                        <div class="w-100">
+                            @Html.DropDownListFor(model => model.RoleId, null, null, htmlAttributes: new { @class = "form-control w-100", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group d-flex justify-content-center m-2">
+                    <input type="submit" value="Create" class="btn btn-success py-2" />
+            </div>
+        </div>
+        
+
+    }
+}
+
+
+@section Scripts{
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}

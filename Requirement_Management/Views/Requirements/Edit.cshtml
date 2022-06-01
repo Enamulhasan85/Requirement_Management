@@ -59,7 +59,7 @@
                 </div>
                 <div class="form-group col-lg-4 my-2 d-flex align-items-end">
                     <div class="d-flex">
-                        <button class="btn btn-success m-1" id="save" onclick="Save();">Save</button>
+                        <a class="btn btn-success m-1" id="save" onclick="Save();">Save</a>
                         @Html.ActionLink("Back to List", "Index", new { @area = "" }, new { @class = "btn btn-info m-1" })
                     </div>
                 </div>
@@ -539,9 +539,12 @@
                 processData: false, // Not to process data
                 data: fileData,
                 success: function (result, status, xhr) {
-                    alert(result.message);
+
                     console.log(result.filepaths);
+
                     if (!result.error) {
+                        alert(result.message);
+
                         var inputData = {
                             'Id': $("#Id").val(),
                             'Title': $("#Title").val(),
@@ -566,7 +569,7 @@
                     function (data, status) {
                         if (data.Id) {
                             alert("Operation Successfull.");
-                            //location.replace("/Requirements");
+                            location.replace("");
                             console.log(inputData);
                         }
                     });
