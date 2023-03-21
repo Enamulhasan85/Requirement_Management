@@ -1,16 +1,22 @@
 ﻿@model IEnumerable<Requirement_Management.Models.SoftwareCategory>
 
 @{
-    ViewBag.Title = "Software Categories";
+    ViewBag.Title = "Module Categories";
 }
 
 <div class="">
     <div class="d-flex">
-        <h4 class="text-center mx-auto p-2" style="border-bottom:2px solid #343a40">Software Categories</h4>
+        <h4 class="text-center mx-auto p-2" style="border-bottom:2px solid #343a40">Module Categories</h4>
     </div>
     <p>
         @Html.ActionLink("Add Category", "Create", new { area = "" }, new { @class = "btn btn-success" })
     </p>
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-danger mx-auto col-sm-6 py-2">
+            <strong>Error!</strong> @ViewBag.Message
+        </div>
+    }
     <div class="table-responsive">
         <table class="table">
             <thead class="bg-dark text-white">
@@ -35,7 +41,7 @@
                         </td>
                         <td class="text-center">
                             @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-info" })
-                            <form action="/SoftwareCategories/Delete/@item.Id" method="post" class="d-inline-block" onsubmit="return confirm('Do you really want to delete the software category?');">
+                            <form action="/SoftwareCategories/Delete/@item.Id" method="post" class="d-inline-block" onsubmit="return confirm('Do you really want to delete the Module category?');">
                                 @Html.AntiForgeryToken()
                                 <div class="">
                                     <input type="submit" value="Delete" class="btn btn-danger">

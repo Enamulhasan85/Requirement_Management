@@ -17,8 +17,9 @@ namespace Requirement_Management.Controllers
         private RequirementManagementContext db = new RequirementManagementContext();
 
         // GET: RequirementTypes
-        public ActionResult Index()
+        public ActionResult Index(string msg)
         {
+            ViewBag.Message = msg;
             return View(db.RequirementType.ToList());
         }
 
@@ -111,6 +112,10 @@ namespace Requirement_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (db.RequirementDetail.Where(r => r.ReqTypeId == id).Count() != 0)
+            {
+                return RedirectToAction("Index", new { msg = "Delete RequirementDetails Under this RequirementType" });
+            }
             RequirementType requirementType = db.RequirementType.Find(id);
             db.RequirementType.Remove(requirementType);
             db.SaveChanges();

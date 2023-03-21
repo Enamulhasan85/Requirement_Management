@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Requirement_Management.Models;
 using Requirement_Management.CustomAuthentication;
+using Requirement_Management.ViewModels;
 
 namespace Requirement_Management.Controllers
 {
@@ -17,8 +18,9 @@ namespace Requirement_Management.Controllers
         private RequirementManagementContext db = new RequirementManagementContext();
 
         // GET: RequirementProviders
-        public ActionResult Index()
+        public ActionResult Index(string msg)
         {
+            ViewBag.Message = msg;
             return View(db.RequirementProvider.ToList());
         }
 
@@ -40,6 +42,7 @@ namespace Requirement_Management.Controllers
         // GET: RequirementProviders/Create
         public ActionResult Create()
         {
+            ViewBag.CompanyId = new MultiSelectList(db.ClientCompany, "Id", "Name");
             return View();
         }
 
@@ -48,12 +51,28 @@ namespace Requirement_Management.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Contact,Email")] RequirementProvider requirementProvider)
+        public ActionResult Create(ReqProviderView requirementProvider)
         {
             if (ModelState.IsValid)
             {
-                db.RequirementProvider.Add(requirementProvider);
+                RequirementProvider reqProvider = new RequirementProvider();
+                reqProvider.Name = requirementProvider.Name;
+                reqProvider.Contact = requirementProvider.Contact;
+                reqProvider.Email = requirementProvider.Email;
+                db.RequirementProvider.Add(reqProvider);
                 db.SaveChanges();
+
+                if (requirementProvider.CompanyId != null)
+                {
+                    foreach (var companyid in requirementProvider.CompanyId)
+                    {
+                        CompanyProvider comProvider = new CompanyProvider();
+                        comProvider.ReqProviderId = reqProvider.Id;
+                        comProvider.CompanyId = companyid;
+                        db.CompanyProvider.Add(comProvider);
+                        db.SaveChanges();
+                    }
+                }
                 return RedirectToAction("Index");
             }
 
@@ -72,7 +91,19 @@ namespace Requirement_Management.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.CompanyId = new MultiSelectList(db.ClientCompany, "Id", "Name");
             return View(requirementProvider);
+        }
+
+        public JsonResult GetProvidersCompany(int? id)
+        {
+            var comlist = db.CompanyProvider.Where(i => i.ReqProviderId == id).ToList();
+            var companies = comlist.Select(c => new {
+                Id = c.CompanyId,
+            }).ToList();
+
+            return Json(companies, JsonRequestBehavior.AllowGet);
         }
 
         // POST: RequirementProviders/Edit/5
@@ -80,12 +111,36 @@ namespace Requirement_Management.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Contact,Email")] RequirementProvider requirementProvider)
+        public ActionResult Edit(ReqProviderView requirementProvider)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(requirementProvider).State = EntityState.Modified;
+                RequirementProvider reqProvider = new RequirementProvider();
+                reqProvider.Id = requirementProvider.Id;
+                reqProvider.Name = requirementProvider.Name;
+                reqProvider.Contact = requirementProvider.Contact;
+                reqProvider.Email = requirementProvider.Email;
+                db.Entry(reqProvider).State = EntityState.Modified;
                 db.SaveChanges();
+
+                var ComProList = db.CompanyProvider.Where(i => i.ReqProviderId == requirementProvider.Id).ToList();
+                foreach (var item in ComProList)
+                {
+                    db.CompanyProvider.Remove(item);
+                    db.SaveChanges();
+                }
+
+                if (requirementProvider.CompanyId != null)
+                {
+                    foreach (var companyid in requirementProvider.CompanyId)
+                    {
+                        CompanyProvider comProvider = new CompanyProvider();
+                        comProvider.ReqProviderId = reqProvider.Id;
+                        comProvider.CompanyId = companyid;
+                        db.CompanyProvider.Add(comProvider);
+                        db.SaveChanges();
+                    }
+                }
                 return RedirectToAction("Index");
             }
             return View(requirementProvider);
@@ -111,6 +166,18 @@ namespace Requirement_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (db.RequirementDetail.Where(r => r.ReqProviderId == id).Count() != 0)
+            {
+                return RedirectToAction("Index", new { msg = "Delete RequirementDetails Under this RequirementProvider" });
+            }
+
+            var ComProList = db.CompanyProvider.Where(i => i.ReqProviderId == id).ToList();
+            foreach(var item in ComProList)
+            {
+                db.CompanyProvider.Remove(item);
+                db.SaveChanges();
+            }
+
             RequirementProvider requirementProvider = db.RequirementProvider.Find(id);
             db.RequirementProvider.Remove(requirementProvider);
             db.SaveChanges();

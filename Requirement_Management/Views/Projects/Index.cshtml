@@ -1,0 +1,396 @@
+﻿@model Requirement_Management.ViewModels.ProjectView
+
+@{
+    ViewBag.Title = "Project";
+}
+
+<div class="">
+    <div class="d-flex">
+        <h4 class="text-center mx-auto p-2" style="border-bottom:2px solid #343a40;">Project</h4>
+    </div>
+
+    <p>
+        @Html.ActionLink("Add Project", "Create", new { area = "" }, new { @class = "btn btn-success" })
+        @*<a class="btn btn-primary" href="/Requirements/DetailsReports">Report <i class="fas fa-file-alt"></i></a>*@
+    </p>
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-danger mx-auto col-sm-6 py-2">
+            <strong>Error!</strong> @ViewBag.Message
+        </div>
+    }
+    <table class="table">
+        <thead class="bg-dark text-white">
+            <tr class="border">
+                <th>SL#</th>
+                <th hidden>ProjectId</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    Company
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </th>
+                <th class="text-center">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var x = 1;
+            }
+            @foreach (var item in Model.Project)
+            {
+                <tr class="border">
+                    <td>@(x++)</td>
+                    <td class="id" hidden>@item.Id</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Company.Name)
+                    </td>
+                    <td>
+                        @item.StartDate.ToString("dd/MM/yyyy")
+                    </td>
+                    <td style="width:250px;" class="text-center">
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-info btn-sm" })
+                        @*@Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-warning btn-sm" })*@
+                        <button class="btn btn-success btn-sm"  data-toggle="modal" data-target="#manageModal" onclick="manageProject(this);">Schedule</button>
+                        <form action="/Projects/Delete/@item.Id" method="post" class="d-inline-block" onsubmit="return confirm('Do you really want to delete the Project data?');">
+                            @Html.AntiForgeryToken()
+                            <div class="">
+                                <input type="submit" value="Delete" class="btn btn-sm btn-danger">
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div class="modal fade" id="manageModal" tabindex="-1" role="dialog" aria-labelledby="manageModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close invisible" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title w-25 text-center" id="manageModalLongTitle">Manage Project</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <input type="text" readonly hidden id="Id" />
+                    <input type="text" readonly hidden id="ProjectId" />
+                    
+                    <div class="form-group col-3">
+                        <label class="control-label w-100" for="Mode"><b>Project Mode:</b></label>
+                        <div class="w-100">
+                            @Html.EnumDropDownListFor(model => model.ProjectMode, new { @class = "form-control", @id = "Mode" })
+                            @Html.ValidationMessageFor(model => model.ProjectMode, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="TargetCost" class="control-label w-100"><b>Target Cost:</b></label>
+                        <div class="w-100">
+                            <input class="form-control" id="TargetCost" type="number" />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label class="control-label w-100" for="ScheduleStartDate"><b>Start Date:</b></label>
+                        <div class="w-100">
+                            <input class="form-control" id="ScheduleStartDate" type="date" />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label class="control-label w-100" for="TargetDate"><b>Target EndDate:</b></label>
+                        <div class="w-100">
+                            <input class="form-control" id="TargetDate" type="date" />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label class="control-label w-100" for="EndDate"><b>End Date:</b></label>
+                        <div class="w-100">
+                            <input class="form-control" id="EndDate" type="date" />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label class="control-label w-100" for="ScheduleStatus"><b>Schedule Status:</b></label>
+                        <div class="w-100">
+                            @Html.EnumDropDownListFor(model => model.ScheduleStatus, new { @class = "form-control", @id = "ScheduleStatus" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row text-center">
+                    <button class="btn btn-success mx-auto my-1" onclick="AddRecord();">Add</button>
+                </div>
+
+                <div class="my-4 d-print-table">
+                    <table class="table text-center" id="manageTable" style="">
+                        <thead class="bg-dark text-white">
+                            <tr class="border">
+                                <th class="border">SL#</th>
+                                <th class="border" hidden>ProjectId</th>
+                                <th class="border">Mode</th>
+                                <th class="border" hidden>ModeId</th>
+                                <th class="border">Target Cost</th>
+                                <th class="border">Start Date</th>
+                                <th class="border">Target Date</th>
+                                <th class="border">End Date</th>
+                                <th class="border">Schedule Status</th>
+                                <th class="border" hidden>Schedule StatusId</th>
+                                @*<th class="border">Total Cost</th>*@
+                                <th class="border d-print-none text-center" style="min-width:124px;">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    
+    <script>
+        $('#manageModal').on('hidden.bs.modal', function () {
+            // do something…
+            $("#manageTable").find("tr:gt(0)").remove();
+        })
+
+        var rowobj = null;
+        var editstat = null;
+
+        function manageProject(rowobj) {
+            $("#ProjectId").val($(rowobj).parent().parent().find('.id').text());
+            var inputdata = {
+                'ProjectId': $(rowobj).parent().parent().find('.id').text()
+            };
+            console.log(inputdata);
+
+            $.get("Projects/GetManageRecords", inputdata,
+                function (data, status) {
+                    for (var i = 0; i < data.length; i++) {
+                        var enddate = "";
+                        console.log(data[i].EndDate);
+                        if (data[i].EndDate != null) {
+                            var d = eval(data[i].EndDate.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+                            var enddate = ((d.getDate() > 9) ? d.getDate() : ('0' + d.getDate())) + '/' + ((d.getMonth() > 8) ? (d.getMonth() + 1) : ('0' + (d.getMonth() + 1))) + '/' + d.getFullYear();
+                        }
+
+                        var targetdate = "";
+                        console.log(data[i].TargetDate);
+                        if (data[i].TargetDate != null) {
+                            var d = eval(data[i].TargetDate.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+                            var targetdate = ((d.getDate() > 9) ? d.getDate() : ('0' + d.getDate())) + '/' + ((d.getMonth() > 8) ? (d.getMonth() + 1) : ('0' + (d.getMonth() + 1))) + '/' + d.getFullYear();
+                        }
+
+                        $("#manageTable").append(
+                            '<tr class="border">' +
+                                '<td class="sl border">' + (i+1) + '</td>' +
+                                '<td class="id border" hidden>' + data[i].Id + '</td>' +
+                                '<td class="projectid border" hidden>' + $("#ProjectId").val() + '</td>' +
+                                '<td class="mode border">' + data[i].Mode + '</td>' +
+                                '<td class="modeid border" hidden>' + data[i].ModeId + '</td>' +
+                                '<td class="targetcost border">' + data[i].TargetCost + '</td>' +
+                                '<td class="startdate border">' + data[i].StartDate + '</td>' +
+                                '<td class="targetdate border">' + targetdate + '</td>' +
+                                '<td class="enddate border">' + enddate + '</td>' +
+                                '<td class="status border">' + data[i].Status + '</td>' +
+                                '<td class="statusid border" hidden>' + data[i].StatusId + '</td>' +
+                                '<td class="border d-print-none text-center" style="min-width:124px;">' +
+                                    '<button class="btn btn-info mx-1" onclick="EditRecord(this);">Edit</button>' +
+                                    '<button class="btn btn-danger" onclick="DeleteRecord(this);">Delete</button>' +
+                                '</td>' +
+                            '</tr>'
+                        );
+                    }
+                }
+            );
+        }
+
+        var ViewDate;
+
+        function getHtmDate(ViewDate) {
+            if (ViewDate) {
+                var arr = ViewDate.split('/');
+                return arr[2] + "-" + arr[1] + "-" + arr[0];
+            }
+            return null;
+        }
+
+        function getSlashDate(ViewDate) {
+            if (ViewDate) {
+                var arr = ViewDate.split('-');
+                return arr[2] + "/" + arr[1] + "/" + arr[0];
+            }
+            return null;
+        }
+
+        function validateRecord() {
+            if ($("#ScheduleStartDate").val() == "") {
+                alert("Start Date can't be empty!!");
+                return false;
+            }
+
+            return true;
+        }
+
+        function AddRecord() {
+            if (!validateRecord()) return;
+
+            if (editstat != null) {
+                var inputdata = {
+                    'Id': $("#Id").val(),
+                    'ProjectId': $("#ProjectId").val(),
+                    'ProjectMode': $("#Mode").val(),
+                    'TargetCost': $("#TargetCost").val(),
+                    'StartDate': $("#ScheduleStartDate").val(),
+                    'TargetDate': $("#TargetDate").val(),
+                    'EndDate': $("#EndDate").val(),
+                    'Status': $("#ScheduleStatus").val()
+                };
+
+                $.post("/Projects/EditRecord", inputdata, function (result) {
+                    if (result.Id) {
+                        $(editstat).parent().parent().find(".mode").text($("#Mode option:selected").text());
+                        $(editstat).parent().parent().find(".modeid").text($("#Mode").val());
+                        $(editstat).parent().parent().find(".targetcost").text($("#TargetCost").val());
+                        $(editstat).parent().parent().find(".startdate").text(getSlashDate($("#ScheduleStartDate").val()));
+                        $(editstat).parent().parent().find(".targetdate").text(getSlashDate($("#TargetDate").val()));
+                        $(editstat).parent().parent().find(".enddate").text(getSlashDate($("#EndDate").val()));
+                        $(editstat).parent().parent().find(".status").text($("#ScheduleStatus option:selected").text());
+                        $(editstat).parent().parent().find(".statusid").text($("#ScheduleStatus").val());
+
+                        $(editstat).parent().find(".btn-danger").attr("disabled", false);
+                        editstat = null;
+
+                        alert("Operation Successful!!");
+
+                        $("#Mode").val('0');
+                        $("#TargetCost").val(null);
+                        $("#ScheduleStartDate").val(null);
+                        $("#TargetDate").val(null);
+                        $("#EndDate").val(null);
+                        $("#ScheduleStatus").val('0');
+                    }
+                });
+
+            }
+            else {
+                var inputdata = {
+                    'ProjectId': $("#ProjectId").val(),
+                    'ProjectMode': $("#Mode").val(),
+                    'TargetCost': $("#TargetCost").val(),
+                    'StartDate': $("#ScheduleStartDate").val(),
+                    'TargetDate': $("#TargetDate").val(),
+                    'EndDate': $("#EndDate").val(),
+                    'Status': $("#ScheduleStatus").val()
+                };
+
+                console.log(inputdata);
+
+                $.post("/Projects/AddRecord", inputdata, function (result) {
+                    if (result.Id) {
+                        var sl = parseInt($("#manageTable tr:last").find('.sl').text());
+                        if ($("#manageTable tr:last").find('.sl').text() == "") sl = 0;
+
+                        $("#manageTable").append(
+                            '<tr class="border">' +
+                                '<td class="sl border">' + ++sl + '</td>' +
+                                '<td class="id border" hidden>' + result.Id + '</td>' +
+                                '<td class="projectid border" hidden>' + $("#ProjectId").val() + '</td>' +
+                                '<td class="mode border">' + $("#Mode option:selected").text() + '</td>' +
+                                '<td class="modeid border" hidden>' + $("#Mode").val() + '</td>' +
+                                '<td class="targetcost border">' + $("#TargetCost").val() + '</td>' +
+                                '<td class="startdate border">' + getSlashDate($("#ScheduleStartDate").val()) + '</td>' +
+                                '<td class="targetdate border">' + getSlashDate($("#TargetDate").val()) + '</td>' +
+                                '<td class="enddate border">' + getSlashDate($("#EndDate").val()) + '</td>' +
+                                '<td class="status border">' + $("#ScheduleStatus option:selected").text() + '</td>' +
+                                '<td class="statusid border" hidden>' + $("#ScheduleStatus").val() + '</td>' +
+                                '<td class="border d-print-none text-center" style="min-width:124px;">' +
+                                    '<button class="btn btn-info mx-1" onclick="EditRecord(this);">Edit</button>' +
+                                    '<button class="btn btn-danger" onclick="DeleteRecord(this);">Delete</button>' +
+                                '</td>' +
+                            '</tr>'
+                        );
+
+                        alert("Operation Successful!!");
+
+                        $("#Mode").val('0');
+                        $("#TargetCost").val(null);
+                        $("#ScheduleStartDate").val(null);
+                        $("#TargetDate").val(null);
+                        $("#EndDate").val(null);
+                        $("#ScheduleStatus").val('0');
+                    }
+                });
+               
+            }
+
+        }
+
+
+        function EditRecord(rowobj) {
+            if (editstat != null) {
+                $(editstat).parent().find(".btn-danger").attr("disabled", false);
+            }
+            editstat = rowobj;
+
+            $(rowobj).parent().find(".btn-danger").attr("disabled", true);
+
+            $("#Id").val($(editstat).parent().parent().find(".id").text());
+            $("#Mode").val($(editstat).parent().parent().find(".modeid").text());
+            $("#TargetCost").val($(editstat).parent().parent().find(".targetcost").text());
+            $("#ScheduleStartDate").val( getHtmDate($(editstat).parent().parent().find(".startdate").text()) );
+            $("#TargetDate").val(getHtmDate($(editstat).parent().parent().find(".targetdate").text()));
+            $("#EndDate").val( getHtmDate($(editstat).parent().parent().find(".enddate").text()));
+            $("#ScheduleStatus").val($(editstat).parent().parent().find(".statusid").text());
+            
+        }
+
+
+        function DeleteRecord(rowobj) {
+            var inputData = {
+                'Id': $(rowobj).parent().parent().find(".id").text()
+            };
+
+            $.post("/Projects/DeleteRecord", inputData,
+                   function (data, status) {
+                       if (data.Id) {
+                           alert("Operation Successfull.");
+                           $(rowobj).parent().parent().remove();
+
+                           var table = document.getElementById("manageTable");
+                           for (var i = 0; i < table.rows.length; i++) {
+                               $(table.rows[i]).find(".sl").text(i);
+                           }
+                       }
+                   });
+        }
+    </script>
+
+}

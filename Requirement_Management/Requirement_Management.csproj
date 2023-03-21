@@ -204,7 +204,10 @@
     <Compile Include="Controllers\ClientCompaniesController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JobHolderController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ProjectsController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\RequirementProvidersController.cs" />
     <Compile Include="Controllers\RequirementsController.cs" />
     <Compile Include="Controllers\RequirementTypesController.cs" />
@@ -223,15 +226,24 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\202201141808308_init.cs" />
-    <Compile Include="Migrations\202201141808308_init.Designer.cs">
+    <Compile Include="Migrations\202201141808308_init.designer.cs">
       <DependentUpon>202201141808308_init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202303210754122_UpdatedDatabaseMigration.cs" />
+    <Compile Include="Migrations\202303210754122_UpdatedDatabaseMigration.Designer.cs">
+      <DependentUpon>202303210754122_UpdatedDatabaseMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ClientCompany.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\JobHolder.cs" />
+    <Compile Include="Models\ManageRequirement.cs" />
     <Compile Include="Models\LoginView.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Project.cs" />
+    <Compile Include="Models\ProjectSchedule.cs" />
+    <Compile Include="Models\ProjectSoftware.cs" />
     <Compile Include="Models\Requirement.cs" />
     <Compile Include="Models\RequirementDetail.cs" />
     <Compile Include="Models\RequirementFile.cs" />
@@ -243,11 +255,21 @@
     <Compile Include="Models\SoftwareCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\CustomDropDownList.cs" />
     <Compile Include="ViewModels\DetailReportView.cs" />
+    <Compile Include="ViewModels\DetailsRepForEdit.cs" />
+    <Compile Include="ViewModels\DeveloperwiseReportView.cs" />
     <Compile Include="ViewModels\IndexView.cs" />
+    <Compile Include="ViewModels\ListReportView.cs" />
+    <Compile Include="ViewModels\ProjectSoftwareView.cs" />
+    <Compile Include="ViewModels\ProjectView.cs" />
     <Compile Include="ViewModels\ReportView.cs" />
+    <Compile Include="ViewModels\ReqProviderView.cs" />
     <Compile Include="ViewModels\RequirementDetailView.cs" />
+    <Compile Include="ViewModels\RequirementReportView.cs" />
+    <Compile Include="ViewModels\StatuswiseRequirementReportView.cs" />
     <Compile Include="ViewModels\RequirementView.cs" />
+    <Compile Include="ViewModels\StatusReportView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -258,6 +280,47 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\select2.css" />
     <Content Include="Content\select2.min.css" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -297,6 +360,8 @@
     <Content Include="Scripts\jquery-3.6.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.6.0.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-1.13.1.js" />
+    <Content Include="Scripts\jquery-ui-1.13.1.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -437,7 +502,6 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Requirements\Create.cshtml" />
-    <Content Include="Views\Requirements\Delete.cshtml" />
     <Content Include="Views\Requirements\Details.cshtml" />
     <Content Include="Views\Requirements\Edit.cshtml" />
     <Content Include="Views\Requirements\Index.cshtml" />
@@ -448,6 +512,21 @@
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\JobHolder\Index.cshtml" />
+    <Content Include="Views\JobHolder\Create.cshtml" />
+    <Content Include="Views\JobHolder\Details.cshtml" />
+    <Content Include="Views\JobHolder\Edit.cshtml" />
+    <Content Include="Views\JobHolder\Delete.cshtml" />
+    <Content Include="Views\Projects\Create.cshtml" />
+    <Content Include="Views\Projects\Delete.cshtml" />
+    <Content Include="Views\Projects\Details.cshtml" />
+    <Content Include="Views\Projects\Edit.cshtml" />
+    <Content Include="Views\Projects\Index.cshtml" />
+    <Content Include="Views\Reports\StatusReport.cshtml" />
+    <Content Include="Views\Reports\DeveloperwiseReport.cshtml" />
+    <Content Include="Views\Reports\RequirementReport.cshtml" />
+    <Content Include="Views\Reports\ListReport.cshtml" />
+    <Content Include="Views\Reports\StatuswiseRequirementReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -467,6 +546,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202201141808308_init.resx">
       <DependentUpon>202201141808308_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303210754122_UpdatedDatabaseMigration.resx">
+      <DependentUpon>202303210754122_UpdatedDatabaseMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
@@ -488,7 +570,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60112</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:60112/</IISUrl>
+          <IISUrl>http://localhost:60114/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -17,8 +17,9 @@ namespace Requirement_Management.Controllers
         private RequirementManagementContext db = new RequirementManagementContext();
 
         // GET: Softwares
-        public ActionResult Index()
+        public ActionResult Index(string msg)
         {
+            ViewBag.Message = msg;
             var software = db.Software.Include(s => s.Software_Category);
             return View(software.ToList());
         }
@@ -116,6 +117,10 @@ namespace Requirement_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (db.RequirementSoftware.Where(r => r.SoftwareId == id).Count() != 0 || db.ProjectSoftware.Where(r => r.SoftwareId == id).Count() != 0)
+            {
+                return RedirectToAction("Index", new { msg = "Delete ProjectSoftware and RequirementSoftware Under this Software" });
+            }
             Software software = db.Software.Find(id);
             db.Software.Remove(software);
             db.SaveChanges();

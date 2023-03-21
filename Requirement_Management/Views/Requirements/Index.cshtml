@@ -1,12 +1,12 @@
 ﻿@model Requirement_Management.ViewModels.IndexView
 
 @{
-    ViewBag.Title = "Requirements";
+    ViewBag.Title = "Requirement";
 }
 
 <div class="">
     <div class="d-flex">
-        <h4 class="text-center mx-auto p-2" style="border-bottom:2px solid #343a40;">Requirements</h4>
+        <h4 class="text-center mx-auto p-2" style="border-bottom:2px solid #343a40;">Requirement</h4>
     </div>
 
 @using (Html.BeginForm())
@@ -39,10 +39,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="ReqProviderId"><b>Requirement Provider:</b></label>
-                    <div class="d-flex">
-                        @Html.DropDownList("ReqProviderId", null, "", htmlAttributes: new { @class = "form-control", @id = "Provider" })
-                        @Html.ValidationMessageFor(model => model.ReqProviderId, "", new { @class = "text-danger" })
+                    <label class="control-label w-100" for="Query"><b>Query By:</b></label>
+                    <div class="w-100">
+                        @Html.EnumDropDownListFor(r => r.Query, new { @class = "form-control" })
+                        <span class="field-validation-valid text-danger" data-valmsg-for="Query" data-valmsg-replace="true"></span>
                     </div>
                 </div>
             </div>
@@ -54,19 +54,8 @@
                         @*<span class="field-validation-valid text-danger ml-1 m-0" style="font-family: none; display: inline-block;" data-valmsg-for="To" data-valmsg-replace="true"></span>*@
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label w-100" for="Query"><b>Query By:</b></label>
-                    <div class="w-100">
-                        @Html.EnumDropDownListFor(r => r.Query, new { @class = "form-control" })
-                        @*<select class="form-control" id="Query" name="Query">
-                            <option value="0">Entry Date</option>
-                            <option value="1">Req Date</option>
-                        </select>*@                        
-                        <span class="field-validation-valid text-danger" data-valmsg-for="Query" data-valmsg-replace="true"></span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary" type="submit" @*onclick="AddInfo();"*@>Search</button>
+                <div class="form-group my-auto">
+                    <button class="btn btn-primary" type="submit">Search</button>
                 </div>
             </div>
         </div>
@@ -82,12 +71,17 @@
         <table class="table">
             <thead class="bg-dark text-white">
                 <tr class="border">
-                    <th>#</th>
+                    <th>SL#</th>
+                    <th>Req Id</th>
+
                     <th>
-                        Title
+                        Requirement Name
+                    </th>
+                    <th>
+                        Company
                     </th>
                     @*<th>
-                        Html.DisplayNameFor(model => model.Description)
+                        Contact Person
                     </th>*@
                     <th>
                         Date
@@ -95,21 +89,6 @@
                     <th>
                         Entry Date
                     </th>
-                    @*<th>
-                        Req. Type
-                    </th>*@
-                    <th>
-                        Provider
-                    </th>
-                    <th>
-                        Company
-                    </th>
-                    @*<th>
-                        Status
-                    </th>
-                    <th>
-                        Star Marked
-                    </th>*@
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
@@ -121,11 +100,15 @@
                 {
                     <tr class="border">
                         <td>@(x++)</td>
+                        <td>@item.Id</td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Title)
                         </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Company.Name)
+                        </td>
                         @*<td>
-                            @Html.DisplayFor(modelItem => item.Description)
+                            @Html.DisplayFor(modelItem => item.ReqProvider.Name)
                         </td>*@
                         <td>
                             @item.Date.ToString("dd/MM/yyyy")
@@ -133,30 +116,10 @@
                         <td>
                             @item.EntryDate.ToString("dd/MM/yyyy")
                         </td>
-                        @*<td>
-                            @Html.DisplayFor(modelItem => item.ReqType.Name)
-                        </td>*@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ReqProvider.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Company.Name)
-                        </td>
-                        @*<td>
-                            @Html.DisplayFor(modelItem => item.Status)
-                        </td>*@
-                        @*<td>
-                            @Html.DisplayFor(modelItem => item.StarMarked)
-                        </td>*@
-                        <td class="text-center">
-                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-info mx-1" })
-                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-warning mx-1" })
-                            <form action="/Requirements/Delete/@item.Id" method="post" class="d-inline-block" onsubmit="return confirm('Do you really want to delete the requirement?');">
-                                @Html.AntiForgeryToken()
-                                <div class="">
-                                    <input type="submit" value="Delete" class="btn btn-danger mx-1">
-                                </div>
-                            </form>
+                        <td style="width:250px;" class="text-center">
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-info btn-sm" })
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-warning btn-sm" })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-sm", @OnClick= "return confirm('Do you really want to delete the requirement?');" })
                         </td>
                     </tr>
                 }

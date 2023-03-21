@@ -1,0 +1,238 @@
+﻿@model Requirement_Management.ViewModels.ProjectView
+
+@{
+    ViewBag.Title = "Add Project";
+}
+
+<div class="mx-auto p-0 col-lg-8 card my-5 bg-light">
+    <div class="card-header bg-dark text-white p-2">
+        <h4 class="text-center mx-auto my-0">New Project</h4>
+    </div>
+
+    <div class="p-3">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="form-group col-5 ml-5">
+                <label class="control-label w-100" for="Company"><b>Company:</b></label>
+                <div class="w-100">
+                    @Html.DropDownList("CompanyId", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group col-5 ml-5">
+                <label class="control-label w-100" for="Date"><b>Start Date:</b></label>
+                <div class="w-100">
+                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+                    @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-5 ml-5">
+                <label class="control-label w-100" for="Title"><b>Title:</b></label>
+                <div class="w-100">
+                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="alert alert-info px-3 mx-4">
+        <div class="row">
+            <div class="form-group col-5 ml-4">
+                <label class="control-label w-100" for="Company"><b>Module Category:</b></label>
+                <div class="w-100">
+                    @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control", style = "width: 270px;" })
+                    @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger"})
+                </div>
+            </div>
+
+            <div class="form-group col-5 ml-4">
+                <label class="control-label w-100" for="Status"><b>Status:</b></label>
+                <div class="w-100">
+                    @Html.EnumDropDownListFor(r => r.Status, new { @class = "form-control", style = "width: 270px;" })
+                    @Html.ValidationMessageFor(model => model.Software, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-5 ml-4">
+                <label class="control-label w-100" for="Software"><b>Module:</b></label>
+                <div class="w-100">
+                    @Html.DropDownList("SoftwareId", (MultiSelectList)ViewBag.SoftwareId, new { @multiple = "multiple", @class = "form-control", @id = "Softwares", style = "width: 270px;" })
+                    @Html.ValidationMessageFor(model => model.Software, "", new { @class = "text-danger", style = "width: 270px;" })
+                </div>
+            </div>
+
+            <button class="btn btn-primary mx-auto my-auto" onclick="AddSoftware();" style="height: 40px; width:60px;">Add</button>
+        </div>
+    </div>
+
+
+    <table class="table-sm col-10 mx-auto text-center" id="softwareTable">
+        <thead class="bg-dark text-white">
+            <tr class="border">
+                <th class="border">
+                    SL#
+                </th>
+                <th class="border" hidden>
+                    SoftwareId
+                </th>
+                <th class="border">
+                    Module
+                </th>
+                <th class="border">
+                    IsActive
+                </th>
+                <th class="border text-center">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div class="form-group d-flex mt-2 my-3">
+        <div class="d-inline-block mx-auto">
+            <button onclick="SaveSoftwares();" class="btn btn-success">Save</button>
+            @Html.ActionLink("Back to List", "Index", new { @area = "" }, new { @class = "btn btn-info" })
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            $("#CategoryId").select2();
+            $("#CompanyId").select2();
+            $("#Softwares").select2();
+            $("#Status").select2();
+        });
+
+        $("#CategoryId").on('change', function () {
+            $("#Softwares").empty();
+
+            var inputData = {
+                'Id': this.value
+            };
+
+            $.get("/Requirements/GetSoftwares", inputData,
+                function (data, status) {
+                    //console.log(data);
+                    var appendOptionsString = "";
+                    for (var i = 0; i < data.length; i++) {
+                        appendOptionsString = appendOptionsString +
+                            "<option value=\"" + data[i].Id + "\" >" + data[i].Name + "</option>";
+                    }
+                    $("#Softwares").append(appendOptionsString);
+                    //$("#Softwares").val(softwareids.split(", ")).trigger("change");
+                });
+
+        });
+
+        $("#CategoryId").trigger("change");
+
+        function AddSoftware() {
+            var sl = parseInt($("#softwareTable tr:last").find('.sl').text());
+            if ($("#softwareTable tr:last").find('.sl').text() == "") sl = 0;
+
+            var softwares = $("#Softwares").select2('data');
+
+            for (var software of softwares) {
+            //console.log(software);
+
+                var table = document.getElementById("softwareTable");
+                for (var i = 0; i < table.rows.length; i++) {
+                    if ($(table.rows[i]).find(".SoftwareId").text() == software.id) break;
+                }
+                if (i < table.rows.length) continue;
+
+                $("#softwareTable").append(
+                    '<tr class="border">' +
+                        '<td class="sl border">' + ++sl + '</td>' +
+                        '<td class="software border">' + software.text + '</td>' +
+                        '<td class="SoftwareId border" hidden>' + software.id + '</td>' +
+                        '<td class="border">' + $("#Status option:selected").text() + '</td>' +
+                        '<td class="isactive border" hidden>' + $("#Status").val() + '</td>' +
+                        '<td class="border">' +
+                            '<button class="btn btn-sm btn-danger" onclick="DeleteSoftware(this);">Delete</button>' +
+                        '</td>' +
+                    '</tr>'
+                );
+            }
+
+        }
+
+
+        function DeleteSoftware(delSoftware) {
+            $(delSoftware).parent().parent().remove();
+
+            var table = document.getElementById("softwareTable");
+            for (var i = 0; i < table.rows.length; i++) {
+                $(table.rows[i]).find(".sl").text(i);
+            }
+        }
+
+        function validate() {
+            var ok = true;
+            if ($("#Title").val() == "") {
+                ok = false;
+                alert("Title can't be empty!!");
+            }
+
+            if ($("#StartDate").val() == "") {
+                ok = false;
+                alert("Date can't be empty!!");
+            }
+
+            if (document.getElementById("softwareTable").rows.length == 1) {
+                ok = false;
+                alert("Software can't be empty!!");
+            }
+            return ok;
+        }
+
+        function SaveSoftwares() {
+
+            if (!validate()) return;
+
+            Softwares = [];
+
+            table = document.getElementById("softwareTable");
+            for (var i = 1; i < table.rows.length; i++) {
+                var row = {
+                    'SoftwareId': $(table.rows[i]).find(".SoftwareId").text(),
+                    'Status': $(table.rows[i]).find(".isactive").text()
+                };
+                Softwares.push(row);
+            }
+
+            var inputdata = {
+                'Title': $("#Title").val(),
+                'StartDate': $("#StartDate").val(),
+                'CompanyId': $("#CompanyId").val(),
+                'ProSoftware': Softwares
+            };
+
+            console.log(inputdata);
+
+            $.post("/Projects/Create", inputdata, function (result) {
+                if (result.status == "success") {
+                    alert("Operation Successful!!");
+                    window.location.href = "/Projects"
+                }
+            });
+
+        }
+
+    </script>
+
+}

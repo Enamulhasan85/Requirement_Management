@@ -1,0 +1,136 @@
+﻿@model Requirement_Management.ViewModels.ListReportView
+
+@{
+    ViewBag.Title = "Project List Report";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal mx-auto p-1 d-print-none">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="mx-auto p-0 col-11 col-sm-8 col-md-12 card mb-3 alert alert-secondary">
+            <div class="card-header bg-dark text-white p-2">
+                <h4 class="text-center mx-auto my-0">Project List Report</h4>
+            </div>
+            <div class="d-flex">
+                @*<div class="form-group col-lg-3 my-2">
+                    <label class="control-label w-100" for="From"><b>From:</b></label>
+                    <div class="w-100">
+                        <input class="form-control text-box single-line" id="From" name="From" type="date" value="@Model.Fromdate" />
+                        <span class="field-validation-valid text-danger ml-1 m-0" style="font-family: none; display: inline-block;" data-valmsg-for="From" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <div class="form-group col-lg-3 my-2">
+                    <label class="control-label w-100" for="To"><b>To:</b></label>
+                    <div class="w-100">
+                        <input class="form-control text-box single-line" id="To" name="To" type="date" value="@Model.Todate" />
+                        <span class="field-validation-valid text-danger ml-1 m-0" style="font-family: none; display: inline-block;" data-valmsg-for="To" data-valmsg-replace="true"></span>
+                    </div>
+                </div>*@
+                <div class="form-group col-lg-3 my-2">
+                    <label class="control-label w-100" for="CompanyId"><b>Company:</b></label>
+                    <div class="w-100">
+                        @Html.DropDownList("CompanyId", null, "", htmlAttributes: new { @class = "form-control", @id = "Company" })
+                        @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group col-lg-3 my-2">
+                    <label class="control-label w-100" for="Project"><b>Project:</b> </label>
+                    <div class="w-100">
+                        @Html.DropDownList("ProjectId", null, "", htmlAttributes: new { @class = "form-control", @id = "Project" })
+                        <span class="text-danger ml-1 m-0 proVal" style="font-family: none; display: none;">*Project can't be empty</span>
+                    </div>
+                </div>
+                <div class="form-group col-lg-3 my-2">
+                    <label class="control-label w-100" for="Mode"><b>Mode:</b></label>
+                    <div class="w-100">
+                        @Html.EnumDropDownListFor(r => r.Mode, new { @class = "form-control" })
+                        <span class="field-validation-valid text-danger" data-valmsg-for="Status" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-check form-check-inline mr-0 my-3">
+                <div class="mx-auto text-center">
+                    <button class="btn btn-primary mx-auto" type="submit" id="Search">Search</button>
+                    <button type="button" onclick="window.print()" class="btn btn-danger d-print-none">PDF <i class="fas fa-file-pdf" aria-hidden="true"></i></button>
+                    @*<button id="btnExport" onclick="fnExcelReport();" class="btn btn-success d-print-none">Excel <i class="fas fa-file-excel" aria-hidden="true"></i></button>*@
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+}
+
+
+
+<div class="d-print-table mt-3 w-100">
+    <table class="table-sm text-center mb-5 w-100" id="reportTable">
+        <thead class="bg-dark text-white">
+            <tr class="border">
+                <th class="border py-3">SL#</th>
+                <th class="border">Company</th>
+                <th class="border">Project</th>
+                <th class="border">Start Date</th>
+                @*<th class="border">Pending Workhours</th>*@
+                <th class="border">Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var x = 1;
+            }
+            @foreach (var item in Model.ListReport)
+            {
+                <tr class="border">
+                    <td class="border">@x@{x++; }</td>
+                    <td class="border">@item.CompanyName</td>
+                    <td class="border">@item.Title</td>
+                    <td class="border">@item.StartDate.ToString("dd/MM/yyyy")</td>
+                    @*<td class="border">@item.PendingWorkhours</td>*@
+                    <td class="border"><textarea rows="3" style="width: 100%; height: 100%;"></textarea></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            $("#Company").select2();
+            $("#Project").select2();
+            $("#Mode").select2();
+        });
+
+        $("#Company").on('change', function () {
+            $("#Project").empty();
+            $("#Provider").empty();
+            var inputData = {
+                'Id': this.value
+            };
+
+            $.get("/Requirements/GetProjects", inputData,
+                function (data, status) {
+                    //console.log(data);
+                    var appendOptionsString = "<option value=\"\" ></option>";
+                    for (var i = 0; i < data.length; i++) {
+                        appendOptionsString = appendOptionsString +
+                            "<option value=\"" + data[i].Id + "\" >" + data[i].Name + "</option>";
+                    }
+                    $("#Project").append(appendOptionsString);
+                    $("#Project").val(null).trigger("change");
+                });
+        });
+
+        $("#Company").trigger("change");
+
+    </script>
+}

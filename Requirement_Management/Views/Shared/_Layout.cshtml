@@ -28,20 +28,42 @@
             @if (User.IsInRole("systemadmin, admin, normal user"))
             {
                 <ul class="navbar-nav " style="font-size:.9rem;">
-                @if (User.IsInRole("systemadmin, admin"))
-                {
-                    <li class="nav-item">@Html.ActionLink("User", "Index", "Users", new { area = "" }, new { @class = "nav-link p-3" })</li>
-                }
-                <li class="nav-item">@Html.ActionLink("Company", "Index", "ClientCompanies", new { area = "" }, new { @class = "nav-link p-3" })</li>
-                <li class="nav-item">@Html.ActionLink("Req. Provider", "Index", "RequirementProviders", new { area = "" }, new { @class = "nav-link p-3" })</li>
-                <li class="nav-item">@Html.ActionLink("Soft. Category", "Index", "SoftwareCategories", new { area = "" }, new { @class = "nav-link p-3" })</li>
-                <li class="nav-item">@Html.ActionLink("Software", "Index", "Softwares", new { area = "" }, new { @class = "nav-link p-3" })</li>
-                <li class="nav-item">@Html.ActionLink("Req. Type", "Index", "RequirementTypes", new { area = "" }, new { @class = "nav-link p-3" })</li>
-                <li class="nav-item">@Html.ActionLink("Requirement", "Index", "Requirements", new { area = "" }, new { @class = "nav-link p-3" })</li>
-                @if (User.IsInRole("systemadmin, admin"))
-                {
-                    <li class="nav-item">@Html.ActionLink("Reporting", "DetailsReports", "Requirements", new { area = "" }, new { @class = "nav-link p-3" })</li>
-                }
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle p-3" href="#" id="navbardrop" data-toggle="dropdown">
+                            Setups
+                        </a>
+                        <div class="dropdown-menu">
+                            @if (User.IsInRole("systemadmin, admin"))
+                            {
+                                @Html.ActionLink("User", "Index", "Users", new { area = "" }, new { @class = "dropdown-item" })
+                            }
+                            @Html.ActionLink("Company", "Index", "ClientCompanies", new { area = "" }, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Module Category", "Index", "SoftwareCategories", new { area = "" }, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Module", "Index", "Softwares", new { area = "" }, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Project", "Index", "Projects", new { area = "" }, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Developer", "Index", "JobHolder", new { area = "" }, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Requirement Provider", "Index", "RequirementProviders", new { area = "" }, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Requirement Type", "Index", "RequirementTypes", new { area = "" }, new { @class = "dropdown-item" })
+                        </div>
+                    </li>
+                
+                    <li class="nav-item">@Html.ActionLink("Requirement", "Index", "Requirements", new { area = "" }, new { @class = "nav-link p-3" })</li>
+                    @if (User.IsInRole("systemadmin, admin"))
+                    {
+                        <li class="nav-item">@Html.ActionLink("Manage", "DetailsReports", "Requirements", new { area = "" }, new { @class = "nav-link p-3" })</li>
+                    }
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle p-3" href="#" id="navbardrop" data-toggle="dropdown">
+                            Reports
+                        </a>
+                        <div class="dropdown-menu">
+                            @Html.ActionLink("Project Lists", "ListReport", "Reports", new { area = "" }, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Project Status Report", "StatusReport", "Reports", new { area = "" }, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Developerwise Report", "DeveloperwiseReport", "Reports", new { area = "" }, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Requirement Report", "RequirementReport", "Reports", new { area = "" }, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Statuswise Requirement Report", "StatuswiseRequirementReport", "Reports", new { area = "" }, new { @class = "dropdown-item" })
+                        </div>
+                    </li>
                 </ul>
             }
             @Html.Partial("_LoginPartial")
@@ -50,8 +72,8 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer class="text-center">
-            <p style="font-family: none;">Copyright &copy; @DateTime.Now.Year by Enamul Hasan</p>
+        <footer class="text-center d-print-none">
+            <p style="font-family: none;">Copyright &copy; @DateTime.Now.Year by C&E IT Solutions</p>
         </footer>
     </div>
 

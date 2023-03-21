@@ -21,8 +21,6 @@ namespace Requirement_Management.ViewModels
         public int? CompanyId { get; set; }
         public virtual ClientCompany Company { get; set; }
         public string CompanyName { get; set; }
-        public int? ReqProviderId { get; set; }
-        public virtual RequirementProvider ReqProvider { get; set; }
         public string ReqProviderName { get; set; }
 
         public List<RequirementDetailView> ReqDetail { get; set; }

@@ -1,7 +1,7 @@
 ﻿@model Requirement_Management.ViewModels.ReportView
 
 @{
-    ViewBag.Title = "Details Report";
+    ViewBag.Title = "Manage";
 }
 
 
@@ -14,7 +14,7 @@
 
         <div class="mx-auto p-0 col-11 col-sm-8 col-md-12 card mb-3 alert alert-secondary" @*style="position: absolute; left: 0; right: 0;top: 20%; bottom: 24.4%;"*@>
             <div class="card-header bg-dark text-white p-2">
-                <h4 class="text-center mx-auto my-0">Requirement Detail Report</h4>
+                <h4 class="text-center mx-auto my-0">Search Requirement</h4>
             </div>
             <div class="d-flex">
                 <div class="form-group col-lg-3 my-2">
@@ -50,14 +50,21 @@
 
             <div class="d-flex">
                 <div class="form-group col-lg-3 my-2">
-                    <label class="control-label w-100" for="CategoryId"><b>Software Category:</b> <i class="text-danger">*required</i></label>
+                    <label class="control-label w-100" for="Project"><b>Project:</b> </label>
                     <div class="w-100">
-                        @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control", @id = "Category" })
+                        @Html.DropDownList("ProjectId", null, "", htmlAttributes: new { @class = "form-control", @id = "Project" })
+                        <span class="text-danger ml-1 m-0 proVal" style="font-family: none; display: none;">*Project can't be empty</span>
+                    </div>
+                </div>
+                <div class="form-group col-lg-3 my-2">
+                    <label class="control-label w-100" for="CategoryId"><b>Module Category:</b></label>
+                    <div class="w-100">
+                        @Html.DropDownList("CategoryId", null, "", htmlAttributes: new { @class = "form-control", @id = "Category" })
                         <span class="text-danger ml-1 m-0 catVal" style="font-family: none;display: none;">*Software Category can't be empty</span>
                     </div>
                 </div>
                 <div class="form-group col-lg-3 my-2">
-                    <label class="control-label w-100" for="SoftwareId"><b>Softwares:</b> @*<i class="text-danger">*required</i>*@</label>
+                    <label class="control-label w-100" for="SoftwareId"><b>Modules:</b> @*<i class="text-danger">*required</i>*@</label>
                     <div class="w-100">
                         @Html.DropDownList("SoftwareId", (MultiSelectList)ViewBag.SoftwareId, new { @multiple = "multiple", @class = "form-control", @id = "Softwares" })
                         <span class="text-danger ml-1 m-0 softVal" style="font-family: none;display: none;">*Software can't be empty</span>
@@ -70,43 +77,54 @@
                         <span class="field-validation-valid text-danger" data-valmsg-for="Type" data-valmsg-replace="true"></span>
                     </div>
                 </div>
-                <div class="form-group col-lg-3 my-2">
+            </div>
+            <div class="form-check form-check-inline mt-3 mr-0 ">
+                <div class="form-group col-lg-3">
+                    <label class="control-label w-100" for="ProjectSchedule"><b>Project Schedule:</b> </label>
+                    <div class="w-100">
+                        @Html.DropDownList("ProjectScheduleId", null, "", htmlAttributes: new { @class = "form-control", @id = "ProjectSchedule" })
+                        <span class="text-danger ml-1 m-0 scheVal" style="font-family: none; display: none;">*Project Schedule can't be empty</span>
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-3">
+                    <label class="control-label" for="ReqMode"><b>Requirement Mode:</b></label>
+                    <div class="d-flex">
+                        @Html.EnumDropDownListFor(r => r.ReqMode, new { @class = "form-control" })
+                        <span class="field-validation-valid text-danger" data-valmsg-for="" data-valmsg-replace="false"></span>
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-3">
                     <label class="control-label w-100" for="Status"><b>Status:</b></label>
                     <div class="w-100">
-                        @*@Html.DropDownList("Status", (IEnumerable<SelectListItem>)ViewBag.Status, new { @class = "form-control", @id = "Status" })*@
-                        @Html.EnumDropDownListFor(r => r.Status, new { @class = "form-control" })
-                        @*<select class="form-control" id="Status" name="Status">
-                            <option value="-1"></option>
-                            <option value="0">Submitted</option>
-                            <option value="1">Verified</option>
-                            <option value="2">Working</option>
-                            <option value="3">Done</option>
-                            <option value="4">Deployed</option>
-                        </select>*@
+                        @Html.EnumDropDownListFor(r => r.NullStatus, new { @class = "form-control" })
+                        <span class="field-validation-valid text-danger" data-valmsg-for="" data-valmsg-replace="false"></span>
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-3">
+                    <label class="control-label" for="Priority"><b>Priority:</b></label>
+                    <div class="d-flex">
+                        @Html.EnumDropDownListFor(r => r.NullPriority, new { @class = "form-control" })
                         <span class="field-validation-valid text-danger" data-valmsg-for="" data-valmsg-replace="false"></span>
                     </div>
                 </div>
             </div>
-            <div class="form-check form-check-inline my-3 mr-0 justify-content-between">
-                <div class="d-flex col-9">
-                    <div class="form-check-input">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(model => model.StarMarked)
-                            @*<input class="check-box" data-val="true" data-val-required="The StarMarked field is required." id="StarMarked" name="StarMarked" type="checkbox" value="true">*@
-                            @*<input id="StarMarked" name="StarMarked" type="hidden" value="false">*@
-                            @*<span class="field-validation-valid text-danger" data-valmsg-for="StarMarked" data-valmsg-replace="true"></span>*@
-                        </div>
-                    </div>
-                    <label class="form-check-label" for="StarMarked"><b>Star Marked</b></label>
-                </div>
-                <div class="d-inline-block col-3">
-                    <button class="btn btn-primary mx-auto" type="submit" id="Search">Search</button>
-                    <button onclick="window.print()" class="btn btn-danger d-print-none">PDF <i class="fas fa-file-pdf"></i></button>
-                    <button id="btnExport" onclick="fnExcelReport();" class="btn btn-success d-print-none">Excel <i class="fas fa-file-excel"></i></button>
-                </div>
-            </div>
-            <div class="form-group d-flex my-2">
 
+            <div class="form-check form-check-inline mr-0 ">
+                <div class="form-group col-lg-3">
+                    <label class="control-label w-100" for="Developer"><b>Developer:</b></label>
+                    <div class="w-100">
+                        @Html.DropDownList("JobHolderId", null, "", htmlAttributes: new { @class = "form-control", @id = "JobHolder" })
+                        <span class="field-validation-valid text-danger" data-valmsg-for="" data-valmsg-replace="false"></span>
+                    </div>
+                </div>
+                <div class="col-lg-3 mx-auto text-center">
+                    <button class="btn btn-primary mx-auto" type="submit" id="Search">Search</button>
+                    <button onclick="window.print()" type="button" class="btn btn-danger d-print-none">PDF <i class="fas fa-file-pdf" aria-hidden="true"></i></button>
+                    <button id="btnExport" type="button" onclick="fnExcelReport();" class="btn btn-success d-print-none">Excel <i class="fas fa-file-excel" aria-hidden="true"></i></button>
+                </div>
             </div>
         </div>
 
@@ -115,142 +133,1384 @@
 }
 
 <iframe id="txtArea1" style="display:none"></iframe>
+<div class="text-center d-print-none mx-auto font-weight-bold" style="">
+    <div class="" style="font-family: monospace;">Selected: <span id="reqmarked">0</span></div>
+    <button class="btn btn-primary m-1" data-toggle="modal" data-target="#mulscheduleModal" id="mulschedule" style="" disabled>Assign Task</button>
+</div>
 
-<div class="table-responsive my-5 d-print-table">
-    <table class="table" id="headerTable"  style="font-size: smaller;">
-        <thead class="bg-light" >
+<div class="d-print-table mt-3 w-100" style="margin-left: -34px;">
+    <table class="table-sm text-center mb-5 w-100" id="headerTable" style="font-size: 14px;">
+        <thead class="bg-light">
             <tr class="border">
+                <th class="mark d-print-none">Mark</th>
                 <th class="border">SL#</th>
-                <th class="border" @*style="width: 12%;"*@>
+                <th class="border">Req Id</th>
+                <th class="border">
                     Date
                 </th>
-                <th class="border" style="width: 20%;">
-                    Company & Provider
-                </th>
+                @{
+                    if (Model.CompanyId == null && Model.ReqProviderId == null)
+                    {
+                        <th class="border" >
+                            Company & Provider
+                        </th>
+                    }
+                    else if (Model.CompanyId == null)
+                    {
+                        <th class="border" >
+                            Company
+                        </th>
+                    }
+                    else if (Model.ReqProviderId == null)
+                    {
+                        <th class="border">
+                            Provider
+                        </th>
+                    }
+                }
+                <th class="border" hidden>CompanyId</th>
+                <th class="border" hidden>ProviderId</th>
                 <th class="border">
-                    Software Category
+                    Project
                 </th>
+                <th class="border" hidden>ProjectId</th>
+                <th class="border" hidden>ScheduleId</th>
+                <th class="border" hidden>CategoryName</th>
+                <th class="border" hidden>CategoryId</th>
                 <th class="border">
-                    Softwares
+                    Modules
                 </th>
-                <th class="border" style="width: 13%;">
+                <th class="border" hidden>SoftwareId</th>
+                <th class="border" >
                     Requirement
                 </th>
-                <th class="border" style="width: 13%;">
+                <th class="border" hidden>ReqDetailId</th>
+                <th class="border" >
                     Description
                 </th>
-                <th class="border" style="width: 17%;">
+                <th class="border" >
                     Requirement Type
                 </th>
+                <th class="border" hidden>ReqTypeId</th>
+                <th class="border">
+                    Requirement Mode
+                </th>
+                <th class="border" hidden>ModeId</th>
                 <th class="border">
                     Status
                 </th>
+                <th class="border" hidden>StatusId</th>
                 <th class="border">
-                    Workdays
+                    Priority
                 </th>
-                @*<th class="border">
-                        Star Marked
-                  </th>*@
+                <th class="border" hidden>PriorityId</th>
+                <th class="border">Target Workhours</th>
+                <th class="border">
+                    Consumed Workhours
+                </th>
+                <th class="border d-print-none text-center" style="">
+                    Action
+                </th>
             </tr>
         </thead>
         <tbody>
-            @{ 
+            @{
                 var x = 1;
-                decimal y = 0;
+                decimal TotalConWorkhoursinReq = 0;
+                decimal TotalTarWorkhoursinReq = 0;
             }
             @foreach (var item in Model.ReqDetail)
             {
                 int status = (int)item.Status;
-                y += item.Workdays;
+                int reqmode = (int)item.ReqMode;
+                int priority = (int)item.Priority;
+                TotalConWorkhoursinReq += item.TotalConWorkhoursinReq;
+                TotalTarWorkhoursinReq += item.TotalTarWorkhoursinReq;
                 <tr class="border">
-                    <td class="border">@x<b class="text-danger">@{x++; @((item.StarMarked) ? "*" : ""); }</b></td>
-                    <td class="type border">@item.Date.ToString("dd/M/yyyy")</td>
-                    <td class="type border">@item.CompanyName <br />@item.ReqProviderName</td>
-                    <td class="category border">@item.SoftCategoryName</td>
+                    <td class="mark d-print-none"><input onclick="markReq(this);" type="checkbox" id="@x" class="chk" name="markreq" value="@item.Id" style="width: 20px; height: 20px;"></td>
+                    <td class="border">@x@{x++; }</td>
+
+                    <td class="border">@Html.ActionLink(@item.RequirementId.ToString(), "Details", new { id = @item.RequirementId })</td>
+
+                    <td class="reqdate border">@item.Date.ToString("dd/MM/yyyy")</td>
+                    <td class="type border">@item.CompanyName <div class="provider border">@item.ReqProviderName</div></td>
+
+                    <td class="companyid" hidden>@item.CompanyId</td>
+                    <td class="providerid" hidden>@item.ReqProviderId</td>
+                    <td class="project border">@item.ProjectName</td>
+                    <td class="projectid" hidden>@item.ProjectId</td>
+                    @*<td class="schedule border" >@item.ScheduleName</td>*@
+                    <td class="scheduleid" hidden>@item.ProjectScheduleId</td>
+                    <td class="category border" hidden>@item.SoftCategoryName</td>
+                    <td class="CategoryIdTable" hidden>@item.SoftCategoryId</td>
                     <td class="softwares border">@item.STRSoftwareName</td>
+                    <td class="softwaresId" hidden>@item.STRSoftwareId</td>
+                    @*<td class="developername border">@Html.DisplayFor(modelItem => item.JobHolderName)</td>*@
                     <td class="requirement border">@Html.DisplayFor(modelItem => item.Requirement)</td>
+                    <td class="requirementDetailId border" hidden>@item.Id</td>
                     <td class="description border">@Html.DisplayFor(modelItem => item.Description)</td>
-                    <td class="type border">@item.ReqTypeName</td>
+                    <td class="Reqtype border">@item.ReqTypeName</td>
+                    <td class="typeid" style="display: none;">@Html.DisplayFor(modelItem => item.ReqTypeId)</td>
+                    <td class="reqmode border">@item.ReqMode</td>
+                    <td class="reqmodeid" style="display: none;">@reqmode</td>
                     <td class="status border">@Html.DisplayFor(modelItem => item.Status)</td>
-                    <td class="status border" style="text-align:right;">@Html.DisplayFor(modelItem => item.Workdays)</td>
+                    <td class="statusid border" hidden>@status</td>
+                    <td class="prio border">@Html.DisplayFor(modelItem => item.Priority)</td>
+                    <td class="prioid border" hidden>@priority</td>
+                    <td class="totaltarwhinreq border">@item.TotalTarWorkhoursinReq</td>
+                    <td class="totalconwhinreq border">@item.TotalConWorkhoursinReq</td>
+
+                    <td class="d-print-none d-flex flex-column text-center p-2">
+                        <button data-toggle="modal" data-target="#editModal" onclick="GetRowForEdit(this);" class="RowForEdit btn btn-sm btn-info">Edit</button>
+                        <button data-toggle="modal" data-target="#manageModal" onclick="ManageReq(this)" class="btn btn-sm btn-success my-2">Schedule</button>
+                        @Html.ActionLink("Sheet", "Edit", new { id = @item.RequirementId }, new { target = "_blank", @class = "btn btn-sm btn-secondary" })
+                    </td>
                 </tr>
-            }
+                        }
             <tr class="border">
-                <td colspan="9" class="border">Total Workdays:</td>
-                <td class="border" style="text-align:right;">@(y)</td>
+                <td class="border d-print-none mark"></td>
+                <td class="border font-weight-bold" colspan="12">
+                    Total:
+                </td>
+                <td class="border TotalTarWhinTable font-weight-bold">@TotalTarWorkhoursinReq</td>
+                <td class="border TotalConWhinTable font-weight-bold">@TotalConWorkhoursinReq</td>
             </tr>
         </tbody>
     </table>
 </div>
 
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <input type="text" hidden id="formtype" />
+            <h1 class="ui-state-error-text" id="err" hidden>Module Cannot be empty</h1>
+            <div class="modal-body">
+                <form class="w-100 mx-auto pl-lg-5" style="margin-top:65px;" id="editForm">
+                    <div class="row">
+                        <div class="form-group col-5 ml-4">
+                            <label for="eProject" class="col-form-label"><b>Project:</b></label>
+                            @Html.DropDownList("ProjectId", null, htmlAttributes: new { @class = "form-control", style = "width: 270px;", @id = "eProject" })
+                        </div>
+
+                        <div class="form-group col-5  ml-4">
+                            <label for="eProjectSchedule" class="col-form-label"><b>Project Schedule:</b></label>
+                            @Html.DropDownList("ProjectScheduleId", null, htmlAttributes: new { @class = "form-control", style = "width: 270px;", @id = "eProjectSchedule" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-5 ml-4">
+                            <label for="eSoftwares" class="col-form-label"><b>Module:</b></label>
+                            @Html.DropDownList("SoftwareId", (MultiSelectList)ViewBag.SoftwareId, new { @multiple = "multiple", style = "width: 270px;", @class = "form-control", @id = "eSoftwares" })
+                        </div>
+
+                        <div class="form-group col-5  ml-4">
+                            <label for="eCategory" class="col-form-label"><b>Module Category:</b></label>
+                            @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control", style = "width: 270px;", @id = "eCategory" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-5 ml-4">
+                            <label class="col-form-label" for="ReqProviderId"><b>Requirement Provider:</b></label>
+                            @Html.DropDownList("ReqProviderId", null, htmlAttributes: new { @class = "form-control", style = "width: 270px;", @id = "eProvider" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-5 ml-4">
+                            <label for="EditedRequirement" class="col-form-label"><b>Requirement:</b></label>
+                            <textarea class="form-control" required id="EditedRequirement"></textarea>
+                            <input type="text" readonly hidden id="RequirementDetailIdToBeSent" />
+                        </div>
+
+                        <div class="form-group col-5 ml-4">
+                            <label for="EditedDescription" class="col-form-label"><b>Description: </b></label>
+                            <textarea class="form-control " id="EditedDescription"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-5  ml-4">
+                            <label for="rType" class="col-form-label"><b>Requirement Type: </b></label>
+                            @Html.DropDownList("ReqTypeId", null, htmlAttributes: new { @class = "form-control", style = "width: 270px;", @id = "rType" })
+                        </div>
+
+                        <div class="form-group col-5 ml-4">
+                            <label for="rStatus" class="col-form-label"><b>Status: </b></label>
+                            @Html.EnumDropDownListFor(model => model.Status, new { @class = "form-control", style = "width: 270px;", @id = "rStatus" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-5 ml-4">
+                            <label for="EditReqMode" class="col-form-label"><b>Requirement Mode: </b></label>
+                            @Html.DropDownList("ReqMode", ViewBag.ReqMode as SelectList, htmlAttributes: new { @class = "form-control", style = "width: 270px;", @id = "EditReqMode" })
+                        </div>
+
+                        <div class="form-group col-5 ml-4">
+                            <label for="EditPriority" class="col-form-label"><b>Priority: </b></label>
+                            @Html.EnumDropDownListFor(model => model.Priority, new { @class = "form-control", style = "width: 270px;", @id = "EditPriority" })
+                        </div>
+                        <div>
+                            <input type="text" hidden id="CategoryIDVal" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-primary" id="saverow" onclick="">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="manageModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close invisible" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title w-25 text-center" id="manageModalLongTitle">Manage Requirement</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <input type="text" readonly hidden id="Id" />
+                    <input type="text" readonly hidden id="RequirementDetailIdToBeSent" />
+
+                    <div class="form-group col-3">
+                        <label class="col-form-label" for="jobHolder"><b>JobHolder:</b></label>
+                        @Html.DropDownList("JobHolderId", null, "", htmlAttributes: new { @class = "form-control", @id = "jobHolder", @style = "width: 250px;" })
+                        @Html.ValidationMessageFor(model => model.JobHolderId, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="HourlyCost" class="col-form-label"><b>Hourly Rate </b></label>
+                        @Html.EditorFor(model => model.JobHolder.HourlyCost, new { htmlAttributes = new { @class = "form-control", style = "", @id = "HourlyCost", @disabled = "true" } })
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="TargetWorkhours" class="col-form-label"><b>Target Workhours:</b></label>
+                        <input class="form-control  " id="TargetWorkhours" type="number" />
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="WorkhoursConsumed" class="col-form-label"><b>Workhours Consumed: </b></label>
+                        <input type="number" class="form-control " id="WorkhoursConsumed" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label for="currentStatus" class="col-form-label"><b>Assigned At: </b></label>
+                        @Html.EnumDropDownListFor(model => model.Status, new { @class = "form-control", @id = "currentStatus" })
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="targetStatus" class="col-form-label"><b>Target To:</b></label>
+                        @Html.EnumDropDownListFor(model => model.Status, new { @class = "form-control", @id = "targetStatus" })
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="EditedAssignDate" class="col-form-label"><b>Assign Date:</b></label>
+                        <input class="form-control  " id="EditedAssignDate" type="date" />
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="EditedDeadLine" class="col-form-label"><b>DeadLine: </b></label>
+                        <input type="date" class="form-control " id="EditedDeadLine" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label for="CompletionDate" class="col-form-label"><b>Completion Date:</b></label>
+                        <input class="form-control  " id="CompletionDate" type="date" />
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="CompletionType" class="col-form-label"><b>Completion Type: </b></label>
+                        @Html.EnumDropDownListFor(model => model.CompType, " ", new { @class = "form-control", @id = "CompletionType" })
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="Note" class="col-form-label"><b>Note:</b></label>
+                        <textarea type="textarea" class="form-control " id="Note"></textarea>
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="DevNote" class="col-form-label"><b>Developer Note: </b></label>
+                        <textarea type="textarea" class="form-control " id="DevNote"></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <button onclick="addRecord(this);" class="btn btn-success mx-auto my-1">Add</button>
+                </div>
+
+                <div class="my-4 d-print-table" style="font-size: smaller;">
+                    <table class="table-sm" id="manageTable" style="">
+                        <thead class="bg-light">
+                            <tr class="border">
+                                <th class="border">SL#</th>
+                                <th class="border" hidden>ReqDetailId</th>
+                                <th class="border">
+                                    Developer
+                                </th>
+                                <th class="border">
+                                    Assigned At
+                                </th>
+                                <th class="border">
+                                    Target To
+                                </th>
+                                <th class="border">
+                                    Assign Date
+                                </th>
+                                <th class="border">
+                                    DeadLine
+                                </th>
+                                <th class="border">
+                                    Completion Date
+                                </th>
+                                <th class="border">
+                                    Completion Type
+                                </th>
+                                <th class="border">
+                                    Note
+                                </th>
+                                <th class="border">
+                                    Developer Note
+                                </th>
+                                <th class="border">
+                                    Target Workhours
+                                </th>
+                                <th class="border">
+                                    Workhours Consumed
+                                </th>
+                                @*<th class="border">
+                                    Hourly Cost
+                                </th>
+                                <th class="border">Total Cost</th>*@
+                                <th class="border d-print-none text-center" style="min-width:124px;">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border">
+                                <td class="border" colspan="11">
+                                    <b>Total:</b>
+                                </td>
+                                <td class="border totalHour text-right">
+                                    00
+                                </td>
+                                <td class="border" colspan="1"></td>
+                                <td class="border totalCost text-right">
+                                    0.00
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                @*<button type="button" class="btn btn-primary" id="saverow" onclick="">Save</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="mulscheduleModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close invisible" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title w-50 text-center" id="manageModalLongTitle">Multiple Requirement Task Assigning</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <input type="text" readonly hidden id="Id" />
+                    <input type="text" readonly hidden id="RequirementDetailIdToBeSent" />
+
+                    <div class="form-group col-3">
+                        <label class="col-form-label" for="jobHolder"><b>JobHolder:</b></label>
+                        @Html.DropDownList("JobHolderId", null, "", htmlAttributes: new { @class = "form-control", @id = "mulJobHolder", @style = "width: 250px;" })
+                        @Html.ValidationMessageFor(model => model.JobHolderId, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="HourlyCost" class="col-form-label"><b>Hourly Rate </b></label>
+                        @Html.EditorFor(model => model.JobHolder.HourlyCost, new { htmlAttributes = new { @class = "form-control", style = "", @id = "mulHourlyCost", @disabled = "true" } })
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="TargetWorkhours" class="col-form-label"><b>Target Workhours:</b></label>
+                        <input class="form-control  " id="mulTargetWorkhours" type="number" />
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="WorkhoursConsumed" class="col-form-label"><b>Workhours Consumed: </b></label>
+                        <input type="number" class="form-control " id="mulWorkhoursConsumed" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    @*<div class="form-group col-3">
+                        <label for="currentStatus" class="col-form-label"><b>Assigned At: </b></label>
+                        @Html.EnumDropDownListFor(model => model.Status, new { @class = "form-control", @id = "mulcurrentStatus" })
+                    </div>*@
+
+                    <div class="form-group col-3">
+                        <label for="targetStatus" class="col-form-label"><b>Target To:</b></label>
+                        @Html.EnumDropDownListFor(model => model.Status, new { @class = "form-control", @id = "multargetStatus" })
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="EditedAssignDate" class="col-form-label"><b>Assign Date:</b></label>
+                        <input class="form-control  " id="mulAssignDate" type="date" />
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="EditedDeadLine" class="col-form-label"><b>DeadLine: </b></label>
+                        <input type="date" class="form-control " id="mulDeadLine" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label for="CompletionDate" class="col-form-label"><b>Completion Date:</b></label>
+                        <input class="form-control  " id="mulCompletionDate" type="date" />
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="CompletionType" class="col-form-label"><b>Completion Type: </b></label>
+                        @Html.EnumDropDownListFor(model => model.CompType, " ", new { @class = "form-control", @id = "mulCompletionType" })
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="Note" class="col-form-label"><b>Note:</b></label>
+                        <textarea type="textarea" class="form-control " id="mulNote"></textarea>
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label for="DevNote" class="col-form-label"><b>Developer Note: </b></label>
+                        <textarea type="textarea" class="form-control " id="mulDevNote"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-success" onclick="AssignMulSchedule();">Assign</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
-    <script>
-        $(document).ready(function () {
-            $("#Type").select2();
-            $("#Category").select2();
-            $("#Provider").select2();
-            $("#Company").select2();
-            $("#Softwares").select2();
-            $("#Status").select2();
-        });
+<script>
+    $(document).ready(function () {
+        $("#Type").select2();
+        $("#rType").select2();
+        $("#Category").select2();
+        $("#eCategory").select2();
+        $("#Company").select2();
+        $("#Provider").select2();
+        $("#eProvider").select2();
+        $("#Project").select2();
+        $("#eProject").select2();
+        $("#ProjectSchedule").select2();
+        $("#eProjectSchedule").select2();
+        $("#Softwares").select2();
+        $("#eSoftwares").select2();
+        $("#ReqMode").select2();
+        $("#EditReqMode").select2();
+        $("#NullStatus").select2();
+        $("#rStatus").select2();
+        $("#NullPriority").select2();
+        $("#EditPriority").select2();
+        $("#JobHolder").select2();
+        $("#mulJobHolder").select2();
+    });
 
-        $("#Category").on('change', function () {
 
-            $("#Softwares").empty();
+    $("#jobHolder").on('change', function () {
+        $("#HourlyCost").empty();
+        //console.log(this.value);
+        var inputData = {
+            'Id': this.value
+        };
 
-            var inputData = {
-                'Id': this.value
-            };
+        $.get("/Requirements/GetHourlyCost", inputData,
+            function (data, status) {
+                $("#HourlyCost").val(data);
+            });
+    });
 
-            $.get("/Requirements/GetSoftwares", inputData,
+    $("#mulJobHolder").on('change', function () {
+        $("#mulHourlyCost").empty();
+        //console.log(this.value);
+        var inputData = {
+            'Id': this.value
+        };
+
+        $.get("/Requirements/GetHourlyCost", inputData,
+            function (data, status) {
+                $("#mulHourlyCost").val(data);
+            });
+    });
+
+    $("#Company").on('change', function () {
+        $("#Project").empty();
+        $("#Provider").empty();
+        var inputData = {
+            'Id': this.value
+        };
+
+        $.get("/Requirements/GetProjects", inputData,
+            function (data, status) {
+                //console.log(data);
+                var appendOptionsString = "<option value=\"\" ></option>";
+                for (var i = 0; i < data.length; i++) {
+                    appendOptionsString = appendOptionsString +
+                        "<option value=\"" + data[i].Id + "\" >" + data[i].Name + "</option>";
+                }
+                $("#Project").append(appendOptionsString);
+                $("#Project").val(null).trigger("change");
+            });
+
+        $.get("/Requirements/GetReqProvider", inputData,
                 function (data, status) {
                     //console.log(data);
-                    var appendOptionsString = "";
-
+                    var appendOptionsString = "<option value=\"\" ></option>";
                     for (var i = 0; i < data.length; i++) {
                         appendOptionsString = appendOptionsString +
                             "<option value=\"" + data[i].Id + "\" >" + data[i].Name + "</option>";
                     }
-                    $("#Softwares").append(appendOptionsString);
+                    $("#Provider").append(appendOptionsString);
+                    $("#Provider").val(null).trigger("change");
+
                 });
+    });
 
-        });
+    $("#Project").on('change', function () {
+        $("#Category").empty();
+        $("#ProjectSchedule").empty();
 
-        $("#Category").trigger("change");
+        var inputData = {
+            'Id': this.value
+        };
 
-        function fnExcelReport() {
-            var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
-            var textRange; var j = 0;
-            tab = document.getElementById('headerTable'); // id of table
+        //console.log(softwareids.split(", "));
 
-            for (j = 0 ; j < tab.rows.length ; j++) {
-                tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
-                //tab_text=tab_text+"</tr>";
-            }
+        $.get("/Requirements/GetSchedules", inputData,
+            function (data, status) {
+                //console.log(data);
+                var appendOptionsString = "<option value=\"\" ></option>";
+                for (var i = 0; i < data.length; i++) {
+                    appendOptionsString = appendOptionsString +
+                        "<option value=\"" + data[i].Id + "\" >" + data[i].Mode + " - " + data[i].StartDate + "</option>";
+                }
+                $("#ProjectSchedule").append(appendOptionsString);
+                $("#ProjectSchedule").val(null).trigger("change");
+            });
 
-            tab_text = tab_text + "</table>";
-            tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
-            tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
-            tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+        $.get("/Requirements/GetCategories", inputData,
+            function (data, status) {
+                //console.log(data);
+                var appendOptionsString = "<option value=\"\" ></option>";
+                for (var i = 0; i < data.length; i++) {
+                    appendOptionsString = appendOptionsString +
+                        "<option value=\"" + data[i].Id + "\" >" + data[i].Name + "</option>";
+                }
+                $("#Category").append(appendOptionsString);
+                $("#Category").val(null).trigger("change");
+            });
 
-            var ua = window.navigator.userAgent;
-            var msie = ua.indexOf("MSIE ");
+    });
 
-            if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
-            {
-                txtArea1.document.open("txt/html", "replace");
-                txtArea1.document.write(tab_text);
-                txtArea1.document.close();
-                txtArea1.focus();
-                sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
-            }
-            else                 //other browser not tested on IE 11
-                sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+    $("#Category").on('change', function () {
+        $("#Softwares").empty();
+        var inputData = {
+            'ProjectId': $("#Project").val(),
+            'CategoryId': this.value
+        };
 
-            return (sa);
+        $.get("/Requirements/GetProjectSoftwares", inputData,
+            function (data, status) {
+
+                var appendOptionsString = "";
+                for (var i = 0; i < data.length; i++) {
+                    appendOptionsString = appendOptionsString +
+                        "<option value=\"" + data[i].Id + "\" >" + data[i].Name + "</option>";
+                }
+                $("#Softwares").append(appendOptionsString);
+                $("#Softwares").val(null).trigger("change");
+            });
+    });
+
+
+    $("#eProject").on('change', function () {
+        $("#eCategory").empty();
+        $("#eProjectSchedule").empty();
+
+        var inputData = {
+            'Id': this.value
+        };
+
+        var category = "", schedule = "";
+        if (TargetColObject) {
+            category = $(TargetColObject).parent().parent().find(".CategoryIdTable").text();
+            schedule = $(TargetColObject).parent().parent().find(".scheduleid").text();
         }
-    </script>
+
+        //console.log(softwareids.split(", "));
+
+        var ok = false;
+        $.get("/Requirements/GetSchedules", inputData,
+            function (data, status) {
+                //console.log(data);
+                var appendOptionsString = "";
+                for (var i = 0; i < data.length; i++) {
+                    appendOptionsString = appendOptionsString +
+                        "<option value=\"" + data[i].Id + "\" >" + data[i].Mode + " - " + data[i].StartDate + "</option>";
+                    if (data[i].Id == schedule) ok = true;
+                }
+                $("#eProjectSchedule").append(appendOptionsString);
+
+                if (data.length > 0 && (schedule == "" || ok == false)) schedule = data[0].Id;
+                $("#eProjectSchedule").val(schedule).trigger("change");
+            });
+
+        ok = false;
+        $.get("/Requirements/GetCategories", inputData,
+            function (data, status) {
+                //console.log(data);
+                var appendOptionsString = "";
+                for (var i = 0; i < data.length; i++) {
+                    appendOptionsString = appendOptionsString +
+                        "<option value=\"" + data[i].Id + "\" >" + data[i].Name + "</option>";
+                    if (category == data[i].Id) ok = true;
+                }
+                $("#eCategory").append(appendOptionsString);
+
+                if (data.length > 0) {
+                    if (category == "" || ok == false) category = data[0].Id;
+                    $("#eCategory").val(category).trigger("change");
+                }
+                else {
+                    $("#eSoftwares").empty();
+                }
+            });
+
+    });
+
+    $("#eCategory").on('change', function () {
+        $("#eSoftwares").empty();
+
+        var inputData = {
+            'ProjectId': $("#eProject").val(),
+            'CategoryId': this.value
+        };
+
+        var softwareids = "";
+        if (TargetColObject) {
+            softwareids = $(TargetColObject).parent().parent().find(".softwaresId").text();
+        }
+
+        $.get("/Requirements/GetProjectSoftwares", inputData,
+            function (data, status) {
+                var appendOptionsString = "";
+
+                for (var i = 0; i < data.length; i++) {
+                    appendOptionsString = appendOptionsString +
+                        "<option value=\"" + data[i].Id + "\" >" + data[i].Name + "</option>";
+                }
+                $("#eSoftwares").append(appendOptionsString);
+                $("#eSoftwares").val(softwareids.split(", ")).trigger("change");
+            });
+
+    });
+
+    $("#eProjectSchedule").on('change', function () {
+        var inputData = {
+            'Id': this.value
+        };
+
+        $.get("/Requirements/GetMode", inputData,
+            function (data, status) {
+                var modeid = data;
+                if (TargetColObject) modeid = $(TargetColObject).parent().parent().find(".reqmodeid").text();
+                $("#EditReqMode").val(modeid).trigger("change");
+            });
+    });
+
+    $("#jobHolder").trigger("change");
+    $("#Company").trigger("change");
+    $("#eProject").trigger("change");
+
+    function GetSoftwares(Id, softwareIds) {
+        $("#eSoftwares").empty();
+
+        var inputData = {
+            'Id': Id
+        };
+
+        $.get("/Requirements/GetSoftwares", inputData,
+            function (data, status) {
+                //console.log("The data ", data);
+                var appendOptionsString = "";
+
+                for (var i = 0; i < data.length; i++) {
+                    appendOptionsString = appendOptionsString +
+                        "<option value=\"" + data[i].Id + "\" >" + data[i].Name + "</option>";
+                }
+
+                $("#eSoftwares").append(appendOptionsString);
+
+            }).then(function () {
+                $("#eSoftwares").val(softwareIds.split(", ")).trigger("change");
+            });
+    }
+
+    var ReqMarked = 0;
+    function markReq(checkbox) {
+        //console.log(checkbox.checked);
+        if (checkbox.checked) ReqMarked++;
+        else ReqMarked--;
+        $("#reqmarked").text(ReqMarked);
+        if (ReqMarked == 0) $("#mulschedule").attr("disabled", true);
+        else $("#mulschedule").attr("disabled", false);
+    }
+
+
+    var TargetColObject = null;
+
+    function GetRowForEdit(obj) {
+        $("#editForm").show();
+
+        //$("#formtype").val("1");
+        $('#saverow').attr('onclick', 'saveEdited();');
+
+        TargetColObject = obj;
+
+        $("#eProject").empty();
+        $("#eProvider").empty();
+        var inputData = {
+            'Id': $(obj).parent().parent().find(".companyid").text()
+        };
+
+        $.get("/Requirements/GetProjects", inputData,
+            function (data, status) {
+                var appendOptionsString = "";
+                for (var i = 0; i < data.length; i++) {
+                    appendOptionsString = appendOptionsString +
+                        "<option value=\"" + data[i].Id + "\" >" + data[i].Name + "</option>";
+                }
+                $("#eProject").append(appendOptionsString);
+                $("#eProject").val($(obj).parent().parent().find(".projectid").text()).trigger("change");
+            });
+
+        $.get("/Requirements/GetReqProvider", inputData,
+            function (data, status) {
+                var appendOptionsString = "";
+                for (var i = 0; i < data.length; i++) {
+                    appendOptionsString = appendOptionsString +
+                        "<option value=\"" + data[i].Id + "\" >" + data[i].Name + "</option>";
+                }
+                $("#eProvider").append(appendOptionsString);
+                $("#eProvider").val($(obj).parent().parent().find(".providerid").text()).trigger("change");
+            });
+
+        $("#EditedRequirement").val($(obj).parent().parent().find(".requirement").text());
+        $("#EditedDescription").val($(obj).parent().parent().find(".description").text());
+        $("#RequirementDetailIdToBeSent").val($(obj).parent().parent().find(".requirementDetailId").text());
+        $("#rType").val($(obj).parent().parent().find(".typeid").text()).trigger("change");
+        $("#EditReqMode").val($(obj).parent().parent().find(".reqmodeid").text()).trigger("change");
+        $("#rStatus").val($(obj).parent().parent().find(".statusid").text()).trigger("change");
+        $("#EditPriority").val($(obj).parent().parent().find(".prioid").text()).trigger("change");
+        
+    }
+
+    function saveEdited() {
+        var dataToBeEdited = {
+            'RequirementDetailId': $("#RequirementDetailIdToBeSent").val(),
+            'ReqProviderId': $("#eProvider").val(),
+            'ProjectId': $("#eProject").val(),
+            'ProjectScheduleId': $("#eProjectSchedule").val(),
+            'CategoryId': $("#eCategory").val(),
+            'SoftwareId': $("#eSoftwares").val(),
+            'Requirement': $("#EditedRequirement").val(),
+            'ReqTypeId': $("#rType").val(),
+            'Description': $("#EditedDescription").val(),
+            'ReqMode': $("#EditReqMode").val(),
+            'Status': $("#rStatus").val(),
+            'Priority': $("#EditPriority").val()
+        };
+
+        var SoftwareNames = $("#eSoftwares").select2('data');
+        var SoftName = "";
+        var SoftId = "";
+        var l = SoftwareNames.length;
+        if (l > 0) {
+            for (var i = 0; i < l; i++) {
+                SoftName += SoftwareNames[i].text;
+                SoftId += SoftwareNames[i].id;
+                if (i < l - 1) {
+                    SoftName += ', ';
+                    SoftId += ', ';
+                }
+            }
+        }
+
+        var dataTextFor = {
+            'ProviderDes': $("#eProvider option:selected").text(),
+            'StatusDes': $("#rStatus  option:selected").text(),
+            'PriorityDes': $("#EditPriority  option:selected").text(),
+            'ReqModeDes': $("#EditReqMode  option:selected").text(),
+            'ReqTypeDes': $("#rType option:selected").text(),
+            'ProjectDes': $("#eProject option:selected").text(),
+            'ScheduleDes': $("#eProjectSchedule option:selected").text(),
+            'Softwares': SoftName,
+            'SoftIds': SoftId,
+            'HourlyCost': $(TargetColObject).parent().parent().find(".hourlyCost").text()
+        }
+
+        if (dataToBeEdited.SoftwareId == "") {
+            alert("Software Field caanot be empty");
+            return;
+        }
+        if (dataToBeEdited.Requirement == "") {
+            alert("Requirement Field caanot be empty");
+            return;
+        }
+        if (dataToBeEdited.ReqTypeId == "") {
+            alert("Requirement Type Field caanot be empty");
+            return;
+        }
+
+        if (dataToBeEdited.CategoryId == "" || dataToBeEdited.CategoryId == null) {
+            alert("Software Category Field caanot be empty");
+            return;
+        }
+
+
+        //console.log("Vall ", dataToBeEdited);
+
+        $.post("/Requirements/DetailsReportEditReq", dataToBeEdited, function (result) {
+            if (result.status == "success") {
+                $("#editModal").modal('hide');
+                $(TargetColObject).parent().parent().find(".providerid").text(dataToBeEdited.ReqProviderId);
+                $(TargetColObject).parent().parent().find(".provider").text(dataTextFor.ProviderDes);
+                $(TargetColObject).parent().parent().find(".projectid").text(dataToBeEdited.ProjectId);
+                $(TargetColObject).parent().parent().find(".project").text(dataTextFor.ProjectDes);
+                $(TargetColObject).parent().parent().find(".scheduleid").text(dataToBeEdited.ProjectScheduleId);
+                $(TargetColObject).parent().parent().find(".schedule").text(dataTextFor.ScheduleDes);
+                $(TargetColObject).parent().parent().find(".CategoryIdTable").text(dataToBeEdited.CategoryId);
+                $(TargetColObject).parent().parent().find(".softwaresId").text(dataTextFor.SoftIds);
+                $(TargetColObject).parent().parent().find(".softwares").text(dataTextFor.Softwares);
+
+                $(TargetColObject).parent().parent().find(".requirement").text(dataToBeEdited.Requirement);
+                $(TargetColObject).parent().parent().find(".description").text(dataToBeEdited.Description);
+                $(TargetColObject).parent().parent().find(".typeid").text(dataToBeEdited.ReqTypeId);
+                $(TargetColObject).parent().parent().find(".Reqtype").text(dataTextFor.ReqTypeDes);
+                $(TargetColObject).parent().parent().find(".reqmodeid").text(dataToBeEdited.ReqMode);
+                $(TargetColObject).parent().parent().find(".reqmode").text(dataTextFor.ReqModeDes);
+                $(TargetColObject).parent().parent().find(".statusid").text(dataToBeEdited.Status);
+                $(TargetColObject).parent().parent().find(".status").text(dataTextFor.StatusDes);
+                $(TargetColObject).parent().parent().find(".prioid").text(dataToBeEdited.Priority);
+                $(TargetColObject).parent().parent().find(".prio").text(dataTextFor.PriorityDes);
+                $(TargetColObject).parent().parent().find(".requirementDetailId").text(dataToBeEdited.RequirementDetailId);
+
+                alert("Operation Successful!!");
+            }
+        });
+    }
+
+    function getTotalWorkHoursConsumed() {
+        var table = document.getElementById("manageTable");
+
+        var totalHour = 0.00;
+        for (var i = 0; i < table.rows.length; i++) {
+            var wHour = $(table.rows[i]).find(".WrkhrsCon").text();
+            if (wHour != '' && wHour != null) totalHour += parseFloat(wHour);
+        }
+        //console.log(totalHour);
+        return totalHour;
+    }
+
+    function getTotalTargetWorkHours() {
+        var table = document.getElementById("manageTable");
+
+        var totalHour = 0.00;
+        for (var i = 0; i < table.rows.length; i++) {
+            var wHour = $(table.rows[i]).find(".TarWrkhrs").text();
+            if (wHour != '' && wHour != null) totalHour += parseFloat(wHour);
+        }
+        //console.log(totalHour);
+        return totalHour;
+    }
+
+    function getHtmDate(ViewDate) {
+        if (ViewDate) {
+            var arr = ViewDate.split('/');
+            return arr[2] + "-" + arr[1] + "-" + arr[0];
+        }
+        return null;
+    }
+
+    function getSlashDate(ViewDate) {
+        if (ViewDate) {
+            var arr = ViewDate.split('-');
+            return arr[2] + "/" + arr[1] + "/" + arr[0];
+        }
+        return null;
+    }
+
+    function mulvalidateRecord() {
+        if ($("#mulAssignDate").val() == "") {
+            alert("Assign Date can't be empty!!");
+            return false;
+        }
+
+        if ($("#mulDeadLine").val() == "") {
+            alert("Deadline Date can't be empty!!");
+            return false;
+        }
+        return true;
+    }
+
+    function AssignMulSchedule() {
+        if (!mulvalidateRecord()) return;
+
+        var conwh = parseFloat(0.00), tarwh = parseFloat(0.00);
+        var table = document.getElementById("headerTable");
+        for (var i = 0; i < table.rows.length; i++) {
+            if ($(table.rows[i]).find(".mark").find(".chk").is(":checked")) {
+                if ($("#mulTargetWorkhours").val() == 0) $("#mulTargetWorkhours").val($("#mulWorkhoursConsumed").val());
+                if ($("#mulWorkhoursConsumed").val() != 0) {
+                    conwh += parseFloat($("#mulWorkhoursConsumed").val());
+                    var whinreq = parseFloat($("#mulWorkhoursConsumed").val()) + parseFloat($(table.rows[i]).find(".totalconwhinreq").text());
+                    $(table.rows[i]).find(".totalconwhinreq").text(whinreq);
+                }
+                if ($("#mulTargetWorkhours").val() != 0) {
+                    tarwh += parseFloat($("#mulTargetWorkhours").val());
+                    var whinreq = parseFloat($("#mulTargetWorkhours").val()) + parseFloat($(table.rows[i]).find(".totaltarwhinreq").text());
+                    $(table.rows[i]).find(".totaltarwhinreq").text(whinreq);
+                }
+
+                var dataToBeEdited = {
+                    'JobHolderId': $("#mulJobHolder option:selected").val(),
+                    'RequirementDetailId': $(table.rows[i]).find(".requirementDetailId").text(),
+                    //'CurrStatus': $("#mulcurrentStatus option:selected").val(),
+                    'TargetStatus': $("#multargetStatus option:selected").val(),
+                    'AssignDate': $("#mulAssignDate").val(),
+                    'DeadLine': $("#mulDeadLine").val(),
+                    'TargetWorkhours': $("#mulTargetWorkhours").val(),
+                    'WorkhoursConsumed': $("#mulWorkhoursConsumed").val(),
+                    'CompType': $("#mulCompletionType option:selected").val(),
+                    'CompDate': $("#mulCompletionDate").val(),
+                    'Note': $("#mulNote").val(),
+                    'DevNote': $("#mulDevNote").val(),
+                    'HourlyCost': $("#mulHourlyCost").val()
+                }
+
+                $.post("/Requirements/addRecord", dataToBeEdited, function (result) {
+                    if (result.Id) {
+                        //alert("Operation Successful!!");
+                    }
+                });
+            }
+        }
+
+        alert("Operation Successful!!");
+        $(".TotalTarWhinTable").text(parseFloat(tarwh) + parseFloat($(".TotalTarWhinTable").text()));
+        $(".TotalConWhinTable").text(parseFloat(conwh) + parseFloat($(".TotalConWhinTable").text()));
+
+        $("#mulJobHolder").val($('#jobHolder option:first-child').val()).trigger("change");
+        //$("#mulcurrentStatus").val('0');
+        $("#multargetStatus").val('0');
+        $("#mulAssignDate").val(null);
+        $("#mulDeadLine").val(null);
+        $("#mulCompletionDate").val(null);
+        $("#mulCompletionType").val(null);
+        $("#mulNote").val(null);
+        $("#mulDevNote").val(null);
+        $("#mulTargetWorkhours").val(null);
+        $("#mulWorkhoursConsumed").val(null);
+    }
+
+    $('#manageModal').on('hidden.bs.modal', function () {
+        // do something…
+        $("#manageTable").find("tr:gt(1)").remove();
+
+        var table = document.getElementById("headerTable");
+        var TotalConWh = 0, TotalTarWh = 0;
+        for (var i = 0; i < table.rows.length; i++) {
+            var reqcost1 = $(table.rows[i]).find(".totalconwhinreq").text();
+            var reqcost2 = $(table.rows[i]).find(".totaltarwhinreq").text();
+            if (reqcost1 != '') {
+                TotalConWh += parseFloat(reqcost1);
+            }
+            if (reqcost2 != '') {
+                TotalTarWh += parseFloat(reqcost2);
+            }
+        }
+        $(".TotalConWhinTable").text(TotalConWh);
+        $(".TotalTarWhinTable").text(TotalTarWh);
+        editstat = null;
+    })
+
+    function ManageReq(obj) {
+        $("#jobHolder").select2();
+
+        $("#RequirementDetailIdToBeSent").val($(obj).parent().parent().find(".requirementDetailId").text());
+        var inputData = {
+            'reqDetailId': $(obj).parent().parent().find(".requirementDetailId").text()
+        };
+
+        TargetColObject = obj;
+        var val;
+
+        $.get("/Requirements/GetManageRecords", inputData,
+            function (data, status) {
+                $('#manageTable tr:last').remove();
+
+                console.log(data);
+                for (var i = 0, val = 0.00; i < data.length; i++) {
+                    if (data[i].Note == null) data[i].Note = "";
+                    if (data[i].DevNote == null) data[i].DevNote = "";
+
+                    var date = "";
+                    if (data[i].CompDate != null) {
+                        var d = eval(data[i].CompDate.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+                        var date = ((d.getDate() > 9) ? d.getDate() : ('0' + d.getDate())) + '/' + ((d.getMonth() > 8) ? (d.getMonth() + 1) : ('0' + (d.getMonth() + 1))) + '/' + d.getFullYear();
+                    }
+
+                    var trcls = "border ";
+                    if(data[i].CompDate != null){
+                        if (data[i].WorkhoursConsumed < data[i].TargetWorkhours) trcls += " bg-success text-white";
+                        else if (data[i].WorkhoursConsumed > data[i].TargetWorkhours) trcls += " bg-warning";
+                        else trcls += " bg-warning";
+                    }
+
+                    $("#manageTable").append(
+                        '<tr class="' + trcls + '">' +
+                            '<td class="border sl">' + (i + 1) + '</td>' +
+                            '<td class="Id border" hidden>' + data[i].Id + '</td>' +
+                            '<td class="border" hidden>' + data[i].RequirementDetailId + '</td>' +
+                            '<td class="jobHolderName border">' + data[i].JobHolderName + '</td>' +
+                            '<td class="jobHolderId border" hidden>' + data[i].JobHolderId + '</td>' +
+                            '<td class="CurrStatus border">' + data[i].CurrStatus + '</td>' +
+                            '<td class="CurrStatusId border" hidden>' + data[i].CurrStatusId + '</td>' +
+                            '<td class="TarStatus border">' + data[i].TargetStatus + '</td>' +
+                            '<td class="TarStatusId border" hidden>' + data[i].TargetStatusId + '</td>' +
+                            '<td class="AssignDate border">' + data[i].AssignDate + '</td>' +
+                            '<td class="DeadLine border">' + data[i].DeadLine + '</td>' +
+                            '<td class="CompDate border">' + date + '</td>' +
+                            '<td class="CompType border">' + data[i].CompType + '</td>' +
+                            '<td class="CompTypeId border" hidden>' + data[i].CompTypeId + '</td>' +
+                            '<td class="Note border">' + data[i].Note + '</td>' +
+                            '<td class="DevNote border">' + data[i].DevNote + '</td>' +
+                            '<td class="TarWrkhrs border text-right">' + data[i].TargetWorkhours + '</td>' +
+                            '<td class="WrkhrsCon border text-right">' + data[i].WorkhoursConsumed + '</td>' +
+                            '<td class="hourlyCost border text-right" hidden>' + data[i].HourlyCost + '</td>' +
+                            //'<td class="border val text-right">' + val + '</td>' +
+                            '<td class="hidden-print text-center p-1">' +
+                                '<button onclick="editRecord(this);" class="btn btn-sm btn-info mx-1">Edit</button>' +
+                                '<button onclick="delRecord(this);" class="btn btn-sm btn-danger">Delete</button>' +
+                            '</td>' +
+                        '</tr>'
+                    );
+                }
+
+                $("#manageTable").append(
+                    '<tr class="border">' +
+                        '<td class="border" colspan="10">' +
+                            '<b>Total:</b>' +
+                        '</td>' +
+                        '<td class="border totalTarHour text-right">' + getTotalTargetWorkHours() + '</td>' +
+                        '<td class="border totalConHour text-right">' + getTotalWorkHoursConsumed() + '</td>' +
+                    '</tr>'
+                );
+                $(TargetColObject).parent().parent().find(".totalconwhinreq").text($(".totalConHour").text());
+                $(TargetColObject).parent().parent().find(".totaltarwhinreq").text($(".totalTarHour").text());
+            }
+        );
+    }
+
+    function validateRecord() {
+        if ($("#EditedAssignDate").val() == "") {
+            alert("Assign Date can't be empty!!");
+            return false;
+        }
+
+        if ($("#EditedDeadLine").val() == "") {
+            alert("Deadline Date can't be empty!!");
+            return false;
+        }
+
+        return true;
+    }
+
+    editstat = null;
+
+    function addRecord() {
+        if (!validateRecord()) return;
+
+        if ($("#TargetWorkhours").val() == 0) $("#TargetWorkhours").val($("#WorkhoursConsumed").val());
+        if (editstat != null) {
+            var dataToBeEdited = {
+                'Id': $("#Id").val(),
+                'JobHolderId': $("#jobHolder option:selected").val(),
+                'RequirementDetailId': $("#RequirementDetailIdToBeSent").val(),
+                'CurrStatus': $("#currentStatus option:selected").val(),
+                'TargetStatus': $("#targetStatus option:selected").val(),
+                'AssignDate': $("#EditedAssignDate").val(),
+                'DeadLine': $("#EditedDeadLine").val(),
+                'TargetWorkhours': $("#TargetWorkhours").val(),
+                'WorkhoursConsumed': $("#WorkhoursConsumed").val(),
+                'CompType': $("#CompletionType option:selected").val(),
+                'CompDate': $("#CompletionDate").val(),
+                'Note': $("#Note").val(),
+                'DevNote': $("#DevNote").val(),
+                'HourlyCost': $("#HourlyCost").val()
+            }
+
+            $.post("/Requirements/editRecord", dataToBeEdited, function (result) {
+                if (result.Id) {
+                    alert("Operation Successful!!");
+                }
+            });
+
+            var trcls = "border ";
+            if ($("#CompletionDate").val() != "") {
+                var whcon = parseFloat($("#WorkhoursConsumed").val()), tarwh = parseFloat($("#TargetWorkhours").val());
+                if (whcon < tarwh) trcls += " bg-success text-white";
+                else if (whcon > tarwh) trcls += " bg-warning";
+                else trcls += " bg-warning";
+            }
+            $(editstat).parent().parent().attr('class', trcls);
+            $(editstat).parent().parent().find(".Id").text($("#Id").val());
+            $(editstat).parent().parent().find(".jobHolderId").text($("#jobHolder option:selected").val());
+            $(editstat).parent().parent().find(".jobHolderName").text($("#jobHolder option:selected").text());
+            $(editstat).parent().parent().find(".CurrStatusId").text($("#currentStatus option:selected").val());
+            $(editstat).parent().parent().find(".CurrStatus").text($("#currentStatus option:selected").text());
+            $(editstat).parent().parent().find(".TarStatusId").text($("#targetStatus option:selected").val());
+            $(editstat).parent().parent().find(".TarStatus").text($("#targetStatus option:selected").text());
+            $(editstat).parent().parent().find(".AssignDate").text(getSlashDate($("#EditedAssignDate").val()));
+            $(editstat).parent().parent().find(".DeadLine").text(getSlashDate($("#EditedDeadLine").val()));
+            $(editstat).parent().parent().find(".TarWrkhrs").text($("#TargetWorkhours").val());
+            $(editstat).parent().parent().find(".WrkhrsCon").text($("#WorkhoursConsumed").val());
+            $(editstat).parent().parent().find(".CompDate").text(getSlashDate($("#CompletionDate").val()));
+            $(editstat).parent().parent().find(".CompTypeId").text($("#CompletionType option:selected").val());
+            $(editstat).parent().parent().find(".CompType").text($("#CompletionType option:selected").text());
+            $(editstat).parent().parent().find(".Note").text($("#Note").val());
+            $(editstat).parent().parent().find(".DevNote").text($("#DevNote").val());
+            $(editstat).parent().parent().find(".hourlyCost").text($("#HourlyCost").val());
+            //$(editstat).parent().parent().find(".val").text(val);
+
+            $(editstat).parent().find(".btn-danger").attr("disabled", false);
+            editstat = null;
+
+            $(".totalTarHour").text(getTotalTargetWorkHours());
+            $(".totalConHour").text(getTotalWorkHoursConsumed());
+            //$(".totalCost").text(getTotalCost());
+            $(TargetColObject).parent().parent().find(".totaltarwhinreq").text($(".totalTarHour").text());
+            $(TargetColObject).parent().parent().find(".totalconwhinreq").text($(".totalConHour").text());
+
+            $("#jobHolder").val($('#jobHolder option:first-child').val()).trigger("change");
+            $("#currentStatus").val('0');
+            $("#targetStatus").val('0');
+            $("#EditedAssignDate").val(null);
+            $("#EditedDeadLine").val(null);
+            $("#CompletionDate").val(null);
+            $("#CompletionType").val(null);
+            $("#Note").val(null);
+            $("#DevNote").val(null);
+            $("#TargetWorkhours").val(null);
+            $("#WorkhoursConsumed").val(null);
+        }
+        else {
+            //var val = $("#HourlyCost").val() * $("#WorkhoursConsumed").val();
+            //console.log($("#HourlyCost").val());
+            if ($("#TargetWorkhours").val() == 0) $("#TargetWorkhours").val($("#WorkhoursConsumed").val());
+            var dataToBeEdited = {
+                'JobHolderId': $("#jobHolder option:selected").val(),
+                'RequirementDetailId': $("#RequirementDetailIdToBeSent").val(),
+                'CurrStatus': $("#currentStatus option:selected").val(),
+                'TargetStatus': $("#targetStatus option:selected").val(),
+                'AssignDate': $("#EditedAssignDate").val(),
+                'DeadLine': $("#EditedDeadLine").val(),
+                'TargetWorkhours': $("#TargetWorkhours").val(),
+                'WorkhoursConsumed': $("#WorkhoursConsumed").val(),
+                'CompType': $("#CompletionType option:selected").val(),
+                'CompDate': $("#CompletionDate").val(),
+                'Note': $("#Note").val(),
+                'DevNote': $("#DevNote").val(),
+                'HourlyCost': $("#HourlyCost").val()
+            }
+
+            var id;
+            $.post("/Requirements/addRecord", dataToBeEdited, function (result) {
+                if (result.Id) {
+                    id = result.Id;
+                    alert("Operation Successful!!");
+                    $('#manageTable tr:last').remove();
+
+                    var sl = parseInt($("#manageTable tr:last").find('.sl').text());
+                    if ($("#manageTable tr:last").find('.sl').text() == "") sl = 0;
+
+                    var trcls = "border ";
+                    if ($("#CompletionDate").val() != "") {
+                        var whcon = parseFloat($("#WorkhoursConsumed").val()), tarwh = parseFloat($("#TargetWorkhours").val());
+                        if (whcon < tarwh) trcls += " bg-success text-white";
+                        else if (whcon > tarwh) trcls += " bg-warning";
+                        else trcls += " bg-warning";
+                    }
+
+                    $("#manageTable").append(
+                        '<tr class="' + trcls + '">' +
+                            '<td class="border sl">' + ++sl + '</td>' +
+                            '<td class="Id border" hidden>' + id + '</td>' +
+                            '<td class="border" hidden>' + $("#RequirementDetailIdToBeSent").val() + '</td>' +
+                            '<td class="jobHolderName border">' + $("#jobHolder option:selected").text() + '</td>' +
+                            '<td class="jobHolderId border" hidden>' + $("#jobHolder  option:selected").val() + '</td>' +
+                            '<td class="CurrStatus border">' + $("#currentStatus  option:selected").text() + '</td>' +
+                            '<td class="CurrStatusId border" hidden>' + $("#currentStatus option:selected").val() + '</td>' +
+                            '<td class="TarStatus border">' + $("#targetStatus option:selected").text() + '</td>' +
+                            '<td class="TarStatusId border" hidden>' + $("#targetStatus option:selected").val() + '</td>' +
+                            '<td class="AssignDate border">' + getSlashDate($("#EditedAssignDate").val()) + '</td>' +
+                            '<td class="DeadLine border">' + getSlashDate($("#EditedDeadLine").val()) + '</td>' +
+                            '<td class="CompDate border">' + getSlashDate($("#CompletionDate").val()) + '</td>' +
+                            '<td class="CompType border">' + $("#CompletionType option:selected").text() + '</td>' +
+                            '<td class="CompTypeId border" hidden>' + $("#CompletionType option:selected").val() + '</td>' +
+                            '<td class="Note border">' + $("#Note").val() + '</td>' +
+                            '<td class="DevNote border">' + $("#DevNote").val() + '</td>' +
+                            '<td class="TarWrkhrs border text-right">' + $("#TargetWorkhours").val() + '</td>' +
+                            '<td class="WrkhrsCon border text-right">' + $("#WorkhoursConsumed").val() + '</td>' +
+                            '<td class="hourlyCost border text-right" hidden>' + $("#HourlyCost").val() + '</td>' +
+                            //'<td class="border val text-right">' + val + '</td>' +
+                            '<td class="hidden-print text-center p-1">' +
+                                '<button onclick="editRecord(this);" class="btn btn-sm btn-info mx-1">Edit</button>' +
+                                '<button onclick="delRecord(this);" class="btn btn-sm btn-danger">Delete</button>' +
+                            '</td>' +
+                        '</tr>'
+                    );
+
+                    $("#manageTable").append(
+                        '<tr class="border">' +
+                            '<td class="border" colspan="10">' +
+                                '<b>Total:</b>' +
+                            '</td>' +
+                            '<td class="border totalTarHour text-right">' + getTotalTargetWorkHours() + '</td>' +
+                            '<td class="border totalConHour text-right">' + getTotalWorkHoursConsumed() + '</td>' +
+                        '</tr>'
+                    );
+
+                    $(TargetColObject).parent().parent().find(".totaltarwhinreq").text($(".totalTarHour").text());
+                    $(TargetColObject).parent().parent().find(".totalconwhinreq").text($(".totalConHour").text());
+
+                    $("#jobHolder").val($('#jobHolder option:first-child').val()).trigger("change");
+                    $("#currentStatus").val('0');
+                    $("#targetStatus").val('0');
+                    $("#EditedAssignDate").val(null);
+                    $("#EditedDeadLine").val(null);
+                    $("#CompletionDate").val(null);
+                    $("#CompletionType").val(null);
+                    $("#Note").val(null);
+                    $("#DevNote").val(null);
+                    $("#TargetWorkhours").val(null);
+                    $("#WorkhoursConsumed").val(null);
+                }
+            });
+        }
+    }
+
+
+    function editRecord(rowobj) {
+        if (editstat != null) {
+            $(editstat).parent().find(".btn-danger").attr("disabled", false);
+        }
+        editstat = rowobj;
+        $(rowobj).parent().find(".btn-danger").attr("disabled", true);
+
+        $("#Id").val($(rowobj).parent().parent().find(".Id").text());
+        $("#jobHolder").val($(rowobj).parent().parent().find(".jobHolderId").text()).trigger("change");
+        $("#currentStatus").val($(rowobj).parent().parent().find(".CurrStatusId").text());
+        $("#targetStatus").val($(rowobj).parent().parent().find(".TarStatusId").text());
+        $("#EditedAssignDate").val(getHtmDate($(rowobj).parent().parent().find(".AssignDate").text()));
+        $("#EditedDeadLine").val(getHtmDate($(rowobj).parent().parent().find(".DeadLine").text()));
+        $("#TargetWorkhours").val($(rowobj).parent().parent().find(".TarWrkhrs").text());
+        $("#WorkhoursConsumed").val($(rowobj).parent().parent().find(".WrkhrsCon").text());
+        $("#CompletionDate").val(getHtmDate($(rowobj).parent().parent().find(".CompDate").text()));
+        $("#CompletionType").val($(rowobj).parent().parent().find(".CompTypeId").text());
+        $("#Note").val($(rowobj).parent().parent().find(".Note").text());
+        $("#DevNote").val($(rowobj).parent().parent().find(".DevNote").text());
+    }
+
+    function delRecord(rowobj) {
+        var inputData = {
+            'Id': $(rowobj).parent().parent().find(".Id").text()
+        };
+        $.post("/Requirements/DeleteRecord", inputData,
+                function (data, status) {
+                    if (data.Id) {
+                        alert("Operation Successfull.");
+                        $(rowobj).parent().parent().remove();
+                        $(".totalConHour").text(getTotalWorkHoursConsumed());
+                        $(".totalTarHour").text(getTotalTargetWorkHours());
+                        $(TargetColObject).parent().parent().find(".totalconwhinreq").text($(".totalConHour").text());
+                        $(TargetColObject).parent().parent().find(".totaltarwhinreq").text($(".totalTarHour").text());
+
+                        var table = document.getElementById("manageTable");
+                        for (var i = 0; i < table.rows.length; i++) {
+                            $(table.rows[i]).find(".sl").text(i);
+                        }
+                    }
+                });
+    }
+
+
+    function fnExcelReport() {
+        var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+        var textRange; var j = 0;
+        tab = document.getElementById('headerTable'); // id of table
+
+        for (j = 0 ; j < tab.rows.length ; j++) {
+            tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+        }
+
+        tab_text = tab_text + "</table>";
+        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");  //remove if u want links in your table
+        tab_text = tab_text.replace(/<img[^>]*>/gi, "");   // remove if u want images in your table
+        tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, "");  // reomves input params
+
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+        {
+            txtArea1.document.open("txt/html", "replace");
+            txtArea1.document.write(tab_text);
+            txtArea1.document.close();
+            txtArea1.focus();
+            sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
+        }
+        else                 //other browser not tested on IE 11
+            sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+        return (sa);
+    }
+
+</script>
 }

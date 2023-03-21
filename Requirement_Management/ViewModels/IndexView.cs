@@ -27,8 +27,6 @@ namespace Requirement_Management.ViewModels
         public DateTime To { get; set; }
         public int? CompanyId { get; set; }
         public virtual ClientCompany Company { get; set; }
-        public int? ReqProviderId { get; set; }
-        public virtual RequirementProvider ReqProvider { get; set; }
         public Query Query { get; set; }
 
         public List<Requirement> Req { get; set; }

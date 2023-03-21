@@ -1,53 +1,70 @@
 ﻿@model Requirement_Management.ViewModels.RequirementView
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detail";
 }
 
 @*<h2>Details</h2>*@
 
-<div>
-    <h2 class="text-center mt-5" style="font-family: 'Font Awesome 5 Pro';">@Model.Title</h2>
-    <hr class="col-3 mt-2" style="border: 1px solid;">
-    <div class="col-sm-6 mx-auto" style="font-family: monospace; font-size: larger;">
+<div class="row d-print-none justify-content-end mx-0">
+    <button onclick="window.print()" class="btn btn-danger m-1">Print <i class="fas fa-file-pdf"></i></button>
+    <button class="btn btn-success multi-level-excel-export m-1">Export <i class="fas fa-file-excel" aria-hidden="true"></i></button>
+</div>
+
+<br />
+
+<div id="page-content" >
+
+    <h2 class="text-center" >@Model.Title</h2>
+    <hr class="col-3" style="border: 1px solid;">
+    <div class="col-sm-6 mx-auto" style="font-size: larger;">
         @if (@Model.CompanyName != null)
         {
             <h6 class="text-center col">Company: @Model.CompanyName</h6>
         }
-        @if (@Model.ReqProviderName != null)
-        {
-            <h6 class="text-center col">Provider: @Model.ReqProviderName</h6>
-        }
     </div>
+    <br />
     <div class="px-2 d-flex justify-content-between">
-        <h6 style="font-family: monospace;">Id: @Model.Id</h6>
-        <h6 style="font-family: monospace;">Date: @Model.Date.ToString("dd/MM/yyyy")</h6>
+        <h6 >Id: @Model.Id</h6>
+        <h6 >Date: @Model.Date.ToString("dd/MM/yyyy")</h6>
     </div>
-    <div class="table-responsive mb-2 d-print-table">
-        <table class="table">
+    <div class="mb-2 d-print-table">
+        <table class="table-sm text-center" style="font-size: 14.6px;">
             <thead class="bg-light">
                 <tr class="border">
-                    <th class="border">#</th>
-                    <th class="border" style="width: 12%;">
-                        Requirement
-                    </th>
-                    <th class="border" style="width: 15%;">
-                        Description
-                    </th>
-                    <th class="border" style="width: 17%;">
-                        Requirement Type
-                    </th> 
-                    <th class="border" style="width: 18%;">
-                        Software Category
+                    <th class="border">SL#</th>
+                    <th class="border">
+                        Requirement Provider
                     </th>
                     <th class="border">
-                        Softwares
+                        Project
+                    </th>
+                    <th class="border">
+                        Project Schedule
+                    </th>
+                    <th class="border">
+                        Module Category
+                    </th>
+                    <th class="border">
+                        Modules
+                    </th>
+                    <th class="border" >
+                        Requirement
+                    </th>
+                    <th class="border" >
+                        Description
+                    </th>
+                    <th class="border" >
+                        Requirement Type
+                    </th> 
+                    <th class="border">
+                        Requirement Mode
                     </th>
                     <th class="border">
                         Status
                     </th>
                     <th class="border">
-                        Workdays
+                        Priority
                     </th>
                     @*<th class="border">
                         Star Marked
@@ -61,14 +78,18 @@
                     int status = (int)item.Status;
 
                     <tr class="border">
-                        <td class="border">@x<b class="text-danger">@{x++; @((item.StarMarked) ? "*" : ""); }</b></td>
+                        <td class="border">@x @{x++;}</td>
+                        <td class="provider border">@item.ReqProviderName</td>
+                        <td class="project border">@item.ProjectName</td>
+                        <td class="schedule border">@item.ScheduleName</td>
+                        <td class="category border">@item.SoftCategoryName</td>
+                        <td class="softwares border">@item.ReqSoftwareName</td>
                         <td class="requirement border">@Html.DisplayFor(modelItem => item.Requirement)</td>
                         <td class="description border">@Html.DisplayFor(modelItem => item.Description)</td>
                         <td class="type border">@item.ReqTypeName</td>
-                        <td class="category border">@item.SoftCategoryName</td>
-                        <td class="softwares border">@item.ReqSoftwareName</td>
+                        <td class="type border">@item.ReqMode</td>
                         <td class="status border">@Html.DisplayFor(modelItem => item.Status)</td>
-                        <td class="workdays border">@Html.DisplayFor(modelItem => item.Workdays)</td>
+                        <td class="priority border">@Html.DisplayFor(modelItem => item.Priority)</td>
                     </tr>
                 }
             </tbody>
@@ -84,7 +105,46 @@
             }
         }
     </div>
-    <button onclick="window.print()" class="btn btn-success d-print-none mx-auto d-block">Print <i class="fas fa-file-pdf"></i></button>
+
 
 </div>
 
+<!-- special anchor for excel export. -->
+<a id="dlink" style="display:none;"></a>
+<!-- special anchor for excel export. -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+<script>
+
+
+    //multi-level excel export (new)
+
+    $(document).find(".multi-level-excel-export").click(function (event) {
+
+        var tableToExcel = (function () {
+            var uri = 'data:application/vnd.ms-excel;base64,'
+            , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+            , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+            , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+            return function (table, name, filename) {
+                table = document.getElementById("page-content")
+                var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+
+                document.getElementById("dlink").href = uri + base64(format(template, ctx));
+                document.getElementById("dlink").download = filename;
+                document.getElementById("dlink").click();
+
+            }
+        })();
+
+        tableToExcel(null, 'Downloaded-Report', 'Downloaded-Report.xls');
+
+    });
+
+    ///
+
+</script>
+
+}

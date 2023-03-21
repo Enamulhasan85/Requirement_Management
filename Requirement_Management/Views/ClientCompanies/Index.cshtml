@@ -11,6 +11,12 @@
     <p>
         @Html.ActionLink("Add Company", "Create", new { area = "" }, new { @class = "btn btn-success" })
     </p>
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-danger mx-auto col-sm-6 py-2">
+            <strong>Error!</strong> @ViewBag.Message
+        </div>
+    }
     <div class="table-responsive">
         <table class="table">
             <thead class="bg-dark text-white">

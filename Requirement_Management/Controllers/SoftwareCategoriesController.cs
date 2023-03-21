@@ -17,8 +17,9 @@ namespace Requirement_Management.Controllers
         private RequirementManagementContext db = new RequirementManagementContext();
 
         // GET: SoftwareCategories
-        public ActionResult Index()
+        public ActionResult Index(string msg)
         {
+            ViewBag.Message = msg;
             return View(db.SoftwareCategory.ToList());
         }
 
@@ -111,6 +112,14 @@ namespace Requirement_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (db.RequirementDetail.Where(r => r.SoftCategoryId == id).Count() != 0)
+            {
+                return RedirectToAction("Index", new { msg = "Delete Software and RequirementDetails Under this Software Category" });
+            }
+            if (db.Software.Where(r => r.Software_CategoryId == id).Count() != 0)
+            {
+                return RedirectToAction("Index", new { msg = "Delete Software and RequirementDetails Under this Software Category" });
+            }
             SoftwareCategory softwareCategory = db.SoftwareCategory.Find(id);
             db.SoftwareCategory.Remove(softwareCategory);
             db.SaveChanges();

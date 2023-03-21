@@ -28,6 +28,14 @@ namespace Requirement_Management
                       "~/Content/bootstrap.min.css",
                       "~/Content/site.css",
                       "~/Content/select2.min.css"));
+
+            //Create bundel for jQueryUI  
+            //js  
+            bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
+                      "~/Scripts/jquery-ui-{version}.js"));
+            //css  
+            bundles.Add(new StyleBundle("~/Content/cssjqryUi").Include(
+                   "~/Content/jquery-ui.css"));
         }
     }
 }

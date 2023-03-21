@@ -1,0 +1,101 @@
+﻿@model IEnumerable<Requirement_Management.Models.JobHolder>
+
+@{
+    ViewBag.Title = "Developer";
+}
+
+<div class="d-flex">
+    <h4 class="text-center mx-auto p-2" style="border-bottom:2px solid #343a40">Developer</h4>
+</div>
+<p>
+    @Html.ActionLink("Create New", "Create", new { area = "" }, new { @class = "btn btn-success" })
+</p>
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-danger mx-auto col-sm-6 py-2">
+        <strong>Error!</strong> @ViewBag.Message
+    </div>
+}
+<table class="table">
+    <thead class="bg-dark text-white">
+        <tr class="border">
+            <th>
+                #
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Contact)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Designation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JoiningDate)
+            </th>
+            <th>
+                Hourly Cost
+            </th>
+            <th class="text-center">
+                @Html.DisplayNameFor(model => model.isActive)
+            </th>
+            <th class="text-center" style="width: 132px;">Action</th>
+        </tr>
+    </thead>
+        @{ 
+            var x = 1;
+        }
+        @foreach (var item in Model)
+        {
+            //var date = item.JoiningDate?.ToString("dd/MM/yyyy");
+
+            <tr class="border">
+                <td>@x@{x++;}</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Contact)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Designation)
+                </td>
+                <td>
+                    @if (item.JoiningDate != null)
+                    {
+                        @item.JoiningDate.Value.ToString("dd/MM/yyyy");
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HourlyCost)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.isActive)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-info btn-sm" })
+                   
+                    <form action="/JobHolder/Delete/@item.Id" method="post" class="d-inline-block" onsubmit="return confirm('Do you really want to delete the provider data?');">
+                        @Html.AntiForgeryToken()
+                        <div class="">
+                            <input type="submit" value="Delete" class="btn btn-danger btn-sm">
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        }
+
+</table>

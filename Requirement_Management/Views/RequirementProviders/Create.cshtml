@@ -3,7 +3,8 @@
 @{
     ViewBag.Title = "Add Provider";
 }
-<div class="mx-auto p-0 col-11 col-sm-8 col-md-6 col-lg-4 col-xl-4 card my-5" @*style="position: absolute; left: 0; right: 0;top: 20%; bottom: 24.4%;"*@>
+
+<div class="mx-auto p-0 col-lg-4 card my-5" @*style="position: absolute; left: 0; right: 0;top: 20%; bottom: 24.4%;"*@>
     <div class="card-header bg-dark text-white">
         <h4 class="text-center mx-auto my-0">New Provider</h4>
     </div>
@@ -14,6 +15,14 @@
 
         <div class="form-horizontal mx-auto p-3 bg-light">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group mx-auto col-lg-11 my-2">
+                <label class="control-label w-100" for="CompanyId"><b>Company:</b> <i class="text-danger">*required</i></label>
+                <div class="w-100">
+                    @Html.DropDownList("CompanyId", (MultiSelectList)ViewBag.CompanyId, new { @multiple = "multiple", @class = "form-control", @id = "CompanyId" })
+                    <span class="text-danger ml-1 m-0 softVal" style="font-family: none; display: none;">*Company can't be empty</span>
+                </div>
+            </div>
+
             <div class="form-group mx-auto col-lg-11 my-2">
                 <label class="control-label w-100" for="Name"><b>Provider:</b></label>                
                 <div class="w-100">
@@ -51,4 +60,10 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            $("#CompanyId").select2();
+        });
+    </script>
 }

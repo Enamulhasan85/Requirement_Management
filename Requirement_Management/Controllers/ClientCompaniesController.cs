@@ -17,8 +17,9 @@ namespace Requirement_Management.Controllers
         private RequirementManagementContext db = new RequirementManagementContext();
 
         // GET: ClientCompanies
-        public ActionResult Index()
+        public ActionResult Index(string msg)
         {
+            ViewBag.Message = msg;
             return View(db.ClientCompany.ToList());
         }
 
@@ -111,6 +112,10 @@ namespace Requirement_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if(db.Project.Where(r => r.CompanyId == id).Count() != 0 || db.Requirement.Where(r => r.CompanyId == id).Count() != 0)
+            {
+                return RedirectToAction("Index", new { msg = "Delete Projects and Requirements Under this Company" });
+            }
             ClientCompany clientCompany = db.ClientCompany.Find(id);
             db.ClientCompany.Remove(clientCompany);
             db.SaveChanges();
